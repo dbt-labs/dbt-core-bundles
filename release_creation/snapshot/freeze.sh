@@ -1,0 +1,1 @@
+pip freeze --path ./target > $1

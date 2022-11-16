@@ -97,3 +97,4 @@ dmypy.json
 # Project Specific
 tmp/
 dbt-core*.zip
+snapshot*.txt
