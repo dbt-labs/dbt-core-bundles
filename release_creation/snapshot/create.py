@@ -9,6 +9,7 @@ _OUTPUT_ARCHIVE_FILE_BASE = "dbt-core-all-adapters-snapshot"
 _FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 _SNAPSHOT_FILE = f"{_FILE_DIR}/snapshot.requirements.txt"
 
+
 def _generate_download_command_args(major_version:Optional[int], minor_version:Optional[int], is_pre:bool = False) -> Tuple[List, str]:
     download_command = []
     suffix = "latest"
@@ -18,6 +19,7 @@ def _generate_download_command_args(major_version:Optional[int], minor_version:O
     requirements_prefix = f"v{major_version}.{minor_version}.{suffix}"
     download_command.append(f"-r {_FILE_DIR}/requirements/{requirements_prefix}.requirements.txt")
     return download_command, requirements_prefix
+
 
 def generate_snapshot(target_version: Version) -> Dict[str, str]:
     is_pre = True if target_version.prerelease else False

@@ -30,15 +30,18 @@ def get_latest_release(input_version:str) -> Tuple[Version, Optional[GitRelease]
             latest_release = r
     return latest, latest_release
 
+
 def _get_local_snapshot_reqs(snapshot_req_path:str) -> List[str]:
     with open(snapshot_req_path) as f:
         reqs = f.read()
     return reqs.split()
 
+
 def _get_gh_release_asset(release_asset: GitReleaseAsset) -> List[str]:
     resp = requests.get(release_asset.browser_download_url)
     resp.raise_for_status()
     return resp.content.decode("utf-8").split()
+
 
 def _compare_reqs(snapshot_req: List[str], release_req: List[str]) -> Tuple[Set[str], Set[str]]:
     snapshot_req_set = set(snapshot_req)
