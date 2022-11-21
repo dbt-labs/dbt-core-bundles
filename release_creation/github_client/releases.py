@@ -52,6 +52,10 @@ def _compare_reqs(snapshot_req: List[str], release_req: List[str]) -> Tuple[Set[
 
 
 def _diff_snapshot_requirements(snapshot_req_path:str, latest_release: Optional[GitRelease]):
+    # Scenarios being handled:
+    # 1. No change - raise exception
+    # 2. No prior patch version - Creat major.minor.0 snapshot
+    # 3. New changes - generate diff
     diff_result = ""
     if latest_release:
         release_reqs = [_asset for _asset in latest_release.get_assets() if _SNAP_REQ_NAME in _asset.name]
@@ -62,7 +66,8 @@ def _diff_snapshot_requirements(snapshot_req_path:str, latest_release: Optional[
             diff_result += "Added:\n* "+ "\n* ".join(added) + "\n___\n"
         if removed:
             diff_result += "\nRemoved:\n* " + "\n* ".join(removed) + "\n"
-
+        if diff_result == "":
+            raise Exception("New snapshot does not contain any new changes")
         return diff_result
     else:    
         return "No prior snapshot"
