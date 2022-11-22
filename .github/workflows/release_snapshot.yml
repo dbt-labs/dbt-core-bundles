@@ -31,10 +31,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.x"
+          python-version: 3.9
       - run: |
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
-          python -m pip install --upgrade setuptools wheel twine check-wheel-contents
           pip install -r requirements.txt
       - run: python release_creation/main.py
