@@ -29,10 +29,10 @@ jobs:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v2
         with:
           python-version: "3.x"
       - run: |
-          ./install_arrow.sh
+          sudo apt-get install libsasl2-dev
           pip install -r requirements.txt
       - run: python release_creation/main.py
