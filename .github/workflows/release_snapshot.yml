@@ -11,8 +11,10 @@
 # - poorly
 
 name: Release a Snapshot
-permissions:
+permissions: 
   packages: read
+  contents: write
+  pull-requests: read
 on:
   workflow_dispatch:
     inputs:
