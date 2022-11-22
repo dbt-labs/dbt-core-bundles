@@ -34,5 +34,7 @@ jobs:
           python-version: "3.x"
       - run: |
           sudo apt-get install libsasl2-dev
+          python -m pip install --user --upgrade pip
+          python -m pip install --upgrade setuptools wheel twine check-wheel-contents
           pip install -r requirements.txt
       - run: python release_creation/main.py
