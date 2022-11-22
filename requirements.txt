@@ -1,3 +1,2 @@
 semantic-version
 PyGithub
-pyarrow==10.0.*

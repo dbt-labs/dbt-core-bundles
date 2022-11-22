@@ -33,5 +33,8 @@ jobs:
         with:
           python-version: "3.x"
       - run: |
+          conda install arrow-cpp=10.0.* -c conda-forge
+          conda install pyarrow=10.0.* -c conda-forge
           pip install -r requirements.txt
+      - run:
           python release_creation/main.py
