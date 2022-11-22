@@ -1,0 +1,37 @@
+# **what?**
+# This workflow will....
+
+# **why?**
+# Because I said so
+
+# **when?**
+# This is triggered manually
+
+# **how**
+# - poorly
+
+name: Release a Snapshot
+permissions:
+  packages: read
+on:
+  workflow_dispatch:
+    inputs:
+      version_number:
+       description: The release version number (i.e. 1.0.0b1).
+       required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      INPUT_VERSION: ${{ inputs.version_number }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install requirements.txt
+          python release_creation/main.py 
+  
+  
