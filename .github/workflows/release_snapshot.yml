@@ -17,22 +17,21 @@ on:
   workflow_dispatch:
     inputs:
       version_number:
-       description: The release version number (i.e. 1.0.0b1).
-       required: true
+        description: The release version number (i.e. 1.0.0b1).
+        required: true
+        default: v1.3.0
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       INPUT_VERSION: ${{ inputs.version_number }}
-      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
       - run: |
           pip install -r requirements.txt
-          python release_creation/main.py 
-  
-  
+          python release_creation/main.py
