@@ -26,13 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       INPUT_VERSION: ${{ inputs.version_number }}
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - run: |
-          pip install requirements.txt
+          pip install -r requirements.txt
           python release_creation/main.py 
   
   
