@@ -1,5 +1,6 @@
 python -m pip install --upgrade pip
-rm -rf tmp
-mkdir tmp
-pip3 download --dest ./tmp \
-    $1
+rm -rf $1
+mkdir $1
+python -m pip download \
+ --dest $1 \
+ $2
