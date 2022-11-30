@@ -1,14 +1,17 @@
 # **what?**
-# This workflow will....
+# This workflow generates a zip archive with all the python dependencies
+# needed to run core + all adapters for linux, mac and windows OS platforms. 
 
 # **why?**
-# Because I said so
+# Installing from pip can result in unpredictable installs/runtime environments. 
+# Each zip serves as a snapshot of dependencies known to work. If any subsequent 
+# snapshot breaks then a user can simply roll back to a prior release.
 
 # **when?**
-# This is triggered manually
+# This is currently triggered manually.
 
 # **how**
-# - poorly
+# Call workflow dispatch
 
 name: Release a Snapshot
 permissions: 
@@ -24,10 +27,9 @@ on:
         default: v1.3.0
 
 jobs:
-  build:
+  linux:
     runs-on: ubuntu-latest
     env:
-      INPUT_VERSION: ${{ inputs.version_number }}
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
@@ -38,4 +40,41 @@ jobs:
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
-      - run: python release_creation/main.py
+      - run: |
+          python release_creation/main.py \
+           --input-version=${{ inputs.version_number }} \
+           --operation=create
+  macos:
+    runs-on: macos-latest
+    env:
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - run: |
+          sudo apt-get install libsasl2-dev
+          python -m pip install --user --upgrade pip
+          pip install -r requirements.txt
+      - run: |
+          python release_creation/main.py \
+           --input-version=${{ inputs.version_number }} \
+           --operation=update
+  windows:
+    runs-on: windows-latest
+    env:
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - run: |
+          sudo apt-get install libsasl2-dev
+          python -m pip install --user --upgrade pip
+          pip install -r requirements.txt
+      - run: |
+          python release_creation/main.py \
+           --input-version=${{ inputs.version_number }} \
+           --operation=update
