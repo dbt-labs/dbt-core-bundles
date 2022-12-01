@@ -62,18 +62,3 @@ jobs:
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=update
-  windows:
-    runs-on: windows-latest
-    env:
-      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - run: |
-          powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-          choco install microsoft-visual-cpp-build-tools
-          python -m pip install --user --upgrade pip
-          pip install -r requirements.txt
-      - run: python release_creation/main.py --input-version=${{ inputs.version_number }} --operation=update
