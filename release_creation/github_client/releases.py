@@ -112,7 +112,6 @@ def add_assets_to_release(assets: Dict, latest_release: Optional[GitRelease]) ->
         try:
             latest_release.upload_asset(path=asset_path, name=asset_name)
         except GithubException as e:
-            breakpoint()
             if e.status == 422:
                 print("Asset already exists!")
             else:
