@@ -32,7 +32,7 @@ def get_latest_snapshot_release(input_version: str) -> Tuple[Version, Optional[G
             match(target_match, r.tag_name)
             and target_version.build == release_version.build
             and target_version.prerelease == release_version.prerelease
-            and release_version > latest
+            and release_version >= latest
         ):
             latest = release_version
             latest_release = r
