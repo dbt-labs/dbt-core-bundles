@@ -1,6 +1,6 @@
 # **what?**
 # This workflow generates a zip archive with all the python dependencies
-# needed to run core + all adapters for linux, mac and windows OS platforms. 
+# needed to run core + all adapters for linux, mac OS platforms (future ToDo: add Windows)
 
 # **why?**
 # Installing from pip can result in unpredictable installs/runtime environments. 
