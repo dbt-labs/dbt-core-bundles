@@ -72,6 +72,8 @@ jobs:
         with:
           python-version: 3.9
       - run: |
+          @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+          choco install microsoft-visual-cpp-build-tools
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
       - run: python release_creation/main.py --input-version=${{ inputs.version_number }} --operation=update
