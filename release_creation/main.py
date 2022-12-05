@@ -30,6 +30,7 @@ def main():
         target_version.prerelease = latest_version.prerelease
         target_version.build = latest_version.build
         snapshot_assets = generate_snapshot(target_version)
+        print(f"Attempting to create new release for target version: {target_version}")
         create_new_release_for_version(target_version, snapshot_assets, latest_release)
     elif operation == ReleaseOperations.update:
         snapshot_assets = generate_snapshot(latest_version)
