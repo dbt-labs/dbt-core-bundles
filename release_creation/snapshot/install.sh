@@ -4,6 +4,5 @@ pip install -r $1/requirements/$2.requirements.txt \
 --no-index  \
 --force-reinstall \
 --find-links ./$3 \
---target ./target
-
+--target ./target/$4
 # dbt --version

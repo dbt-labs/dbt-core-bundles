@@ -36,7 +36,7 @@ def get_latest_snapshot_release(input_version: str) -> Tuple[ Version, Optional[
         ):
             latest = release_version
             latest_release = r
-    return latest, latest_release
+    return latest, latest_release    
 
 
 def _get_local_snapshot_reqs(snapshot_req_path: str) -> List[str]:
