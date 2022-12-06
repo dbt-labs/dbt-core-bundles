@@ -6,7 +6,7 @@ python -mvenv $install_env
 . $install_env/bin/activate
 python -m pip install --upgrade pip
 rm -rf $1
-mkdir $1
+mkdir  -p $1
 python -m pip download \
  --dest $1 \
  $2
