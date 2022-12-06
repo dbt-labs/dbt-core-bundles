@@ -9,7 +9,7 @@ import shutil
 _OUTPUT_ARCHIVE_FILE_BASE = "dbt-core-all-adapters-snapshot"
 _FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 _SNAPSHOT_FILE = f"{_FILE_DIR}/snapshot.requirements.txt"
-
+_PYTHON_VERSIONS = ['3.8.11','3.9.1','3.10.0']
 
 def _get_local_platform() -> str:
     local_sys = platform.system()
@@ -51,14 +51,21 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
     archive_path = f"{_OUTPUT_ARCHIVE_FILE_BASE}-{target_version}"
     _os = _get_local_platform()
     os_archive_path = f"{archive_path}-{_os}"
-    tmp_path = f"tmp/{_os}"
-    download_cmd = _generate_download_command_args(requirements_prefix=requirements_prefix, is_pre=is_pre)
-    subprocess.run(['sh',f"{_FILE_DIR}/download.sh", tmp_path, download_cmd], check=True)
-    subprocess.run(['sh',f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, tmp_path], check=True)
-    subprocess.run(['sh',f"{_FILE_DIR}/freeze.sh", _SNAPSHOT_FILE], check=True)
-    shutil.make_archive(os_archive_path, 'zip', 'tmp')
-    assets = {
-        f"snapshot_core_all_adapters_{_os}.zip": os_archive_path + ".zip",
-         "snapshot_requirements": _SNAPSHOT_FILE
-    }
+    base_tmp_path = f"tmp/{_os}/"
+    assets = {}
+    for py_version in _PYTHON_VERSIONS:
+        py_major_minor = ".".join(py_version.split(".")[:-1])
+        py_version_tmp_path = f"{base_tmp_path}{py_major_minor}"
+        py_version_archive_path = os_archive_path + f"-{py_major_minor}"
+        download_cmd = _generate_download_command_args(requirements_prefix=requirements_prefix, is_pre=is_pre)
+        subprocess.run(
+            ['sh',f"{_FILE_DIR}/download.sh", py_version_tmp_path, download_cmd, py_version], 
+            check=True)
+        subprocess.run(
+            ['sh',f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, py_version_tmp_path, py_version], 
+            check=True)
+        shutil.make_archive(py_version_archive_path, 'zip', py_version_tmp_path)
+        assets[f"snapshot_core_all_adapters_{_os}_{py_major_minor}.zip"] = py_version_archive_path + ".zip"
+        subprocess.run(['sh',f"{_FILE_DIR}/freeze.sh", _SNAPSHOT_FILE, py_version], check=True)
+        assets["snapshot_requirements"] = _SNAPSHOT_FILE
     return assets
