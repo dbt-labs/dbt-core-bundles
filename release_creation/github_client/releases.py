@@ -2,7 +2,7 @@ import copy
 import os
 import requests
 from typing import Dict, List, Optional, Set, Tuple
-from semantic_version import Version, match
+from semantic_version import Version
 from github import Github
 from github.GithubException import GithubException
 from github.GitRelease import GitRelease
@@ -17,10 +17,9 @@ def get_github_client() -> Github:
     return Github(_GH_ACCESS_TOKEN)
 
 
-def get_latest_snapshot_release(input_version: str) -> Tuple[Version, Optional[GitRelease]]:
+def get_latest_snapshot_release(input_version: str) -> Tuple[ Version, Optional[GitRelease]]:
     gh = get_github_client()
     target_version = Version.coerce(input_version)
-    target_match = f"~{target_version.major}.{target_version.minor}"
     latest = copy.copy(target_version)
     latest.patch = 0
     repo = gh.get_repo(_GH_SNAPSHOT_REPO)
@@ -29,10 +28,11 @@ def get_latest_snapshot_release(input_version: str) -> Tuple[Version, Optional[G
     for r in releases:
         release_version = Version.coerce(r.tag_name)
         if (
-            match(target_match, r.tag_name)
-            and target_version.build == release_version.build
-            and target_version.prerelease == release_version.prerelease
-            and release_version >= latest
+            release_version.major == latest.major
+            and release_version.minor == latest.minor
+            and release_version.prerelease == latest.prerelease
+            and release_version.build == latest.build
+            and release_version.patch >= latest.patch  # type: ignore
         ):
             latest = release_version
             latest_release = r
