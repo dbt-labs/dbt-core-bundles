@@ -60,6 +60,9 @@ jobs:
       - run: |
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
+          pyenv install 3.8.11 --skip-existing
+          pyenv install 3.9.1 --skip-existing
+          pyenv install 3.10.0 --skip-existing
       - name: setup pyenv
         uses: "gabrielfalcao/pyenv-action@v9"
       - run: |

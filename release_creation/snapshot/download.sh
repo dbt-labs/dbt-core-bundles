@@ -1,5 +1,5 @@
 set -e
-pyenv install $3 --skip-existing
+# pyenv install $3 --skip-existing
 install_env=".snapshot-env-$3"
 pyenv local $3
 python -mvenv $install_env --system-site-packages
@@ -11,4 +11,3 @@ mkdir  -p $1
 python -m pip download \
  --dest $1 \
  $2
-deactivate
