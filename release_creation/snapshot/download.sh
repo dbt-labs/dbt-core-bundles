@@ -10,4 +10,4 @@ mkdir  -p $1
 python -m pip download \
  --dest $1 \
  $2
-. deactivate
+deactivate
