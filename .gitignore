@@ -98,3 +98,5 @@ dmypy.json
 tmp/
 dbt-core*.zip
 snapshot*.txt
+.snapshot-env*
+.DS_Store
