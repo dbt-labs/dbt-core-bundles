@@ -10,4 +10,10 @@ rm -rf $1
 mkdir  -p $1
 python -m pip download \
  --dest $1 \
+ --no-binary :pyodbc,cffi,cryptography: \
+ --use-feature=no-binary-enable-wheel-cache \
+ $2
+
+python -m pip download \
+ --dest $1 \
  $2

@@ -38,7 +38,6 @@ def _generate_download_command_args(
     download_command = ""
     if is_pre:
         download_command += " --pre"
-    download_command += " --prefer-binary"
     download_command += f" -r {_FILE_DIR}/requirements/{requirements_prefix}.requirements.txt"
     return download_command
 
