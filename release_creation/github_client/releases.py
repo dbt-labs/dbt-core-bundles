@@ -10,7 +10,7 @@ from github.GitReleaseAsset import GitReleaseAsset
 
 _GH_SNAPSHOT_REPO = "dbt-labs/dbt-core-snapshots"
 _GH_ACCESS_TOKEN = os.environ["GH_ACCESS_TOKEN"]
-_SNAP_REQ_NAME = "snapshot_requirements_3.8.txt"
+_SNAP_REQ_NAME = "snapshot_requirements"
 
 
 def get_github_client() -> Github:
@@ -89,8 +89,10 @@ def create_new_release_for_version(
     gh = get_github_client()
     release_tag = str(release_version)
     repo = gh.get_repo(_GH_SNAPSHOT_REPO)
+    reqs_files = [x for x in assets if _SNAP_REQ_NAME in x]
+    print(reqs_files)
     release_body = _diff_snapshot_requirements(
-        assets[_SNAP_REQ_NAME], latest_release=latest_release
+        assets[reqs_files[0]], latest_release=latest_release
     )
     if not release_body:
         raise Exception("New snapshot does not contain any new changes")
