@@ -38,9 +38,17 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
+      - name: Cache Python Installs
+        id: cache-installs
+        uses: actions/cache@v3
+        with:
+          path: $(pyenv root)/shims
+          key: ${{ runner.os }}-installs
+
       - name: setup pyenv
         uses: "gabrielfalcao/pyenv-action@v9"
-      - run: |
+      - if: steps.cache-installs.outputs.cache-hit != 'true'
+        run: |
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
@@ -60,11 +68,19 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - name: setup pyenv
-        uses: "gabrielfalcao/pyenv-action@v9"
       - run: |
           python -m pip install --user --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt 
+      - name: Cache Python Installs
+        id: cache-installs
+        uses: actions/cache@v3
+        with:
+          path: $(pyenv root)/shims
+          key: ${{ runner.os }}-installs
+      - name: setup pyenv
+        uses: "gabrielfalcao/pyenv-action@v9"
+      - if: steps.cache-installs.outputs.cache-hit != 'true'
+        run: |
           pyenv install 3.8.11 --skip-existing
           pyenv install 3.9.1 --skip-existing
           pyenv install 3.10.0 --skip-existing

@@ -5,10 +5,10 @@ import platform
 import subprocess
 import shutil
 
-
 _OUTPUT_ARCHIVE_FILE_BASE = "dbt-core-all-adapters-snapshot"
 _FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 _PYTHON_VERSIONS = ['3.8.11','3.9.1','3.10.0']
+
 
 def _get_local_os() -> str:
     local_sys = platform.system()
@@ -75,5 +75,8 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
         assets[f"snapshot_requirements_{py_major_minor}.txt"] = requirements_file
         extra_platforms = _get_extra_platforms_for_os(_os)
         for extra_platform in extra_platforms:
-            subprocess.run(['sh',f"{_FILE_DIR}/download_deps.sh", py_version_tmp_path, extra_platform, requirements_file], check=True)
+            subprocess.run(
+                ['sh',f"{_FILE_DIR}/download_deps.sh", 
+                py_version_tmp_path, extra_platform, requirements_file],
+                 check=True)
     return assets
