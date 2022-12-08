@@ -29,61 +29,58 @@ on:
         required: true
 
 jobs:
-  linux:
+  linux-create:
     runs-on: ubuntu-latest
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.9
-      - name: Cache Python Installs
-        id: cache-installs
-        uses: actions/cache@v3
-        with:
-          path: $HOME/.pyenv/shims
-          key: ${{ runner.os }}-installs
-
-      - name: setup pyenv
-        uses: "gabrielfalcao/pyenv-action@v9"
-      - if: steps.cache-installs.outputs.cache-hit != 'true'
-        run: |
+          python-version: "3.7"
+      - run: |
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
-          pyenv install 3.8.11 --skip-existing
-          pyenv install 3.9.1 --skip-existing
-          pyenv install 3.10.0 --skip-existing
       - run: |
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=create
-  macos:
-    runs-on: macos-latest
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+          python-version: ["3.8", "3.9", "3.10"]
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: ${{ matrix.python-version }}
       - run: |
+          sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
-          pip install -r requirements.txt 
-      - name: Cache Python Installs
-        id: cache-installs
-        uses: actions/cache@v3
+          pip install -r requirements.txt
+      - run: |
+          python release_creation/main.py \
+           --input-version=${{ inputs.version_number }} \
+           --operation=update
+  macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+          python-version: ["3.7", "3.8", "3.9", "3.10"]
+    env:
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
         with:
-          path: $(pyenv root)/shims
-          key: ${{ runner.os }}-installs
-      - name: setup pyenv
-        uses: "gabrielfalcao/pyenv-action@v9"
-      - if: steps.cache-installs.outputs.cache-hit != 'true'
-        run: |
-          pyenv install 3.8.11 --skip-existing
-          pyenv install 3.9.1 --skip-existing
-          pyenv install 3.10.0 --skip-existing
+          python-version: ${{ matrix.python-version }}
       - run: |
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \

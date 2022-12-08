@@ -1,13 +1,12 @@
 from typing import Dict, List, Optional, Tuple
 from semantic_version import Version
-import os
+import os, platform
 import platform
 import subprocess
 import shutil
 
 _OUTPUT_ARCHIVE_FILE_BASE = "dbt-core-all-adapters-snapshot"
 _FILE_DIR = os.path.dirname(os.path.realpath(__file__))
-_PYTHON_VERSIONS = ['3.8.11','3.9.1','3.10.0']
 
 
 def _get_local_os() -> str:
@@ -57,26 +56,26 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
     os_archive_path = f"{archive_path}-{_os}"
     base_tmp_path = f"tmp/{_os}/"
     assets = {}
-    for py_version in _PYTHON_VERSIONS:
-        py_major_minor = ".".join(py_version.split(".")[:-1])
-        requirements_file = f"{_FILE_DIR}/snapshot.requirements.{py_major_minor}.txt"
-        py_version_tmp_path = f"{base_tmp_path}{py_major_minor}"
-        py_version_archive_path = os_archive_path + f"-{py_major_minor}"
-        download_cmd = _generate_download_command_args(requirements_prefix=requirements_prefix, is_pre=is_pre)
+    py_version = platform.python_version()
+    py_major_minor = ".".join(py_version.split(".")[:-1])
+    requirements_file = f"{_FILE_DIR}/snapshot.requirements.{py_major_minor}.txt"
+    py_version_tmp_path = f"{base_tmp_path}{py_major_minor}"
+    py_version_archive_path = os_archive_path + f"-{py_major_minor}"
+    download_cmd = _generate_download_command_args(requirements_prefix=requirements_prefix, is_pre=is_pre)
+    subprocess.run(
+        ['sh',f"{_FILE_DIR}/download.sh", py_version_tmp_path, download_cmd, py_version], 
+        check=True)
+    subprocess.run(
+        ['sh',f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, py_version_tmp_path, py_version], 
+        check=True)
+    shutil.make_archive(py_version_archive_path, 'zip', py_version_tmp_path)
+    assets[f"snapshot_core_all_adapters_{_os}_{py_major_minor}.zip"] = py_version_archive_path + ".zip"
+    subprocess.run(['sh',f"{_FILE_DIR}/freeze.sh", requirements_file, py_version], check=True)
+    assets[f"snapshot_requirements_{py_major_minor}.txt"] = requirements_file
+    extra_platforms = _get_extra_platforms_for_os(_os)
+    for extra_platform in extra_platforms:
         subprocess.run(
-            ['sh',f"{_FILE_DIR}/download.sh", py_version_tmp_path, download_cmd, py_version], 
-            check=True)
-        subprocess.run(
-            ['sh',f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, py_version_tmp_path, py_version], 
-            check=True)
-        shutil.make_archive(py_version_archive_path, 'zip', py_version_tmp_path)
-        assets[f"snapshot_core_all_adapters_{_os}_{py_major_minor}.zip"] = py_version_archive_path + ".zip"
-        subprocess.run(['sh',f"{_FILE_DIR}/freeze.sh", requirements_file, py_version], check=True)
-        assets[f"snapshot_requirements_{py_major_minor}.txt"] = requirements_file
-        extra_platforms = _get_extra_platforms_for_os(_os)
-        for extra_platform in extra_platforms:
-            subprocess.run(
-                ['sh',f"{_FILE_DIR}/download_no_deps.sh", 
-                py_version_tmp_path, extra_platform, requirements_file],
-                 check=True)
+            ['sh',f"{_FILE_DIR}/download_no_deps.sh", 
+            py_version_tmp_path, extra_platform, requirements_file],
+                check=True)
     return assets

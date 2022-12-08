@@ -4,9 +4,9 @@ requirements_file=$3
 staging="download-no-deps-staging"
 
 pip download -r $requirements_file \
- --dest ./$staging \
+ --dest $staging \
  --progress-bar off \
  --platform $platform \
  --no-deps
 
-cp -r $staging/ ./$final_dest
+cp -a $staging/. $final_dest/
