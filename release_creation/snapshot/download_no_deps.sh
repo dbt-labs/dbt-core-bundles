@@ -6,7 +6,7 @@ staging="download-no-deps-staging"
 pip download -r $requirements_file \
  --dest ./$staging \
  --progress-bar off \
- $platform \
+ --platform $platform \
  --no-deps
 
 cp -r $staging/ ./$final_dest
