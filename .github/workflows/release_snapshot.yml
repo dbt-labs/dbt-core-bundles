@@ -48,6 +48,7 @@ jobs:
            --input-version=${{ inputs.version_number }} \
            --operation=create
   linux:
+    needs: linux-create
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -69,6 +70,7 @@ jobs:
            --input-version=${{ inputs.version_number }} \
            --operation=update
   macos:
+    needs: linux-create
     runs-on: macos-latest
     strategy:
       matrix:
@@ -81,6 +83,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+      - run: |
+          python -m pip install --user --upgrade pip
+          pip install -r requirements.txt
       - run: |
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
