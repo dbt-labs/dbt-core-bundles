@@ -76,7 +76,7 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
         extra_platforms = _get_extra_platforms_for_os(_os)
         for extra_platform in extra_platforms:
             subprocess.run(
-                ['sh',f"{_FILE_DIR}/download_deps.sh", 
+                ['sh',f"{_FILE_DIR}/download_no_deps.sh", 
                 py_version_tmp_path, extra_platform, requirements_file],
                  check=True)
     return assets
