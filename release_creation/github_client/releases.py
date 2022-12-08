@@ -10,7 +10,7 @@ from github.GitReleaseAsset import GitReleaseAsset
 
 _GH_SNAPSHOT_REPO = "dbt-labs/dbt-core-snapshots"
 _GH_ACCESS_TOKEN = os.environ["GH_ACCESS_TOKEN"]
-_SNAP_REQ_NAME = "snapshot_requirements"
+_SNAP_REQ_NAME = "snapshot_requirements_3.8.txt"
 
 
 def get_github_client() -> Github:

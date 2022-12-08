@@ -42,7 +42,7 @@ jobs:
         id: cache-installs
         uses: actions/cache@v3
         with:
-          path: $(pyenv root)/shims
+          path: $HOME/.pyenv/shims
           key: ${{ runner.os }}-installs
 
       - name: setup pyenv
