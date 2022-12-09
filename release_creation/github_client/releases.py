@@ -89,8 +89,11 @@ def create_new_release_for_version(
     gh = get_github_client()
     release_tag = str(release_version)
     repo = gh.get_repo(_GH_SNAPSHOT_REPO)
+    reqs_files = [x for x in assets if _SNAP_REQ_NAME in x]
+    print(assets)
+    print(reqs_files)
     release_body = _diff_snapshot_requirements(
-        assets[_SNAP_REQ_NAME], latest_release=latest_release
+        assets[reqs_files[0]], latest_release=latest_release
     )
     if not release_body:
         raise Exception("New snapshot does not contain any new changes")

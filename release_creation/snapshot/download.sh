@@ -1,13 +1,12 @@
 set -e
-pyenv install $3 --skip-existing
-install_env=".snapshot-env-$3"
-pyenv local $3
-python -mvenv $install_env
-source $install_env/bin/activate
-python -m pip install --upgrade pip
-rm -rf $1
-mkdir $1
+base_dir=$1
+
+rm -rf $base_dir
+mkdir  -p $base_dir
+
 python -m pip download \
- --dest $1 \
+ --progress-bar off \
+ --prefer-binary \
+ --dest $base_dir \
+ --no-cache-dir \
  $2
-source deactivate
