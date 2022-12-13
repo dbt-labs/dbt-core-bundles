@@ -39,11 +39,12 @@ def _get_requirements_prefix(
 def _generate_download_command_args(
     requirements_prefix: str, is_pre: bool = False
 ) -> str:
-    download_command = ""
+    download_args = []
     if is_pre:
-        download_command += " --pre"
-    download_command += f" -r {_FILE_DIR}/requirements/{requirements_prefix}.requirements.txt"
-    return download_command
+        download_args.append(" --pre")
+    download_args.append(
+        f" -r {_FILE_DIR}/requirements/{requirements_prefix}.requirements.txt")
+    return "".join(download_args)
 
 
 def generate_snapshot(target_version: Version) -> Dict[str, str]:

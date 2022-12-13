@@ -1,3 +1,4 @@
+set -e
 rm -rf target
 mkdir target
 

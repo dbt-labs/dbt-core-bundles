@@ -1,2 +1,3 @@
-semantic-version
-PyGithub
+StrEnum
+semantic-version~=2.10.0
+PyGithub~=1.0

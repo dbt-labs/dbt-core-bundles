@@ -1,4 +1,4 @@
-from enum import Enum
+from strenum import StrEnum
 import os
 import argparse
 
@@ -12,7 +12,7 @@ from snapshot.create import generate_snapshot
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
-class ReleaseOperations(str, Enum):
+class ReleaseOperations(StrEnum):
     create = "create"
     update = "update"
 
