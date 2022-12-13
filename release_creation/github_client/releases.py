@@ -96,7 +96,7 @@ def create_new_release_for_version(
         assets[reqs_files[0]], latest_release=latest_release
     )
     if not release_body:
-        raise Exception("New snapshot does not contain any new changes")
+        raise RuntimeError("New snapshot does not contain any new changes")
     created_release = repo.create_git_release(
         tag=release_tag, name="Snapshot Release", message=release_body
     )
