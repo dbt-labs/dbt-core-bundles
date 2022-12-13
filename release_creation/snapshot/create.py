@@ -48,6 +48,17 @@ def _generate_download_command_args(
 
 
 def generate_snapshot(target_version: Version) -> Dict[str, str]:
+    """creates a zip archive of the python dependencies for the provided 
+       semantic version
+
+    Args:
+        target_version (Version): the input version to use when determining 
+        the requirements to download.
+
+    Returns:
+        Dict[str, str]: dict of generated snapshot assets, key is it's name 
+                        and the value is the path to the file.
+    """
     is_pre = True if target_version.prerelease else False
     requirements_prefix = _get_requirements_prefix(
         major_version=target_version.major, minor_version=target_version.minor, is_pre=is_pre
