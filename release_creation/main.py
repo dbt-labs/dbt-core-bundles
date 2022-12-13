@@ -1,4 +1,5 @@
-from enum import Enum
+import logging
+from strenum import StrEnum
 import os
 import argparse
 
@@ -10,9 +11,9 @@ from github_client.releases import (
 from snapshot.create import generate_snapshot
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+logger = logging.getLogger(__name__)
 
-
-class ReleaseOperations(str, Enum):
+class ReleaseOperations(StrEnum):
     create = "create"
     update = "update"
 
@@ -30,8 +31,8 @@ def main():
         target_version.prerelease = latest_version.prerelease
         target_version.build = latest_version.build
         snapshot_assets = generate_snapshot(target_version)
-        print(f"Attempting to create new release for target version: {target_version}")
-        print(snapshot_assets)
+        logger.info(f"Attempting to create new release for target version: {target_version}")
+        logger.info(f"release assets {[]}")
         create_new_release_for_version(target_version, snapshot_assets, latest_release)
     elif operation == ReleaseOperations.update:
         snapshot_assets = generate_snapshot(latest_version)

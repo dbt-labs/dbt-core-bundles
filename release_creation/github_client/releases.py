@@ -18,6 +18,15 @@ def get_github_client() -> Github:
 
 
 def get_latest_snapshot_release(input_version: str) -> Tuple[ Version, Optional[GitRelease]]:
+    """Retrieve the latest release matching the major.minor and release stage
+       semantic version if it exists. Ignores the patch version. 
+
+    Args:
+        input_version (str): semantic version (1.0.0.0rc, 2.3.5) to match against 
+
+    Returns:
+        Tuple[ Version, Optional[GitRelease]]: _description_
+    """
     gh = get_github_client()
     target_version = Version.coerce(input_version)
     latest = copy.copy(target_version)
@@ -86,6 +95,18 @@ def _diff_snapshot_requirements(
 def create_new_release_for_version(
     release_version: Version, assets: Dict, latest_release: Optional[GitRelease]
 ) -> None:
+    """Given an input version it creates a matching Github Release and attaches the assets
+       as a ReleaseAsset
+
+    Args:
+        release_version (Version): semantic version to be used when creating the release
+        assets (Dict): assets to be added to the created release where a key is the asset name
+        latest_release (Optional[GitRelease]): supply if there is a prior release to be diffed against
+
+    Raises:
+        RuntimeError: _description_
+        e: _description_
+    """
     gh = get_github_client()
     release_tag = str(release_version)
     repo = gh.get_repo(_GH_SNAPSHOT_REPO)
@@ -96,7 +117,7 @@ def create_new_release_for_version(
         assets[reqs_files[0]], latest_release=latest_release
     )
     if not release_body:
-        raise Exception("New snapshot does not contain any new changes")
+        raise RuntimeError("New snapshot does not contain any new changes")
     created_release = repo.create_git_release(
         tag=release_tag, name="Snapshot Release", message=release_body
     )

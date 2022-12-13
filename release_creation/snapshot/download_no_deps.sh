@@ -1,3 +1,4 @@
+set -e
 final_dest=$1
 platform=$2
 requirements_file=$3
