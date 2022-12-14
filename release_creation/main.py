@@ -19,9 +19,17 @@ class ReleaseOperations(StrEnum):
 
 
 def main():
+    """
+    Implements two workflows:
+    * Create: Generate a net new release for a major.minor version which corresponds to core.
+    * Update: Add release assets to an existing release.
+
+    Input version is a string that corresponds to the semver standard, 
+    see https://semver.org/ for more info. 
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--operation", required=True, type=ReleaseOperations)
-    parser.add_argument("--input-version", required=True, type=str)  # e.g. v1.3.4
+    parser.add_argument("--input-version", required=True, type=str)  # e.g. 1.3.4
     args = parser.parse_args()
     version = args.input_version
     operation = args.operation
