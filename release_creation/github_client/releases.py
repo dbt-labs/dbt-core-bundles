@@ -1,4 +1,5 @@
 import copy
+import logging
 import os
 import requests
 from typing import Dict, List, Optional, Set, Tuple
@@ -12,6 +13,7 @@ _GH_SNAPSHOT_REPO = "dbt-labs/dbt-core-snapshots"
 _GH_ACCESS_TOKEN = os.environ["GH_ACCESS_TOKEN"]
 _SNAP_REQ_NAME = "snapshot_requirements"
 
+logger = logging.getLogger(__name__)
 
 def get_github_client() -> Github:
     return Github(_GH_ACCESS_TOKEN)
@@ -25,27 +27,28 @@ def get_latest_snapshot_release(input_version: str) -> Tuple[ Version, Optional[
         input_version (str): semantic version (1.0.0.0rc, 2.3.5) to match against 
 
     Returns:
-        Tuple[ Version, Optional[GitRelease]]: _description_
+        Tuple[ Version, Optional[GitRelease]]: A tuple of the latest release tag 
+        and the latest release itself.
     """
     gh = get_github_client()
     target_version = Version.coerce(input_version)
-    latest = copy.copy(target_version)
-    latest.patch = 0
+    latest_version = copy.copy(target_version)
+    latest_version.patch = 0
     repo = gh.get_repo(_GH_SNAPSHOT_REPO)
     releases = repo.get_releases()
     latest_release = None
     for r in releases:
         release_version = Version.coerce(r.tag_name)
         if (
-            release_version.major == latest.major
-            and release_version.minor == latest.minor
-            and release_version.prerelease == latest.prerelease
-            and release_version.build == latest.build
-            and release_version.patch >= latest.patch  # type: ignore
+            release_version.major == latest_version.major
+            and release_version.minor == latest_version.minor
+            and release_version.prerelease == latest_version.prerelease
+            and release_version.build == latest_version.build
+            and release_version.patch >= latest_version.patch  # type: ignore
         ):
-            latest = release_version
+            latest_version = release_version
             latest_release = r
-    return latest, latest_release    
+    return latest_version, latest_release    
 
 
 def _get_local_snapshot_reqs(snapshot_req_path: str) -> List[str]:
@@ -111,8 +114,7 @@ def create_new_release_for_version(
     release_tag = str(release_version)
     repo = gh.get_repo(_GH_SNAPSHOT_REPO)
     reqs_files = [x for x in assets if _SNAP_REQ_NAME in x]
-    print(assets)
-    print(reqs_files)
+
     release_body = _diff_snapshot_requirements(
         assets[reqs_files[0]], latest_release=latest_release
     )
@@ -137,6 +139,6 @@ def add_assets_to_release(assets: Dict, latest_release: Optional[GitRelease]) ->
             latest_release.upload_asset(path=asset_path, name=asset_name)
         except GithubException as e:
             if e.status == 422:
-                print("Asset already exists!")
+                logger.warning("Asset already exists!")
             else:
                 raise e
