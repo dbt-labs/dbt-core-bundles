@@ -96,6 +96,7 @@ dmypy.json
 
 # Project Specific
 tmp/
+.target/
 dbt-core*.zip
 snapshot*.txt
 .snapshot-env*

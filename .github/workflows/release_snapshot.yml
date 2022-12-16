@@ -1,0 +1,92 @@
+# **what?**
+# This workflow generates a zip archive with all the python dependencies
+# needed to run core + all adapters for linux, mac OS platforms (future ToDo: add Windows)
+
+# **why?**
+# Installing from pip can result in unpredictable installs/runtime environments. 
+# Each zip serves as a snapshot of dependencies known to work. If any subsequent 
+# snapshot breaks then a user can simply roll back to a prior release.
+
+# **when?**
+# This is currently triggered manually.
+
+# **how**
+# Call workflow dispatch. For input-version please use the semantic version 
+# representing the release of the dependency you want to incorporate into a new 
+# snapshot. So if there has just been a release of dbt-core of 1.3.3 then pass that
+# as the input version (without a `v` prefix). 
+
+name: Release a Snapshot
+permissions: 
+  packages: read
+  contents: write
+  pull-requests: read
+on:
+  workflow_dispatch:
+    inputs:
+      version_number:
+        description: The release version number (i.e. 1.0.0b1).
+        required: true
+
+jobs:
+  linux-create:
+    runs-on: ubuntu-latest
+    env:
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.7"
+      - run: |
+          sudo apt-get install libsasl2-dev
+          python -m pip install --user --upgrade pip
+          pip install -r requirements.txt
+      - run: |
+          python release_creation/main.py \
+           --input-version=${{ inputs.version_number }} \
+           --operation=create
+  linux:
+    needs: linux-create
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+          python-version: ["3.8", "3.9", "3.10"]
+    env:
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: |
+          sudo apt-get install libsasl2-dev
+          python -m pip install --user --upgrade pip
+          pip install -r requirements.txt
+      - run: |
+          python release_creation/main.py \
+           --input-version=${{ inputs.version_number }} \
+           --operation=update
+  macos:
+    needs: linux-create
+    runs-on: macos-latest
+    strategy:
+      matrix:
+          python-version: ["3.7", "3.8", "3.9", "3.10"]
+    env:
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: |
+          python -m pip install --user --upgrade pip
+          pip install -r requirements.txt
+      - run: |
+          python release_creation/main.py \
+           --input-version=${{ inputs.version_number }} \
+           --operation=update
