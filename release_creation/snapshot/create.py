@@ -22,9 +22,9 @@ def _get_local_os() -> str:
 
 def _get_extra_platforms_for_os(_os: str) -> List[str]:
     if _os == "mac":
-        return ['macosx_10_9_x86_64', 'macosx_11_0_arm64']
+        return ['macosx_10_9_x86_64', 'macosx_11_0_arm64', 'macosx_10_10_intel', 'macosx_12_0_arm64']
     else:
-        return ['manylinux_2_17_x86_64','manylinux2014_x86_64']
+        return ['manylinux_2_17_x86_64','manylinux2014_x86_64', 'manylinux2014_i686']
 
 
 def _get_requirements_prefix(
