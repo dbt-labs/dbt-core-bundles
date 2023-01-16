@@ -100,6 +100,6 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
 
     assets = {}
     assets[f"snapshot_core_all_adapters_{local_os}_{py_major_minor}.zip"] = py_version_archive_path + ".zip"
-    assets[f"{SNAPSHOT_REQ_NAME_PREFIX}_{py_major_minor}.txt"] = requirements_file
+    assets[f"{SNAPSHOT_REQ_NAME_PREFIX}_{local_os}_{py_major_minor}.txt"] = requirements_file
 
     return assets
