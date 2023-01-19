@@ -46,7 +46,7 @@ jobs:
       - run: |
           export CREATED_TAG=`python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
-           --operation=create)`
+           --operation=create`
           echo "CREATED_TAG=$CREATED_TAG" >> $GITHUB_OUTPUT
   linux:
     needs: linux-create
@@ -105,7 +105,6 @@ jobs:
           python -m pip install --user --upgrade pip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_core_all_adapters_linux_3.8.zip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_requirements_3.8.txt
-          ls -la
           unzip snapshot_core_all_adapters_linux_3.8.zip -d snapshot_pkgs
           pip install -r snapshot_requirements_3.8.txt \
               --no-index \ 
