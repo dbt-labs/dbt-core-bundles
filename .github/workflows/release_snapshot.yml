@@ -44,9 +44,9 @@ jobs:
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
       - run: |
-          python release_creation/main.py \
+          echo "CREATED_TAG=$(python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
-           --operation=create
+           --operation=create)" >> $GITHUB_OUTPUT
   linux:
     needs: linux-create
     runs-on: ubuntu-latest
@@ -90,3 +90,24 @@ jobs:
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=update
+  test-linux-install:
+    needs: linux-create
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - run: |
+          export CREATED_TAG=${{ steps.linux-create.outputs.CREATED_TAG }}
+          python -m pip install --user --upgrade pip
+          curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_core_all_adapters_linux_3.8.zip
+          curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_requirements_3.8.txt
+          unzip snapshot_core_all_adapters_linux_3.8.zip -d snapshot_pkgs
+          pip install -r snapshot_requirements_3.8.txt \
+              --no-index \ 
+              --find-links ./snapshot_pkgs \
+              && \
+              pip freeze
+

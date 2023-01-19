@@ -1,6 +1,7 @@
 import logging
 from strenum import StrEnum
 import os
+import sys
 import argparse
 
 from github_client.releases import (
@@ -42,10 +43,10 @@ def main():
         logger.info(f"Attempting to create new release for target version: {target_version}")
         logger.info(f"release assets {[]}")
         create_new_release_for_version(target_version, snapshot_assets, latest_release)
+        sys.stdout.write(str(target_version))
     elif operation == ReleaseOperations.update:
         snapshot_assets = generate_snapshot(latest_version)
-        add_assets_to_release(assets=snapshot_assets, latest_release=latest_release)
-
+        add_assets_to_release(assets=snapshot_assets, latest_release=latest_release)        
 
 if __name__ == "__main__":
     main()
