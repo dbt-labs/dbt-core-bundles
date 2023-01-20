@@ -47,7 +47,9 @@ jobs:
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=create
-          source result.env
+          tail -n1 result.env
+          source ./result.env
+          echo "$CREATED_TAG" 
           echo "CREATED_TAG=$CREATED_TAG" >> $GITHUB_OUTPUT
   linux:
     needs: linux-create

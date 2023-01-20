@@ -21,7 +21,7 @@ class ReleaseOperations(StrEnum):
 
 def write_result(version: Version):
     with open(f"{os.getcwd()}/result.env", "w+") as f:
-        f.write(f"CREATED_TAG={str(version)}")
+        f.write(f"CREATED_TAG=\"{str(version)}\"")
 
 def main():
     """
