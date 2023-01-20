@@ -50,7 +50,7 @@ jobs:
           tail -n1 result.env
           source ./result.env
           echo "$CREATED_TAG" 
-          echo "CREATED_TAG=$CREATED_TAG" >> $GITHUB_OUTPUT
+          echo "CREATED_TAG=$CREATED_TAG" >> $GITHUB_ENV
   linux:
     needs: linux-create
     runs-on: ubuntu-latest
@@ -104,7 +104,7 @@ jobs:
         with:
           python-version: 3.8
       - run: |
-          export CREATED_TAG=${{ steps.linux-create.outputs.CREATED_TAG }}
+          export CREATED_TAG=${{ env.CREATED_TAG }}
           python -m pip install --user --upgrade pip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_core_all_adapters_linux_3.8.zip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_requirements_3.8.txt
