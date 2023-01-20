@@ -104,7 +104,8 @@ jobs:
         with:
           python-version: 3.8
       - run: |
-          export CREATED_TAG=${{ env.CREATED_TAG }}
+          echo "${{ env.CREATED_TAG }}"
+          export CREATED_TAG="${{ env.CREATED_TAG }}"
           python -m pip install --user --upgrade pip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_core_all_adapters_linux_3.8.zip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_requirements_3.8.txt
