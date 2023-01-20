@@ -44,9 +44,10 @@ jobs:
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
       - run: |
-          export CREATED_TAG=`python release_creation/main.py \
+          python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
-           --operation=create`
+           --operation=create
+          source result.env
           echo "CREATED_TAG=$CREATED_TAG" >> $GITHUB_OUTPUT
   linux:
     needs: linux-create

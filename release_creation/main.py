@@ -1,3 +1,4 @@
+from distutils.version import Version
 import logging
 from strenum import StrEnum
 import os
@@ -18,6 +19,9 @@ class ReleaseOperations(StrEnum):
     create = "create"
     update = "update"
 
+def write_result(version: Version):
+    with open(f"{os.getcwd()}/result.env", "w+") as f:
+        f.write(f"CREATED_TAG={str(version)}")
 
 def main():
     """
@@ -43,7 +47,7 @@ def main():
         logger.info(f"Attempting to create new release for target version: {target_version}")
         logger.info(f"release assets {[]}")
         create_new_release_for_version(target_version, snapshot_assets, latest_release)
-        sys.stdout.write(str(target_version))
+        write_result(version=version)
     elif operation == ReleaseOperations.update:
         snapshot_assets = generate_snapshot(latest_version)
         add_assets_to_release(assets=snapshot_assets, latest_release=latest_release)        
