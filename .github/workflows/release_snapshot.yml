@@ -33,6 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      created_tag: ${{ steps.create-release.outputs.created_tag }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.7
@@ -43,14 +45,15 @@ jobs:
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
-      - run: |
+      - id: create-release
+        run: |
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=create
           tail -n1 result.env
           source ./result.env
           echo "$CREATED_TAG" 
-          echo "CREATED_TAG=$CREATED_TAG" >> $GITHUB_ENV
+          echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
   linux:
     needs: linux-create
     runs-on: ubuntu-latest
@@ -104,8 +107,8 @@ jobs:
         with:
           python-version: 3.8
       - run: |
-          echo "${{ env.CREATED_TAG }}"
-          export CREATED_TAG="${{ env.CREATED_TAG }}"
+          echo "${{ needs.linux-create.outputs.created_tag }}"
+          export CREATED_TAG="${{ needs.linux-create.outputs.created_tag }}"
           python -m pip install --user --upgrade pip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_core_all_adapters_linux_3.8.zip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_requirements_3.8.txt
