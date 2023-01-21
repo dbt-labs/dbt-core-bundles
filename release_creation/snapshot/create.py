@@ -77,21 +77,21 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
     download_cmd = _generate_download_command_args(requirements_prefix=requirements_prefix, is_pre=is_pre)
     # Download pip dependencies
     subprocess.run(
-        ['sh',f"{_FILE_DIR}/download.sh", py_version_tmp_path, download_cmd, py_version], 
+        ['bash',f"{_FILE_DIR}/download.sh", py_version_tmp_path, download_cmd, py_version], 
         check=True)
     # Check install
     subprocess.run(
-        ['sh',f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, py_version_tmp_path, py_version], 
+        ['bash',f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, py_version_tmp_path, py_version], 
         check=True)
     # Freeze complete requirements (i.e. including transitive dependencies)
-    subprocess.run(['sh',f"{_FILE_DIR}/freeze.sh", requirements_file, py_version], check=True)
+    subprocess.run(['bash',f"{_FILE_DIR}/freeze.sh", requirements_file, py_version], check=True)
     
     # Use the complete requirements to do a no-deps download (doesn't check system compatibility)
     # This allows us to download requirements for platform architectures other than the local
     extra_platforms = _get_extra_platforms_for_os(local_os)
     for extra_platform in extra_platforms:
         subprocess.run(
-            ['sh',f"{_FILE_DIR}/download_no_deps.sh", 
+            ['bash',f"{_FILE_DIR}/download_no_deps.sh", 
             py_version_tmp_path, extra_platform, requirements_file],
                 check=True)
 
