@@ -107,11 +107,10 @@ jobs:
         with:
           python-version: 3.8
       - run: |
-          echo "${{ needs.linux-create.outputs.created_tag }}"
           export CREATED_TAG="${{ needs.linux-create.outputs.created_tag }}"
           python -m pip install --user --upgrade pip
           curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_core_all_adapters_linux_3.8.zip
-          curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_requirements_3.8.txt
+          curl -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_requirements_linux_3.8.txt
           unzip snapshot_core_all_adapters_linux_3.8.zip -d snapshot_pkgs
           pip install -r snapshot_requirements_3.8.txt \
               --no-index \ 
