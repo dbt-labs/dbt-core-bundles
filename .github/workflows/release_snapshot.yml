@@ -37,10 +37,10 @@ jobs:
       created_tag: ${{ steps.create-release.outputs.created_tag }}
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.7
+      - name: Set up Python 3.8
         uses: actions/setup-python@v4
         with:
-          python-version: "3.7"
+          python-version: 3.8
       - run: |
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
@@ -50,7 +50,6 @@ jobs:
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=create
-          tail -n1 result.env
           source ./result.env
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
@@ -59,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.7", "3.9", "3.10"]
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
