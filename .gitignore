@@ -33,6 +33,10 @@ MANIFEST
 *.manifest
 *.spec
 
+#pycharm
+.idea
+.idea/*
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
