@@ -22,9 +22,9 @@ def _get_local_os() -> str:
 
 def _get_extra_platforms_for_os(_os: str) -> List[str]:
     if _os == "mac":
-        return ['macosx_10_9_x86_64', 'macosx_11_0_arm64']
+        return ['macosx_10_9_x86_64', 'macosx_11_0_arm64', 'macosx_10_10_intel', 'macosx_12_0_arm64']
     else:
-        return ['manylinux_2_17_x86_64','manylinux2014_x86_64']
+        return ['manylinux_2_17_x86_64','manylinux2014_x86_64', 'manylinux2014_i686']
 
 
 def _get_requirements_prefix(
@@ -77,21 +77,21 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
     download_cmd = _generate_download_command_args(requirements_prefix=requirements_prefix, is_pre=is_pre)
     # Download pip dependencies
     subprocess.run(
-        ['sh',f"{_FILE_DIR}/download.sh", py_version_tmp_path, download_cmd, py_version], 
+        ['bash',f"{_FILE_DIR}/download.sh", py_version_tmp_path, download_cmd, py_version], 
         check=True)
     # Check install
     subprocess.run(
-        ['sh',f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, py_version_tmp_path, py_version], 
+        ['bash',f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, py_version_tmp_path, py_version], 
         check=True)
     # Freeze complete requirements (i.e. including transitive dependencies)
-    subprocess.run(['sh',f"{_FILE_DIR}/freeze.sh", requirements_file, py_version], check=True)
+    subprocess.run(['bash',f"{_FILE_DIR}/freeze.sh", requirements_file, py_version], check=True)
     
     # Use the complete requirements to do a no-deps download (doesn't check system compatibility)
     # This allows us to download requirements for platform architectures other than the local
     extra_platforms = _get_extra_platforms_for_os(local_os)
     for extra_platform in extra_platforms:
         subprocess.run(
-            ['sh',f"{_FILE_DIR}/download_no_deps.sh", 
+            ['bash',f"{_FILE_DIR}/download_no_deps.sh", 
             py_version_tmp_path, extra_platform, requirements_file],
                 check=True)
 
@@ -100,6 +100,6 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
 
     assets = {}
     assets[f"snapshot_core_all_adapters_{local_os}_{py_major_minor}.zip"] = py_version_archive_path + ".zip"
-    assets[f"{SNAPSHOT_REQ_NAME_PREFIX}_{py_major_minor}.txt"] = requirements_file
+    assets[f"{SNAPSHOT_REQ_NAME_PREFIX}_{local_os}_{py_major_minor}.txt"] = requirements_file
 
     return assets

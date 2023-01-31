@@ -1,3 +1,4 @@
+#!/bin/bash -e
 set -e
 final_dest=$1
 platform=$2
@@ -9,5 +10,15 @@ pip download -r $requirements_file \
  --progress-bar off \
  --platform $platform \
  --no-deps
+
+# some mac builds needs wheel and cython installed
+# include the psycopg2-binary in mac builds for ease of install
+if [[ "$OSTYPE" == darwin* ]]; then 
+    pip download wheel cython psycopg2-binary==2.9.5 \
+    --dest $staging \
+    --progress-bar off \
+    --platform $platform \
+    --no-deps
+fi
 
 cp -a $staging/. $final_dest/
