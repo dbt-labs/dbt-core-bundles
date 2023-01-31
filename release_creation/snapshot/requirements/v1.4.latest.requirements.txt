@@ -5,7 +5,6 @@ dbt-redshift~=1.4.0
 dbt-postgres~=1.4.0
 dbt-spark[PyHive,ODBC]~=1.4.0
 dbt-databricks~=1.4.0
-dbt-databricks~=1.4.0
 dbt-rpc~=0.1.1
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
