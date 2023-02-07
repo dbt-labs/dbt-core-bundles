@@ -10,3 +10,8 @@ python -m pip download \
  --dest $base_dir \
  --no-cache-dir \
  $download_args
+
+python -m pip download \
+ --progress-bar off \
+ --dest $base_dir \
+ wheel
