@@ -53,10 +53,12 @@ jobs:
           source ./result.env
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
-      - uses: ./.github/workflows/snapshot_install_linux.yml
-        with:
-          version_number: ${{ steps.create-release.outputs.created_tag }}
-          python_version: 3.8
+  linux-create-install-test:
+    needs: linux-create
+    uses: ./.github/workflows/snapshot_install_linux.yml
+    with:
+      version_number: ${{ steps.create-release.outputs.created_tag }}
+      python_version: ["3.8"]
   linux:
     needs: linux-create
     runs-on: ubuntu-latest
@@ -79,10 +81,12 @@ jobs:
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=update
-      - uses: ./.github/workflows/snapshot_install_linux.yml
-        with:
-          version_number: ${{ needs.linux-create.outputs.created_tag }}
-          python_version: ${{ matrix.python-version }}
+  linux-test:
+    needs: linux
+    uses: ./.github/workflows/snapshot_install_linux.yml
+    with:
+      version_number: ${{ needs.linux-create.outputs.created_tag }}
+      python_versions: ["3.7", "3.9", "3.10"]
   macos:
     needs: linux-create
     runs-on: macos-latest
