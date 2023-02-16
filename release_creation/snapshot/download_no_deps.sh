@@ -14,7 +14,7 @@ pip download -r $requirements_file \
 # some mac builds needs wheel and cython installed
 # include the psycopg2-binary in mac builds for ease of install
 if [[ "$OSTYPE" == darwin* ]]; then 
-    pip download wheel cython psycopg2-binary==2.9.5 \
+    pip download wheel Cython~=0.29.0 psycopg2-binary~=2.9.5 \
     --dest $staging \
     --progress-bar off \
     --platform $platform \
