@@ -113,7 +113,7 @@ jobs:
            --operation=update
 
   macos-test:
-    needs: [linux, linux-create]
+    needs: [macos, linux-create]
     strategy:
       matrix:
         python-version: ["3.7", "3.9", "3.10"]
