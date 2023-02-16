@@ -17,6 +17,7 @@ jobs:
   test-mac-latest-install:
     runs-on: macos-latest
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ inputs.version_number }}
@@ -26,6 +27,7 @@ jobs:
   test-mac11-install:
     runs-on: macos-11
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ inputs.version_number }}
