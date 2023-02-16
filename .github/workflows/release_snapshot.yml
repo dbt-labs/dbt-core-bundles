@@ -52,7 +52,7 @@ jobs:
            --operation=create
           source ./result.env
           echo "$CREATED_TAG" 
-          echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
+          echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
   linux-create-install-test:
     needs: linux-create
     uses: ./.github/workflows/snapshot_install_linux.yml
@@ -82,7 +82,7 @@ jobs:
            --input-version=${{ inputs.version_number }} \
            --operation=update
   linux-test:
-    needs: linux
+    needs: [linux, linux-create]
     strategy:
       matrix:
         python-version: ["3.7", "3.9", "3.10"]
@@ -113,7 +113,7 @@ jobs:
            --operation=update
 
   macos-test:
-    needs: macos
+    needs: [linux, linux-create]
     strategy:
       matrix:
         python-version: ["3.7", "3.9", "3.10"]
