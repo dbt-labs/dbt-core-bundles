@@ -58,7 +58,7 @@ jobs:
     uses: ./.github/workflows/snapshot_install_linux.yml
     with:
       version_number: ${{ needs.linux-create.outputs.created_tag }}
-      python_version: ["3.8"]
+      python_version: 3.8
   linux:
     needs: linux-create
     runs-on: ubuntu-latest
@@ -83,10 +83,13 @@ jobs:
            --operation=update
   linux-test:
     needs: linux
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.9", "3.10"]
     uses: ./.github/workflows/snapshot_install_linux.yml
     with:
       version_number: ${{ needs.linux-create.outputs.created_tag }}
-      python_versions: ["3.7", "3.9", "3.10"]
+      python_versions: ${{ matrix.python-version }}
   macos:
     needs: linux-create
     runs-on: macos-latest
@@ -108,7 +111,13 @@ jobs:
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=update
-      - uses: ./.github/workflows/snapshot_install_mac.yml
-        with:
-          version_number: ${{ needs.linux-create.outputs.created_tag }}
-          python_version: ${{ inputs.python_version }}
+
+  macos-test:
+    needs: macos
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.9", "3.10"]
+    uses: ./.github/workflows/snapshot_install_mac.yml
+    with:
+      version_number: ${{ needs.linux-create.outputs.created_tag }}
+      python_version: ${{ matrix.python-version }}

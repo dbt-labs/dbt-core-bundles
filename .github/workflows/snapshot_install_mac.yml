@@ -14,24 +14,18 @@ on:
 jobs:
   test-mac-latest-install:
     runs-on: macos-latest
-    strategy:
-      matrix:
-        python-version: ${{ inputs.python_versions }}
     steps:
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ inputs.version_number }}
-          python_version: ${{ matrix.python_version }}
+          python_version: ${{ inputs.python_version }}
           os_platform: mac
 
   test-mac11-install:
     runs-on: macos-11
-    strategy:
-      matrix:
-        python-version: ${{ inputs.python_versions }}
     steps:
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ inputs.version_number }}
-          python_version: ${{ matrix.python_version }}
+          python_version: ${{ inputs.python_version }}
           os_platform: mac
