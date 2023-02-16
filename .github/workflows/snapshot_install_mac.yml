@@ -1,0 +1,31 @@
+name: Mac Snapshot Install Test
+permissions:
+  packages: read
+  contents: write
+  pull-requests: read
+on:
+  workflow_call:
+    inputs:
+      version_number:
+        description: The release version number (i.e. 1.0.0b1).
+        required: true
+      python_version:
+        required: true
+jobs:
+  test-mac-latest-install:
+    runs-on: macos-latest
+    steps:
+      - uses: ./.github/actions/test_install
+        with:
+          version_number: ${{ inputs.version_number }}
+          python_version: ${{ inputs.python_version }}
+          os_platform: mac
+
+  test-mac11-install:
+    runs-on: macos-11
+    steps:
+      - uses: ./.github/actions/test_install
+        with:
+          version_number: ${{ inputs.version_number }}
+          python_version: ${{ inputs.python_version }}
+          os_platform: mac

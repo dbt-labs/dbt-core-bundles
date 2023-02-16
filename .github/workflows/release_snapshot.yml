@@ -53,6 +53,10 @@ jobs:
           source ./result.env
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
+      - uses: ./.github/workflows/snapshot_install_linux.yml
+        with:
+          version_number: ${{ steps.create-release.outputs.created_tag }}
+          python_version: 3.8
   linux:
     needs: linux-create
     runs-on: ubuntu-latest
@@ -75,6 +79,10 @@ jobs:
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=update
+      - uses: ./.github/workflows/snapshot_install_linux.yml
+        with:
+          version_number: ${{ needs.linux-create.outputs.created_tag }}
+          python_version: ${{ matrix.python-version }}
   macos:
     needs: linux-create
     runs-on: macos-latest
@@ -96,25 +104,7 @@ jobs:
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=update
-  test-linux-install:
-    needs: linux-create
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v4
+      - uses: ./.github/workflows/snapshot_install_mac.yml
         with:
-          python-version: 3.8
-      - run: |
-          export CREATED_TAG="${{ needs.linux-create.outputs.created_tag }}"
-          export DBT_PSYCOPG2_NAME=psycopg2
-          python -m pip install --user --upgrade pip
-          curl --fail --retry 15 --retry-all-errors -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_core_all_adapters_linux_3.8.zip
-          curl --fail --retry 15 --retry-all-errors -OL https://github.com/dbt-labs/dbt-core-snapshots/releases/download/$CREATED_TAG/snapshot_requirements_linux_3.8.txt
-          tail -n 200 snapshot_requirements_linux_3.8.txt
-          unzip snapshot_core_all_adapters_linux_3.8.zip -d snapshot_pkgs
-          pip install -r snapshot_requirements_linux_3.8.txt \
-            --no-index \
-            --find-links ./snapshot_pkgs \
-            && \
-            pip freeze
+          version_number: ${{ needs.linux-create.outputs.created_tag }}
+          python_version: ${{ inputs.python_version }}
