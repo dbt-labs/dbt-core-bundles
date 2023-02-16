@@ -19,7 +19,7 @@ runs:
       uses: actions/setup-python@v4
       with:
         python-version: "${{ inputs.python_version }}"
-    - uses: shell
+    - shell: bash
       run: |
         bash install_snapshot.sh \
           "${{ inputs.version_number }}" \
