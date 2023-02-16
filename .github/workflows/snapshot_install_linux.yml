@@ -9,8 +9,10 @@ on:
       version_number:
         description: The release version number (i.e. 1.0.0b1).
         required: true
+        type: string
       python_version:
         required: true
+        type: string
 jobs:
   test-linux-install:
     needs: linux-create
