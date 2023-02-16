@@ -57,7 +57,7 @@ jobs:
     needs: linux-create
     uses: ./.github/workflows/snapshot_install_linux.yml
     with:
-      version_number: ${{ steps.create-release.outputs.created_tag }}
+      version_number: ${{ needs.linux-create.outputs.created_tag }}
       python_version: ["3.8"]
   linux:
     needs: linux-create
