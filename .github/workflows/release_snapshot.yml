@@ -89,7 +89,7 @@ jobs:
     uses: ./.github/workflows/snapshot_install_linux.yml
     with:
       version_number: ${{ needs.linux-create.outputs.created_tag }}
-      python_versions: ${{ matrix.python-version }}
+      python_version: ${{ matrix.python-version }}
   macos:
     needs: linux-create
     runs-on: macos-latest
