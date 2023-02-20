@@ -13,6 +13,6 @@ export DBT_PSYCOPG2_NAME=psycopg2
 curl --fail --retry 5 --retry-all-errors -OL "${github_url}/${archive_file}"
 curl --fail --retry 5 --retry-all-errors -OL "${github_url}/${requirements_file}"
 unzip -o "${archive_file}" -d snapshot_pkgs
-pip install -r ${requirements_file} \
+pip install -r "${requirements_file}" \
   --no-index \
   --find-links ./snapshot_pkgs

@@ -21,6 +21,8 @@ runs:
         python-version: "${{ inputs.python_version }}"
     - shell: bash
       run: |
+        python -m venv env test_release_install
+        source test_release_install/bin/activate
         bash install_snapshot.sh \
           "${{ inputs.version_number }}" \
           "${{ inputs.python_version }}" \
