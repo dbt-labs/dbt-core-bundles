@@ -83,7 +83,7 @@ jobs:
            --operation=update
       - uses: ./.github/actions/test_install
         with:
-          version_number: ${{ needs.linux-create.outputs.created_tag }}
+          version_number: ${{ needs.create-snapshot.outputs.created_tag }}
           python_version: ${{ matrix.python_version }}
           os_platform: "linux"
   build-for-mac:
@@ -109,6 +109,6 @@ jobs:
            --operation=update
       - uses: ./.github/actions/test_install
         with:
-          version_number: ${{ needs.linux-create.outputs.created_tag }}
+          version_number: ${{ needs.create-snapshot.outputs.created_tag }}
           python_version: ${{ matrix.python_version }}
           os_platform: "mac"
