@@ -53,9 +53,10 @@ jobs:
           source ./result.env
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
+          echo "created_tag=$CREATED_TAG" >> $GITHUB_ENV
       - uses: ./.github/actions/test_install
         with:
-          version_number: "$CREATED_TAG"
+          version_number: ${{ env.created_tag }}
           python_version: "3.8"
           os_platform: "linux"
   build-for-linux:
