@@ -56,7 +56,6 @@ jobs:
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
           echo "created_tag=$CREATED_TAG" >> $GITHUB_ENV
-
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ env.created_tag }}
@@ -84,7 +83,7 @@ jobs:
 
       - if: matrix.os == 'ubuntu-latest'
         run: |
-          echo "install_os=linux" >> $GITHUB_ENV
+          echo "os_platform=linux" >> $GITHUB_ENV
           sudo apt-get install libsasl2-dev
 
       - if: matrix.os == 'macos-latest'
