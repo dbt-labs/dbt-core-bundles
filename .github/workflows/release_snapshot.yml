@@ -55,8 +55,8 @@ jobs:
           echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
       - uses: ./.github/actions/test_install
         with:
-          version_number: ${{ needs.linux-create.outputs.created_tag }}
-          python_version: ${{ matrix.python_version }}
+          version_number: "$CREATED_TAG"
+          python_version: "3.8"
           os_platform: "linux"
   build-for-linux:
     needs: create-snapshot
