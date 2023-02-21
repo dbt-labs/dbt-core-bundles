@@ -84,7 +84,7 @@ jobs:
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ needs.create-snapshot.outputs.created_tag }}
-          python_version: ${{ matrix.python_version }}
+          python_version: ${{ matrix.python-version }}
           os_platform: "linux"
   build-for-mac:
     needs: create-snapshot
@@ -110,5 +110,5 @@ jobs:
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ needs.create-snapshot.outputs.created_tag }}
-          python_version: ${{ matrix.python_version }}
+          python_version: ${{ matrix.python-version }}
           os_platform: "mac"
