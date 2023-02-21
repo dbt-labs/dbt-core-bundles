@@ -58,30 +58,47 @@ jobs:
           version_number: ${{ needs.linux-create.outputs.created_tag }}
           python_version: ${{ matrix.python_version }}
           os_platform: "linux"
-
-  build-for-os-and-python-versions:
+  build-for-linux:
     needs: create-snapshot
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
-        os: ["macos-latest", "ubuntu-latest"]
+        python-version: ["3.7", "3.9", "3.10"]
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    runs-on: ${{ matrix.os }}
-    if: ${{ matrix.os }} != ubuntu-latest && ${{ matrix.os }} != 3.8
+    runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - if:  ${{ matrix.os }} == ubuntu-latest
-        run: |
-          export INSTALL_OS="linux"
+      - run: |    
           sudo apt-get install libsasl2-dev
-      - if:  ${{ matrix.os }} == macos-latest
-        run: |
-          export INSTALL_OS="mac"
+          python -m pip install --user --upgrade pip
+          pip install -r requirements.txt
+      - run: |
+          python release_creation/main.py \
+           --input-version=${{ inputs.version_number }} \
+           --operation=update
+      - uses: ./.github/actions/test_install
+        with:
+          version_number: ${{ needs.linux-create.outputs.created_tag }}
+          python_version: ${{ matrix.python_version }}
+          os_platform: "linux"
+  build-for-mac:
+    needs: create-snapshot
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+    env:
+      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: "macos-latest"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
       - run: |    
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
@@ -93,4 +110,4 @@ jobs:
         with:
           version_number: ${{ needs.linux-create.outputs.created_tag }}
           python_version: ${{ matrix.python_version }}
-          os_platform: "$INSTALL_OS"
+          os_platform: "mac"
