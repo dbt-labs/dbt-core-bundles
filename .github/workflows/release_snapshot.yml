@@ -27,6 +27,7 @@ on:
       version_number:
         description: The release version number (i.e. 1.0.0b1).
         required: true
+
 jobs:
   create-snapshot:
     runs-on: ubuntu-latest
@@ -40,10 +41,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
+
       - run: |
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
+
       - id: create-release
         run: |
           python release_creation/main.py \
@@ -53,11 +56,13 @@ jobs:
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
           echo "created_tag=$CREATED_TAG" >> $GITHUB_ENV
+
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ env.created_tag }}
           python_version: "3.8"
           os_platform: "linux"
+
   build-for-os-and-python-versions:
     needs: create-snapshot
     strategy:
@@ -76,20 +81,25 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+
       - if: matrix.os == 'ubuntu-latest'
         run: |
           echo "install_os=linux" >> $GITHUB_ENV
           sudo apt-get install libsasl2-dev
+
       - if: matrix.os == 'macos-latest'
         run: |
           echo "os_platform=mac" >> $GITHUB_ENV
+
       - run: |    
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
+
       - run: |
           python release_creation/main.py \
            --input-version=${{ inputs.version_number }} \
            --operation=update
+
       - uses: ./.github/actions/test_install
         with:
           version_number: ${{ needs.create-snapshot.outputs.created_tag }}
