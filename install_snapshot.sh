@@ -3,8 +3,8 @@ set -e
 
 created_tag="$1"
 python_version="$2"
-operating_system="$3"
-suffix="${operating_system}_${python_version}"
+os_platform="$3"
+suffix="${os_platform}_${python_version}"
 github_url="https://github.com/dbt-labs/dbt-core-snapshots/releases/download/${created_tag}"
 archive_file="snapshot_core_all_adapters_${suffix}.zip"
 requirements_file="snapshot_requirements_${suffix}.txt"
