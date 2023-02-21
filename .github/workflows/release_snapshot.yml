@@ -94,4 +94,4 @@ jobs:
         with:
           version_number: ${{ needs.linux-create.outputs.created_tag }}
           python_version: ${{ matrix.python-version }}
-          os_platform: "${{ env.install_os }}
+          os_platform: ${{ env.install_os }}
