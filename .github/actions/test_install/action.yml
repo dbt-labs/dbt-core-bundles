@@ -1,0 +1,30 @@
+name: test-snapshot-install
+description: "test installing a snapshot for a given os/python/dbt version"
+
+inputs:
+  version_number:
+    description: The release version number (i.e. 1.0.0b1).
+    required: true
+  python_version:
+    description: The version of python to test against
+    required: true
+  os_platform:
+    description: The os platform of the worker performing the test
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python "${{ inputs.python_version }}"
+      uses: actions/setup-python@v4
+      with:
+        python-version: "${{ inputs.python_version }}"
+    - shell: bash
+      run: |
+        python -m venv env test_release_install
+        source test_release_install/bin/activate
+        bash install_snapshot.sh \
+          "${{ inputs.version_number }}" \
+          "${{ inputs.python_version }}" \
+          "${{ inputs.os_platform }}"
+        pip freeze
