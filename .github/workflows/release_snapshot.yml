@@ -71,6 +71,7 @@ jobs:
         include:
           - python-version: 3.8
             os: macos-latest
+    name: ${{ matrix.os }} - ${{ matrix.python-version }}
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ${{ matrix.os }}
