@@ -42,8 +42,9 @@ jobs:
         with:
           python-version: 3.8
 
-      - run: |
-          sudo apt-get upgrade --fix-missing
+      - id: install-linux-deps
+        run: |
+          sudo apt-get upgrade
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
