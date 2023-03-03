@@ -43,6 +43,7 @@ jobs:
           python-version: 3.8
 
       - run: |
+          sudo apt-get upgrade --fix-missing
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
@@ -85,6 +86,7 @@ jobs:
       - if: matrix.os == 'ubuntu-latest'
         run: |
           echo "os_platform=linux" >> $GITHUB_ENV
+          sudo apt-get upgrade
           sudo apt-get install libsasl2-dev
 
       - if: matrix.os == 'macos-latest'
