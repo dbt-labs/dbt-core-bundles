@@ -5,7 +5,8 @@ requirements_file_prefix="$2"
 link_dir="$3"
 target_dir="$4"
 rm -rf target
-mkdir target 
+mkdir target
+echo "$(cat $base_dir/requirements/$requirements_file_prefix.requirements.txt)"
 pip install -r $base_dir/requirements/$requirements_file_prefix.requirements.txt \
 --no-index  \
 --force-reinstall \
