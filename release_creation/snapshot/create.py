@@ -3,7 +3,7 @@ from semantic_version import Version
 import subprocess
 import shutil
 
-from ..snapshot.snapshot_config import get_snapshot_config, SnapshotConfig
+from release_creation.snapshot.snapshot_config import get_snapshot_config, SnapshotConfig
 
 
 SNAPSHOT_REQ_NAME_PREFIX = "snapshot_requirements"
