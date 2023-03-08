@@ -99,8 +99,8 @@ jobs:
           pip install -r requirements.txt
 
       - run: |
-          pip install -e . 
-          python release_creation/main.py \
+          python -m pip install -e . 
+          python -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=update
 

@@ -4,12 +4,12 @@ import os
 from semantic_version.base import Version
 import argparse
 
-from github_client.releases import (
+from release_creation.github_client.releases import (
     create_new_release_for_version,
     get_latest_snapshot_release,
     add_assets_to_release,
 )
-from snapshot.create import generate_snapshot
+from release_creation.snapshot.create import generate_snapshot
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 logger = logging.getLogger(__name__)
