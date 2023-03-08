@@ -26,7 +26,6 @@ def _get_requirements_prefix(
 
 def _download_packages(snapshot_config: SnapshotConfig):
     download_requirements_file = f"{snapshot_config.file_dir}/requirements/{snapshot_config.requirements_prefix}.requirements.txt"
-    download_requirements_file += ' --pre' if snapshot_config.is_pre else ''
     subprocess.run(
         ['bash', f"{snapshot_config.file_dir}/download.sh",
          snapshot_config.py_version_tmp_path, download_requirements_file, snapshot_config.py_version],
@@ -34,11 +33,10 @@ def _download_packages(snapshot_config: SnapshotConfig):
 
 
 def _install_packages(snapshot_config: SnapshotConfig):
-    extra_args = ' --pre' if snapshot_config.is_pre else ''
     subprocess.run(
         ['bash', f"{snapshot_config.file_dir}/install.sh",
          snapshot_config.file_dir, snapshot_config.requirements_prefix,
-         snapshot_config.py_version_tmp_path, snapshot_config.py_version, extra_args],
+         snapshot_config.py_version_tmp_path, snapshot_config.py_version],
         check=True)
 
 
