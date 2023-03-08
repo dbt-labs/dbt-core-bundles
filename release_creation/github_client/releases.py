@@ -1,5 +1,4 @@
 import copy
-import imp
 import logging
 import os
 import requests
