@@ -98,9 +98,9 @@ jobs:
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
 
-      - run: |
-          python -m pip install -e . && \ 
-          python -m release_creation.main \
+      - name:  "Generate Bundle"
+        run: |
+          python -m pip install -e . && python -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=update
 
