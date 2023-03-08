@@ -34,10 +34,11 @@ def _download_packages(snapshot_config: SnapshotConfig):
 
 
 def _install_packages(snapshot_config: SnapshotConfig):
+    extra_args = ' --pre' if snapshot_config.is_pre else ''
     subprocess.run(
         ['bash', f"{snapshot_config.file_dir}/install.sh",
          snapshot_config.file_dir, snapshot_config.requirements_prefix,
-         snapshot_config.py_version_tmp_path, snapshot_config.py_version],
+         snapshot_config.py_version_tmp_path, snapshot_config.py_version, extra_args],
         check=True)
 
 
