@@ -22,12 +22,8 @@ def _get_local_os() -> str:
         raise ValueError(f"Unsupported system {local_sys}")
 
 
-def _get_requirements_prefix(
-        major_version: Optional[int], minor_version: Optional[int], is_pre: bool = False
-):
-    suffix = "latest"
-    if is_pre:
-        suffix = "pre"
+def _get_requirements_prefix(major_version: Optional[int], minor_version: Optional[int], is_pre: bool = False):
+    suffix = "pre" if is_pre else "latest"
     return f"v{major_version}.{minor_version}.{suffix}"
 
 

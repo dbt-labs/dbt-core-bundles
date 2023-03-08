@@ -5,8 +5,8 @@ import shutil
 
 from release_creation.snapshot.snapshot_config import get_snapshot_config, SnapshotConfig
 
-
 SNAPSHOT_REQ_NAME_PREFIX = "snapshot_requirements"
+
 
 def _get_extra_platforms_for_os(_os: str) -> List[str]:
     if _os == "mac":
@@ -88,6 +88,5 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
     # This allows us to download requirements for platform architectures other than the local
     _download_binaries(snapshot_configuration)
 
-    # Generate a Zip archive of required packages
-
+    # return a dict with a Zip archive of required packages and the req file
     return _generate_assets(snapshot_configuration)
