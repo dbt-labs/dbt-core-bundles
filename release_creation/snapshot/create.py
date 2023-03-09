@@ -1,25 +1,11 @@
 from typing import Dict, List, Optional
 from semantic_version import Version
-import os
-import platform
 import subprocess
 import shutil
 
-_OUTPUT_ARCHIVE_FILE_BASE = "dbt-core-all-adapters-snapshot"
-_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
+from release_creation.snapshot.snapshot_config import get_snapshot_config, SnapshotConfig
+
 SNAPSHOT_REQ_NAME_PREFIX = "snapshot_requirements"
-
-
-def _get_local_os() -> str:
-    local_sys = platform.system()
-    if local_sys == "Linux":
-        return "linux"
-    elif local_sys == "Windows":
-        return "windows"
-    elif local_sys == "Darwin":
-        return "mac"
-    else:
-        raise ValueError(f"Unsupported system {local_sys}")
 
 
 def _get_extra_platforms_for_os(_os: str) -> List[str]:
@@ -38,13 +24,45 @@ def _get_requirements_prefix(
     return f"v{major_version}.{minor_version}.{suffix}"
 
 
-def _generate_download_command_args(requirements_prefix: str, is_pre: bool = False) -> str:
-    download_args = []
-    if is_pre:
-        download_args.append("--pre")
-    download_args.append(
-        f"-r {_FILE_DIR}/requirements/{requirements_prefix}.requirements.txt")
-    return " ".join(download_args)
+def _download_packages(snapshot_config: SnapshotConfig):
+    download_requirements_file = f"{snapshot_config.file_dir}/requirements/{snapshot_config.requirements_prefix}.requirements.txt"
+    subprocess.run(
+        ['bash', f"{snapshot_config.file_dir}/download.sh",
+         snapshot_config.py_version_tmp_path, download_requirements_file, snapshot_config.py_version],
+        check=True)
+
+
+def _install_packages(snapshot_config: SnapshotConfig):
+    subprocess.run(
+        ['bash', f"{snapshot_config.file_dir}/install.sh",
+         snapshot_config.file_dir, snapshot_config.requirements_prefix,
+         snapshot_config.py_version_tmp_path, snapshot_config.py_version],
+        check=True)
+
+
+def _freeze_dependencies(snapshot_config: SnapshotConfig):
+    subprocess.run(['bash', f"{snapshot_config.file_dir}/freeze.sh",
+                    snapshot_config.requirements_file, snapshot_config.py_version], check=True)
+
+
+def _download_binaries(snapshot_config: SnapshotConfig):
+    extra_platforms = _get_extra_platforms_for_os(snapshot_config.local_os)
+    for extra_platform in extra_platforms:
+        subprocess.run(
+            ['bash', f"{snapshot_config.file_dir}/download_no_deps.sh",
+             snapshot_config.py_version_tmp_path, extra_platform, snapshot_config.requirements_file], check=True)
+
+
+def _generate_assets(snapshot_config: SnapshotConfig) -> dict:
+    shutil.make_archive(snapshot_config.py_version_archive_path, 'zip', snapshot_config.py_version_tmp_path)
+    created_archive = snapshot_config.py_version_archive_path + ".zip"
+    created_asset_name = f"snapshot_core_all_adapters_{snapshot_config.local_os}_{snapshot_config.py_major_minor}.zip"
+    req_file_name = f"{SNAPSHOT_REQ_NAME_PREFIX}_{snapshot_config.local_os}_{snapshot_config.py_major_minor}.txt"
+    subprocess.run(
+        ['bash', f"{snapshot_config.file_dir}/test_archive_install.sh",
+         created_archive, snapshot_config.requirements_file], check=True)
+    return {created_asset_name: created_archive,
+            req_file_name: snapshot_config.requirements_file}
 
 
 def generate_snapshot(target_version: Version) -> Dict[str, str]:
@@ -56,51 +74,19 @@ def generate_snapshot(target_version: Version) -> Dict[str, str]:
         the requirements to download.
 
     Returns:
-        Dict[str, str]: dict of generated snapshot assets, key is it's name 
+        Dict[str, str]: dict of generated snapshot assets, key is its name
                         and the value is the path to the file.
     """
-    is_pre = True if target_version.prerelease else False
-    requirements_prefix = _get_requirements_prefix(
-        major_version=target_version.major, minor_version=target_version.minor, is_pre=is_pre
-    )
-    # Setup confiuration variables
-    archive_path = f"{_OUTPUT_ARCHIVE_FILE_BASE}-{target_version}"
-    local_os = _get_local_os()
-    os_archive_path = f"{archive_path}-{local_os}"
-    base_tmp_path = f"tmp/{local_os}/"
-    py_version = platform.python_version()
-    py_major_minor = ".".join(py_version.split(".")[:-1])
-    requirements_file = f"{_FILE_DIR}/snapshot.requirements.{py_major_minor}.txt"
-    py_version_tmp_path = f"{base_tmp_path}{py_major_minor}"
-    py_version_archive_path = os_archive_path + f"-{py_major_minor}"
-
-    download_cmd = _generate_download_command_args(requirements_prefix=requirements_prefix, is_pre=is_pre)
+    snapshot_configuration = get_snapshot_config(target_version=target_version)
     # Download pip dependencies
-    subprocess.run(
-        ['bash', f"{_FILE_DIR}/download.sh", py_version_tmp_path, download_cmd, py_version],
-        check=True)
+    _download_packages(snapshot_configuration)
     # Check install
-    subprocess.run(
-        ['bash', f"{_FILE_DIR}/install.sh", _FILE_DIR, requirements_prefix, py_version_tmp_path, py_version],
-        check=True)
+    _install_packages(snapshot_configuration)
     # Freeze complete requirements (i.e. including transitive dependencies)
-    subprocess.run(['bash', f"{_FILE_DIR}/freeze.sh", requirements_file, py_version], check=True)
-
+    _freeze_dependencies(snapshot_configuration)
     # Use the complete requirements to do a no-deps download (doesn't check system compatibility)
     # This allows us to download requirements for platform architectures other than the local
-    extra_platforms = _get_extra_platforms_for_os(local_os)
-    for extra_platform in extra_platforms:
-        subprocess.run(
-            ['bash', f"{_FILE_DIR}/download_no_deps.sh",
-             py_version_tmp_path, extra_platform, requirements_file],
-            check=True)
+    _download_binaries(snapshot_configuration)
 
-    # Generate a Zip archive of required packages
-    shutil.make_archive(py_version_archive_path, 'zip', py_version_tmp_path)
-    created_archive = py_version_archive_path + ".zip"
-    subprocess.run(
-        ['bash', f"{_FILE_DIR}/test_archive_install.sh", created_archive, requirements_file],check=True)
-    assets = {f"snapshot_core_all_adapters_{local_os}_{py_major_minor}.zip": created_archive,
-              f"{SNAPSHOT_REQ_NAME_PREFIX}_{local_os}_{py_major_minor}.txt": requirements_file}
-
-    return assets
+    # return a dict with a Zip archive of required packages and the req file
+    return _generate_assets(snapshot_configuration)

@@ -42,21 +42,28 @@ jobs:
         with:
           python-version: 3.8
 
-      - run: |
+      - id: install-linux-deps
+        name: Install Linux Dependencies
+        run: |
+          sudo apt-get update
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
 
       - id: create-release
+        name: Create Release
         run: |
-          python release_creation/main.py \
+          python -m pip install -e . && \
+          python -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=create
           source ./result.env
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
           echo "created_tag=$CREATED_TAG" >> $GITHUB_ENV
+
       - uses: ./.github/actions/test_install
+        name: Test install from Github Release
         with:
           version_number: ${{ env.created_tag }}
           python_version: "3.8"
@@ -83,24 +90,31 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - if: matrix.os == 'ubuntu-latest'
+        name: Install Linux Dependencies
         run: |
           echo "os_platform=linux" >> $GITHUB_ENV
+          sudo apt-get update
           sudo apt-get install libsasl2-dev
 
       - if: matrix.os == 'macos-latest'
+        name: Install Mac Dependencies
         run: |
           echo "os_platform=mac" >> $GITHUB_ENV
 
-      - run: |    
+      - name: Install Pyhon Dependencies
+        run: |    
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
 
-      - run: |
-          python release_creation/main.py \
+      - name: Generate Bundle
+        run: |
+          python -m pip install -e . && \
+          python -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=update
 
       - uses: ./.github/actions/test_install
+        name: Test install from Github Release
         with:
           version_number: ${{ needs.create-snapshot.outputs.created_tag }}
           python_version: ${{ matrix.python-version }}

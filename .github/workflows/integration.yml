@@ -1,0 +1,43 @@
+name: Adapter Integration Tests
+
+on:
+  # pushes to release branches
+  push:
+    branches:
+      - "main"
+  # all PRs, important to note that `pull_request_target` workflows
+  # will run in the context of the target branch of a PR
+  pull_request_target:
+  workflow_dispatch:
+
+# explicitly turn off permissions for `GITHUB_TOKEN`
+permissions: read-all
+
+# will cancel previous workflows triggered by the same event and for the same ref for PRs or same SHA otherwise
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ contains(github.event_name, 'pull_request') && github.event.pull_request.head.ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    strategy:
+      matrix:
+       os: ["macos-latest", "ubuntu-latest"]
+    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} Test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - if: matrix.os == 'ubuntu-latest'
+        name: Set up Linux
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsasl2-dev
+      - run: tox
+        name: Run Unit Tests
+      - run: tox -e integration
+        name: Run Integration Tests
+

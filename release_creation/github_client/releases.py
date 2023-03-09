@@ -1,5 +1,4 @@
 import copy
-import imp
 import logging
 import os
 import requests
@@ -9,7 +8,7 @@ from github import Github
 from github.GithubException import GithubException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
-from snapshot.create import SNAPSHOT_REQ_NAME_PREFIX
+from release_creation.snapshot.create import SNAPSHOT_REQ_NAME_PREFIX
 
 _GH_SNAPSHOT_REPO = "dbt-labs/dbt-core-snapshots"
 _GH_ACCESS_TOKEN = os.environ["GH_ACCESS_TOKEN"]
