@@ -1,0 +1,29 @@
+# **what?**
+# This workflow creates bundles for the supported versions of dbt
+
+# **why?**
+# We want to regularly pull in and test updates to dbt and its dependencies
+
+# **when?**
+# Every Monday morning
+
+# **how**
+# Iterate over the list of bundles and invoke the release_bundle.yml workflow
+
+name: Schedule Bundle Releases
+
+on:
+  schedule:
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
+
+jobs:
+  release-bundles:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+       version: ["1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.4.0b1", "1.5.0b1"]
+    name: Call Release Workflow for ${{ matrix.version }}
+    uses: ./.github/workflows/release_bundle.yml
+    with:
+      version_number: ${{ matrix.version }}
