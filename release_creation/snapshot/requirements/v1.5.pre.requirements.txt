@@ -1,3 +1,4 @@
+--pre
 dbt-core~=1.5.0b1 --no-binary dbt-postgres
 dbt-snowflake~=1.5.0b1
 dbt-bigquery~=1.5.0b1
