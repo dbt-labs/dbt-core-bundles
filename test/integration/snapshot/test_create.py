@@ -1,3 +1,5 @@
+import subprocess
+
 import pytest
 from semantic_version import Version
 
@@ -14,5 +16,10 @@ def test_generate_snapshot_creates_a_snapshot_with_valid_version(test_version):
         assert os.path.isfile(asset_location)
         if ".zip" in asset_name:
             assert zipfile.is_zipfile(asset_location)
-        else:
-            assert os.path.getsize(asset_location) > 0
+        assert os.path.getsize(asset_location) > 0
+        if ".txt" in asset_name:
+            try:
+                subprocess.run(f"pip uninstall -r {asset_location}")
+            except Exception as e:
+                print(e)
+
