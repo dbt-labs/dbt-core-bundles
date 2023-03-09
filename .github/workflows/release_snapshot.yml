@@ -61,6 +61,7 @@ jobs:
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
           echo "created_tag=$CREATED_TAG" >> $GITHUB_ENV
+
       - uses: ./.github/actions/test_install
         name: Test install from Github Release
         with:
