@@ -16,7 +16,10 @@ def test_generate_snapshot_creates_a_snapshot_with_valid_version(test_version):
         assert os.path.isfile(asset_location)
         if ".zip" in asset_name:
             assert zipfile.is_zipfile(asset_location)
+
+        # check if files are empty
         assert os.path.getsize(asset_location) > 0
+
         if ".txt" in asset_name:
             try:
                 subprocess.run(f"pip uninstall -r {asset_location}")
