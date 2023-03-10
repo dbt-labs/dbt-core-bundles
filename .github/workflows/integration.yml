@@ -31,13 +31,18 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
+
       - if: matrix.os == 'ubuntu-latest'
         name: Set up Linux
         run: |
           sudo apt-get update
           sudo apt-get install libsasl2-dev
-      - run: tox
+
+      - run: |
+          python -m pip install tox
+          tox
         name: Run Unit Tests
+
       - run: tox -e integration
         name: Run Integration Tests
 

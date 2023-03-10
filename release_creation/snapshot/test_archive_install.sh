@@ -7,7 +7,8 @@ python -m venv test_archive_install
 source test_archive_install/bin/activate
 python -m pip install -r "${requirements_file}" \
   --no-index \
-  --find-links ./snapshot_pkg_test
+  --find-links ./snapshot_pkg_test \
+  --pre
 dbt --version
 # make sure psycopg2 is installed, but not psycopg2-binary
 echo -n "Checking psycopg2 install..."
