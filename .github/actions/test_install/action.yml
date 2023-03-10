@@ -1,5 +1,5 @@
-name: test-snapshot-install
-description: "test installing a snapshot for a given os/python/dbt version"
+name: test-bundle-install
+description: "test installing a bundle for a given os/python/dbt version"
 
 inputs:
   version_number:
@@ -23,7 +23,7 @@ runs:
       run: |
         python -m venv env test_release_install
         source test_release_install/bin/activate
-        bash install_snapshot.sh \
+        bash install_bundle.sh \
           "${{ inputs.version_number }}" \
           "${{ inputs.python_version }}" \
           "${{ inputs.os_platform }}"

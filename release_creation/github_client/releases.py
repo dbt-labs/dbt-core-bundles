@@ -8,10 +8,10 @@ from github import Github
 from github.GithubException import GithubException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
-from release_creation.snapshot.create import SNAPSHOT_REQ_NAME_PREFIX
+from release_creation.bundle.create import SNAPSHOT_REQ_NAME_PREFIX
 
 _GH_SNAPSHOT_REPO = "dbt-labs/dbt-core-snapshots"
-_GH_ACCESS_TOKEN = os.environ["GH_ACCESS_TOKEN"]
+_GH_ACCESS_TOKEN = os.environ.get("GH_ACCESS_TOKEN")
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ def get_github_client() -> Github:
     return Github(_GH_ACCESS_TOKEN)
 
 
-def get_latest_snapshot_release(input_version: str) -> Tuple[ Version, Optional[GitRelease]]:
+def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[GitRelease]]:
     """Retrieve the latest release matching the major.minor and release stage
        semantic version if it exists. Ignores the patch version. 
 
@@ -51,7 +51,7 @@ def get_latest_snapshot_release(input_version: str) -> Tuple[ Version, Optional[
     return latest_version, latest_release    
 
 
-def _get_local_snapshot_reqs(snapshot_req_path: str) -> List[str]:
+def _get_local_bundle_reqs(snapshot_req_path: str) -> List[str]:
     with open(snapshot_req_path) as f:
         reqs = f.read()
     return reqs.split()
@@ -76,27 +76,27 @@ def _diff_snapshot_requirements(
 ) -> str:
     # Scenarios being handled:
     # 1. No change - raise exception
-    # 2. No prior patch version - Creat major.minor.0 snapshot
+    # 2. No prior patch version - Create major.minor.0 bundle
     # 3. New changes - generate diff
     if latest_release:
         diff_result = ""
         release_reqs = [
             _asset for _asset in latest_release.get_assets() if SNAPSHOT_REQ_NAME_PREFIX in _asset.name
         ]
-        snapshot_req = _get_local_snapshot_reqs(snapshot_req_path=snapshot_req_path)
+        bundle_req = _get_local_bundle_reqs(snapshot_req_path=snapshot_req_path)
         release_req = _get_gh_release_asset(release_reqs[0])
-        added, removed = _compare_reqs(snapshot_req=snapshot_req, release_req=release_req)
+        added, removed = _compare_reqs(snapshot_req=bundle_req, release_req=release_req)
         if added:
             diff_result += "Added:\n* " + "\n* ".join(added) + "\n___\n"
         if removed:
             diff_result += "\nRemoved:\n* " + "\n* ".join(removed) + "\n"
         return diff_result
     else:
-        return "No prior snapshot"
+        return "No prior bundle"
 
 
 def create_new_release_for_version(
-    release_version: Version, assets: Dict, latest_release: Optional[GitRelease]
+    release_version: Version, assets: Dict, latest_release: GitRelease
 ) -> None:
     """Given an input version it creates a matching Github Release and attaches the assets
        as a ReleaseAsset
@@ -104,7 +104,7 @@ def create_new_release_for_version(
     Args:
         release_version (Version): semantic version to be used when creating the release
         assets (Dict): assets to be added to the created release where a key is the asset name
-        latest_release (Optional[GitRelease]): supply if there is a prior release to be diffed against
+        latest_release GitRelease]: supply if there is a prior release to be diffed against
 
     Raises:
         RuntimeError: _description_
@@ -115,14 +115,14 @@ def create_new_release_for_version(
     repo = gh.get_repo(_GH_SNAPSHOT_REPO)
     logger.info(f"Assets for release: {assets.keys()}")
     reqs_files = [x for x in assets if SNAPSHOT_REQ_NAME_PREFIX in x]
-
+    release_name = f"Bundle for dbt v{release_version.major}.{release_version.minor}"
     release_body = _diff_snapshot_requirements(
         assets[reqs_files[0]], latest_release=latest_release
     )
     if not release_body:
-        raise RuntimeError("New snapshot does not contain any new changes")
+        raise RuntimeError("New bundle does not contain any new changes")
     created_release = repo.create_git_release(
-        tag=release_tag, name="Snapshot Release", message=release_body
+        tag=release_tag, name=release_name, message=release_body
     )
     try:
         for asset_name, asset_path in assets.items():
