@@ -6,7 +6,8 @@ on:
     branches:
       - "main"
   # all PRs, important to note that `pull_request_target` workflows
-  # will run in the context of the target branch of a PR
+  # will run in the context of the target branch of a PR since this
+  # is a public repo
   pull_request_target:
   workflow_dispatch:
 
@@ -25,24 +26,26 @@ jobs:
        os: ["macos-latest", "ubuntu-latest"]
     runs-on: ubuntu-latest
     name: ${{ matrix.os }} Test
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
 
-      - if: matrix.os == 'ubuntu-latest'
-        name: Set up Linux
+      - name: Set up Linux
+        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install libsasl2-dev
 
-      - run: |
+      - name: Run Unit Tests
+        run: |
           python -m pip install tox
           tox
-        name: Run Unit Tests
 
-      - run: tox -e integration
-        name: Run Integration Tests
-
+      - name: Run Integration Tests
+        run: tox -e integration

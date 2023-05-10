@@ -26,11 +26,13 @@ on:
     inputs:
       version_number:
         description: The release version number (i.e. 1.0.0b1).
+        type: string
         required: true
   workflow_call:
     inputs:
       version_number:
         description: The release version number (i.e. 1.0.0b1).
+        type: string
         required: true
 
 jobs:
@@ -41,22 +43,24 @@ jobs:
     outputs:
       created_tag: ${{ steps.create-release.outputs.created_tag }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
-      - id: install-linux-deps
-        name: Install Linux Dependencies
+      - name: Install Linux Dependencies
+        id: install-linux-deps
         run: |
           sudo apt-get update
           sudo apt-get install libsasl2-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
 
-      - id: create-release
-        name: Create Release
+      - name: Create Release
+        id: create-release
         run: |
           python -m pip install -e . && \
           python -m release_creation.main \
@@ -67,8 +71,8 @@ jobs:
           echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
           echo "created_tag=$CREATED_TAG" >> $GITHUB_ENV
 
-      - uses: ./.github/actions/test_install
-        name: Test install from Github Release
+      - name: Test install from Github Release
+        uses: ./.github/actions/test_install
         with:
           version_number: ${{ env.created_tag }}
           python_version: "3.8"
@@ -87,22 +91,25 @@ jobs:
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ${{ matrix.os }}
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      - if: matrix.os == 'ubuntu-latest'
-        name: Install Linux Dependencies
+      - name: Install Linux Dependencies
+        if: matrix.os == 'ubuntu-latest'
         run: |
           echo "os_platform=linux" >> $GITHUB_ENV
           sudo apt-get update
           sudo apt-get install libsasl2-dev
 
-      - if: matrix.os == 'macos-latest'
-        name: Install Mac Dependencies
+      - name: Install Mac Dependencies
+        if: matrix.os == 'macos-latest'
         run: |
           echo "os_platform=mac" >> $GITHUB_ENV
 
@@ -118,8 +125,8 @@ jobs:
            --input-version=${{ inputs.version_number }} \
            --operation=update
 
-      - uses: ./.github/actions/test_install
-        name: Test install from Github Release
+      - name: Test install from Github Release
+        uses: ./.github/actions/test_install
         with:
           version_number: ${{ needs.create-snapshot.outputs.created_tag }}
           python_version: ${{ matrix.python-version }}

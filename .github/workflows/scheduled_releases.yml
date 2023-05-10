@@ -27,7 +27,9 @@ jobs:
        # we support the trailing four versions plus the latest pre-release
        # and the upcoming version's pre-release.
        version: ["1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.4.0b1", "1.5.0b1", "1.5.0"]
-    name: Call Release Workflow for ${{ matrix.version }}
-    uses: ./.github/workflows/release_bundle.yml
-    with:
-      version_number: ${{ matrix.version }}
+    
+    steps:
+      - name: Call Release Workflow for ${{ matrix.version }}
+        uses: ./.github/workflows/release_bundle.yml
+        with:
+          version_number: ${{ matrix.version }}
