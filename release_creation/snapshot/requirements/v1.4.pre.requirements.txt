@@ -1,4 +1,5 @@
  --pre
+setuptools>=40.8.0
 dbt-core~=1.4.0b1 --no-binary dbt-postgres
 dbt-snowflake~=1.4.0b1
 dbt-bigquery~=1.4.0b1
@@ -11,4 +12,3 @@ dbt-rpc~=0.1.3b1
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyodbc==4.0.32 --no-binary pyodbc
-setuptools~=40.8.0
