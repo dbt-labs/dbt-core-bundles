@@ -11,4 +11,4 @@ dbt-rpc~=0.1.3b1
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyodbc==4.0.32 --no-binary pyodbc
-setuptools>=40.8.0
+setuptools~=40.8.0
