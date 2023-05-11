@@ -8,7 +8,7 @@ on:
   # all PRs, important to note that `pull_request_target` workflows
   # will run in the context of the target branch of a PR since this
   # is a public repo
-  #pull_request_target:
+  pull_request_target:
   workflow_dispatch:
 
 # explicitly turn off permissions for `GITHUB_TOKEN`
