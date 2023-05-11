@@ -1,5 +1,5 @@
  --pre
-setuptools>=40.8.0
+setuptools~=40.8.0
 dbt-core~=1.4.0b1 --no-binary dbt-postgres
 dbt-snowflake~=1.4.0b1
 dbt-bigquery~=1.4.0b1
