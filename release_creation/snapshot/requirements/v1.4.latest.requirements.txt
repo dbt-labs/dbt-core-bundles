@@ -1,3 +1,6 @@
+# Temporary fix to avoid setuptools dependency conflict with dbt-core
+# This is added to get the 1.4.x release published.
+setuptools~=40.8.0
 dbt-core~=1.4.0 --no-binary dbt-postgres
 dbt-snowflake~=1.4.0
 dbt-bigquery~=1.4.0
