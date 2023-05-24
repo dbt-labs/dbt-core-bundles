@@ -1,0 +1,11 @@
+--pre
+dbt-core~=1.6.0b2 --no-binary dbt-postgres
+dbt-snowflake~=1.6.0b2
+dbt-bigquery~=1.6.0b2
+dbt-redshift~=1.6.0b2
+dbt-postgres~=1.6.0b2
+dbt-spark[PyHive,ODBC]~=1.6.0b2
+dbt-rpc~=0.4.1
+grpcio-status~=1.47.0
+pyasn1-modules~=0.2.1
+pyodbc==4.0.32 --no-binary pyodbc
