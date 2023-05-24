@@ -48,7 +48,7 @@ jobs:
           python -m pip install tox
       
       - name: Run Unit Tests
-        run: tox
+        run: tox -e unit
 
       - name: Run Integration Tests
         # run integration tests even when unit tests fail
