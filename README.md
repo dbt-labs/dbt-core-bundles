@@ -1,7 +1,7 @@
 # dbt Bundles (beta)
 *NOTE*: this is still under active development please use with caution.
 ## Overview
-Generates bundles (zip archives) of all python dependencies needed to install and run the verified adapters + core as Github releases. 
+Generates bundles (zip archives) of all python dependencies needed to install and run the verified adapters + core as GitHub releases. 
 
 ### Why? 
 Python makes it difficult to create a shippable dependency enclosure that insures predictability at both install and run time. 
