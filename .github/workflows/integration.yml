@@ -22,9 +22,10 @@ concurrency:
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
        os: ["macos-latest", "ubuntu-latest"]
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} Test
 
     steps:
@@ -34,7 +35,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.8"
 
       - name: Set up Linux
         if: matrix.os == 'ubuntu-latest'
@@ -42,10 +43,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install libsasl2-dev
 
-      - name: Run Unit Tests
+      - name: Python setup
         run: |
+          python -m pip install --upgrade pip
           python -m pip install tox
-          tox
+      
+      - name: Run Unit Tests
+        run: tox -e unit
 
-      - name: Run Integration Tests
+      - name: Run Integration Tests (long running)
+        # run integration tests even when unit tests fail
+        if: ${{ always() }}
         run: tox -e integration

@@ -5,7 +5,7 @@ from release_creation.snapshot.snapshot_config import get_snapshot_config
 
 
 @pytest.mark.parametrize(argnames="test_input",
-                         argvalues=[("1.1.0", False), ("1.5.0", True)])
+                         argvalues=[("1.1.0", False), ("1.1.0b1", True)])
 def test_get_snapshot_config_returns_valid_object(test_input):
     is_pre = test_input[1]
     test_version = Version.coerce(test_input[0])
