@@ -12,7 +12,7 @@ These bundles attempt to solve for two issues:
 
 ### How does it work?
 Every week we will release a new bundle that will include all of the changes from the prior week including changes to
-dependencies for each supported major.minor version of dbt as a github release. The release tag corresponds to the 
+dependencies for each supported major.minor version of dbt as a GitHub release. The release tag corresponds to the 
 major.minor version of dbt it's for so `1.3.45` release includes the latest patches for all dbt packages that are `~=1.3.0`.
 
 Note that the patch version *will not* match the patch version for dbt-core or any other package as it will increment 
