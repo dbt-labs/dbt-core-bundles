@@ -103,5 +103,6 @@ tmp/
 .target/
 dbt-core*.zip
 snapshot*.txt
-.snapshot-env*
+dbt-core*.zip
+.bundle-env*
 .DS_Store

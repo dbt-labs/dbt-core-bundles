@@ -45,13 +45,13 @@ def main():
         target_version = latest_version.next_patch()
         target_version.prerelease = latest_version.prerelease
         target_version.build = latest_version.build
-        snapshot_assets = generate_bundle(target_version)
+        bundle_assets = generate_bundle(target_version)
         logger.info(f"Attempting to create new release for target version: {target_version}")
-        create_new_release_for_version(target_version, snapshot_assets, latest_release)
+        create_new_release_for_version(target_version, bundle_assets, latest_release)
         write_result(version=target_version)
     elif operation == ReleaseOperations.update:
-        snapshot_assets = generate_bundle(latest_version)
-        add_assets_to_release(assets=snapshot_assets, latest_release=latest_release)
+        bundle_assets = generate_bundle(latest_version)
+        add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
 
 
 if __name__ == "__main__":

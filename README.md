@@ -22,7 +22,7 @@ with a change to any of the included python packages.
 To use a bundle you will need to download, unzip the archive and pass the resulting directory to pip.
 You can use the [install_bundle.sh](/install_bundle.sh) to do this for you by running the following: 
 ```
-curl -s https://raw.githubusercontent.com/dbt-labs/dbt-core-snapshots/main/install_snapshot.sh | bash -s -- 1.4.5 3.9 mac
+curl -s https://raw.githubusercontent.com/dbt-labs/dbt-core-snapshots/main/install_bundle.sh | bash -s -- 1.4.5 3.9 mac
 ```
 Where `1.4.5` is the bundle, `3.9` is the python version and `mac` is the platform. 
 

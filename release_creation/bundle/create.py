@@ -5,7 +5,9 @@ import shutil
 
 from release_creation.bundle.bundle_config import get_bundle_config, BundleConfig
 
-SNAPSHOT_REQ_NAME_PREFIX = "snapshot_requirements"
+
+# leaving this as `snapshot` for now to not breaking consuming systems
+BUNDLE_REQ_NAME_PREFIX = "snapshot_requirements"
 
 
 def _get_extra_platforms_for_os(_os: str) -> List[str]:
@@ -57,7 +59,7 @@ def _generate_assets(bundle_config: BundleConfig) -> dict:
     shutil.make_archive(bundle_config.py_version_archive_path, 'zip', bundle_config.py_version_tmp_path)
     created_archive = bundle_config.py_version_archive_path + ".zip"
     created_asset_name = f"snapshot_core_all_adapters_{bundle_config.local_os}_{bundle_config.py_major_minor}.zip"
-    req_file_name = f"{SNAPSHOT_REQ_NAME_PREFIX}_{bundle_config.local_os}_{bundle_config.py_major_minor}.txt"
+    req_file_name = f"{BUNDLE_REQ_NAME_PREFIX}_{bundle_config.local_os}_{bundle_config.py_major_minor}.txt"
     subprocess.run(
         ['bash', f"{bundle_config.file_dir}/test_archive_install.sh",
          created_archive, bundle_config.requirements_file], check=True)

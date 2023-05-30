@@ -8,9 +8,9 @@ from github import Github
 from github.GithubException import GithubException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
-from release_creation.bundle.create import SNAPSHOT_REQ_NAME_PREFIX
+from release_creation.bundle.create import BUNDLE_REQ_NAME_PREFIX
 
-_GH_SNAPSHOT_REPO = "dbt-labs/dbt-core-snapshots"
+_GH_BUNDLE_REPO = "dbt-labs/dbt-core-snapshots"
 _GH_ACCESS_TOKEN = os.environ.get("GH_ACCESS_TOKEN")
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
     target_version = Version.coerce(input_version)
     latest_version = copy.copy(target_version)
     latest_version.patch = 0
-    repo = gh.get_repo(_GH_SNAPSHOT_REPO)
+    repo = gh.get_repo(_GH_BUNDLE_REPO)
     releases = repo.get_releases()
     latest_release = None
     for r in releases:
@@ -51,8 +51,8 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
     return latest_version, latest_release    
 
 
-def _get_local_bundle_reqs(snapshot_req_path: str) -> List[str]:
-    with open(snapshot_req_path) as f:
+def _get_local_bundle_reqs(bundle_req_path: str) -> List[str]:
+    with open(bundle_req_path) as f:
         reqs = f.read()
     return reqs.split()
 
@@ -63,16 +63,16 @@ def _get_gh_release_asset(release_asset: GitReleaseAsset) -> List[str]:
     return resp.content.decode("utf-8").split()
 
 
-def _compare_reqs(snapshot_req: List[str], release_req: List[str]) -> Tuple[Set[str], Set[str]]:
-    snapshot_req_set = set(snapshot_req)
+def _compare_reqs(bundle_req: List[str], release_req: List[str]) -> Tuple[Set[str], Set[str]]:
+    bundle_req_set = set(bundle_req)
     release_req_set = set(release_req)
-    added_req = snapshot_req_set - release_req_set
-    removed_req = release_req_set - snapshot_req_set
+    added_req = bundle_req_set - release_req_set
+    removed_req = release_req_set - bundle_req_set
     return added_req, removed_req
 
 
-def _diff_snapshot_requirements(
-    snapshot_req_path: str, latest_release: Optional[GitRelease]
+def _diff_bundle_requirements(
+    bundle_req_path: str, latest_release: Optional[GitRelease]
 ) -> str:
     # Scenarios being handled:
     # 1. No change - raise exception
@@ -81,11 +81,11 @@ def _diff_snapshot_requirements(
     if latest_release:
         diff_result = ""
         release_reqs = [
-            _asset for _asset in latest_release.get_assets() if SNAPSHOT_REQ_NAME_PREFIX in _asset.name
+            _asset for _asset in latest_release.get_assets() if BUNDLE_REQ_NAME_PREFIX in _asset.name
         ]
-        bundle_req = _get_local_bundle_reqs(snapshot_req_path=snapshot_req_path)
+        bundle_req = _get_local_bundle_reqs(bundle_req_path=bundle_req_path)
         release_req = _get_gh_release_asset(release_reqs[0])
-        added, removed = _compare_reqs(snapshot_req=bundle_req, release_req=release_req)
+        added, removed = _compare_reqs(bundle_req=bundle_req, release_req=release_req)
         if added:
             diff_result += "Added:\n* " + "\n* ".join(added) + "\n___\n"
         if removed:
@@ -112,11 +112,11 @@ def create_new_release_for_version(
     """
     gh = get_github_client()
     release_tag = str(release_version)
-    repo = gh.get_repo(_GH_SNAPSHOT_REPO)
+    repo = gh.get_repo(_GH_BUNDLE_REPO)
     logger.info(f"Assets for release: {assets.keys()}")
-    reqs_files = [x for x in assets if SNAPSHOT_REQ_NAME_PREFIX in x]
+    reqs_files = [x for x in assets if BUNDLE_REQ_NAME_PREFIX in x]
     release_name = f"Bundle for dbt v{release_version.major}.{release_version.minor}"
-    release_body = _diff_snapshot_requirements(
+    release_body = _diff_bundle_requirements(
         assets[reqs_files[0]], latest_release=latest_release
     )
     if not release_body:

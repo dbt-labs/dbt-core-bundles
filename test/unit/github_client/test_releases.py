@@ -13,8 +13,8 @@ def test_create_new_release_for_version_correctly_calls_github(monkeypatch):
     os.environ["GH_ACCESS_TOKEN"] = "someToken"
     test_version = Version.coerce("1.0.0")
     monkeypatch.setattr(releases, "get_github_client", lambda: mock_github)
-    monkeypatch.setattr(releases, "_diff_snapshot_requirements",
-                        lambda snapshot_req_path, latest_release: "No prior bundle")
+    monkeypatch.setattr(releases, "_diff_bundle_requirements",
+                        lambda bundle_req_path, latest_release: "No prior bundle")
     releases.create_new_release_for_version(release_version=test_version,
                                             assets={"snapshot_requirements.txt": "path/to/req_files.txt"},
                                             latest_release=release_mock)
