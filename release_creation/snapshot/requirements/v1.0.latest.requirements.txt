@@ -1,5 +1,6 @@
 dbt-core~=1.0.0  --no-binary dbt-postgres
 dbt-snowflake~=1.0.0
+snowlake-connector-python~=3.0,!=3.0.4
 dbt-bigquery~=1.0.0
 dbt-redshift~=1.0.0
 dbt-postgres~=1.0.0
