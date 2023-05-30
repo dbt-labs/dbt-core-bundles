@@ -105,4 +105,5 @@ dbt-core*.zip
 snapshot*.txt
 dbt-core*.zip
 .bundle-env*
+bundle*.txt
 .DS_Store

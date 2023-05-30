@@ -6,7 +6,7 @@ import shutil
 from release_creation.bundle.bundle_config import get_bundle_config, BundleConfig
 
 
-# leaving this as `snapshot` for now to not breaking consuming systems
+# leaving this as `snapshot` for now to not break consuming systems
 BUNDLE_REQ_NAME_PREFIX = "snapshot_requirements"
 
 
