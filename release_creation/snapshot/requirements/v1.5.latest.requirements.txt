@@ -1,6 +1,5 @@
 dbt-core~=1.5.0 --no-binary dbt-postgres
 dbt-snowflake~=1.5.0
-snowflake-connector-python~=3.0,!=3.0.4
 dbt-bigquery~=1.5.0
 dbt-redshift~=1.5.1
 dbt-postgres~=1.5.0
@@ -11,3 +10,4 @@ dbt-rpc~=0.4.0
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyodbc==4.0.32 --no-binary pyodbc
+snowflake-connector-python~=3.0,!=3.0.4
