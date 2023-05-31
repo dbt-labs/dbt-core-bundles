@@ -81,6 +81,12 @@ jobs:
         run: |
           dbt --version
 
+      - name: Post Notification
+        run: |
+          title="Test Install Successful"
+          message="`dbt --version` successful for os_platform=linux, Python="3.8", version=${{ steps.create-release.outputs.created_tag }}"
+          echo "::notice $title::$message"
+
   build-for-os-and-python-versions:
     needs: create-bundle
     strategy:
@@ -138,3 +144,9 @@ jobs:
       - name: Test running a simple command
         run: |
           dbt --version
+
+      - name: Post Notification
+        run: |
+          title="Test Install Successful"
+          message="`dbt --version` successful for os_platform=${{ matrix.os }}, Python=${{ matrix.python-version }}, version=${{ steps.create-release.outputs.created_tag }}"
+          echo "::notice $title::$message"
