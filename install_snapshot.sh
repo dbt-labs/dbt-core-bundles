@@ -15,4 +15,7 @@ curl --fail --retry 5 -OL "${github_url}/${requirements_file}"
 unzip -o "${archive_file}" -d snapshot_pkgs
 python -m pip install -r "${requirements_file}" \
   --no-index \
-  --find-links ./snapshot_pkgs
+  --no-cache-dir \
+  --ignore-installed \
+  --find-links ./snapshot_pkgs \
+  --pre
