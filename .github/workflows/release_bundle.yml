@@ -69,20 +69,23 @@ jobs:
           source ./result.env
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
-          echo "created_tag=$CREATED_TAG" >> $GITHUB_ENV
 
       - name: Test install from Github Release
         uses: ./.github/actions/test_install
         with:
-          version_number: ${{ env.created_tag }}
+          version_number: ${{ steps.create-release.outputs.created_tag }}
           python_version: "3.8"
           os_platform: "linux"
+
+      - name: Test running a simple command
+        run: |
+          dbt --version
 
   build-for-os-and-python-versions:
     needs: create-bundle
     strategy:
       matrix:
-        python-version: ["3.7", "3.9", "3.10"]
+        python-version: ["3.9", "3.10", "3.11"]
         os: ["macos-latest", "ubuntu-latest"]
         include:
           - python-version: 3.8
@@ -131,3 +134,7 @@ jobs:
           version_number: ${{ needs.create-bundle.outputs.created_tag }}
           python_version: ${{ matrix.python-version }}
           os_platform: ${{ env.os_platform }}
+
+      - name: Test running a simple command
+        run: |
+          dbt --version

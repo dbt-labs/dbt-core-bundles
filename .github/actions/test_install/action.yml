@@ -1,3 +1,7 @@
+# **what?**
+# This workflow tests installing a bundle for a given os and python version
+# Using a composite action for efficiency of runners.
+
 name: test-snapshot-install
 description: "test installing a snapshot for a given os/python/dbt version"
 
@@ -15,10 +19,12 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v3
+
     - name: Set up Python "${{ inputs.python_version }}"
       uses: actions/setup-python@v4
       with:
         python-version: "${{ inputs.python_version }}"
+
     - shell: bash
       run: |
         python -m venv env test_release_install
