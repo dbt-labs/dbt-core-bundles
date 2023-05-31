@@ -35,9 +35,9 @@ runs:
           "${{ inputs.version_number }}" \
           "${{ inputs.python_version }}" \
           "${{ inputs.os_platform }}"
+        bash install_snapshot.sh \
+          "1.4.0-b1" \
+          "3.8" \
+          "linux"
         pip freeze
-
-    - name: Test running a simple command
-      shell: bash
-      run: |
         dbt --version
