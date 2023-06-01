@@ -40,7 +40,7 @@ jobs:
     name: Audit Version and Build Python Release Matrix
     runs-on: ubuntu-latest
     outputs:
-      python_versions: ${{ steps.outputs.build-list.versions }}
+      python_versions: ${{ steps.build-list.outputs.versions }}
 
     steps: 
       - name: "Audit Version And Parse Into Parts"
@@ -70,7 +70,7 @@ jobs:
       
       - name: Print Support of Python Versions Other Than 3.8
         run: |
-          echo "${{ steps.outputs.build-list.versions }}"
+          echo "${{ steps.build-list.outputs.versions }}"
 
   create-bundle:
     needs: [build-python-matrix]
