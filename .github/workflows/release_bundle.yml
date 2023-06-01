@@ -179,5 +179,5 @@ jobs:
       - name: "Post Notification"
         run: |
           title="Test Install Successful"
-          message="Installation and version command run successful for os_platform=${{ matrix.os }}, Python=${{ matrix.python-version }}, version=${{ steps.create-release.outputs.created_tag }}"
+          message="Installation and version command run successful for os_platform=${{ matrix.os }}, Python=${{ matrix.python-version }}, version=${{ needs.create-bundle.outputs.created_tag }}"
           echo "::notice $title::$message"
