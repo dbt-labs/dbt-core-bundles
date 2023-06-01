@@ -49,7 +49,7 @@ jobs:
         with:
           version: ${{ inputs.version_number }}
       
-      - name: Set Python Versions
+      - name: "Set Python Versions"
         # 1.0 to 1.3 support python 3.7 to 3.10 
         # 1.4 added support for python 3.11
         # 1.6 drops support for python 3.7
@@ -58,15 +58,15 @@ jobs:
         run: |
           if [[ ${{ steps.semver.outputs.minor }} < 4 ]]
           then
-            versions="['3.7', '3.9', '3.10']"
+            py_versions="[3.7, 3.9, 3.10]"
           elif  [[ ${{ steps.semver.outputs.minor }} < 6 ]]
           then
-            versions="['3.7', '3.9', '3.10', '3.11']"
+            py_versions="[3.7, 3.9, 3.10, 3.11]"
           else
-            versions="['3.9', '3.10', '3.11']"
+            py_versions="[3.9, 3.10, 3.11]"
           fi
-          echo $versions
-          echo "versions=$versions" >> $GITHUB_OUTPUT
+          echo $py_versions
+          echo "versions=$py_versions" >> "$GITHUB_OUTPUT"
       
       - name: Print Support of Python Versions Other Than 3.8
         run: |
@@ -80,15 +80,15 @@ jobs:
     outputs:
       created_tag: ${{ steps.create-release.outputs.created_tag }}
     steps:
-      - name: Checkout Repo
+      - name: "Checkout Repo"
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.8
+      - name: "Set up Python 3.8"
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: "3.8"
 
-      - name: Install Linux Dependencies
+      - name: "Install Linux Dependencies"
         id: install-linux-deps
         run: |
           sudo apt-get update
@@ -96,7 +96,7 @@ jobs:
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
 
-      - name: Create Release
+      - name: "Create Release"
         id: create-release
         run: |
           python -m pip install -e . && \
@@ -107,14 +107,14 @@ jobs:
           echo "$CREATED_TAG" 
           echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
 
-      - name: Test install from Github Release
+      - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
         with:
           version_number: ${{ steps.create-release.outputs.created_tag }}
           python_version: "3.8"
           os_platform: "linux"
 
-      - name: Post Notification
+      - name: "Post Notification"
         run: |
           title="Test Install Successful"
           message="Installation and version command run successful for os_platform=linux, Python="3.8", version=${{ steps.create-release.outputs.created_tag }}"
@@ -137,46 +137,46 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout Repo
+      - name: "Checkout Repo"
         uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "${{ matrix.python-version }}"
 
-      - name: Install Linux Dependencies
+      - name: "Install Linux Dependencies"
         if: matrix.os == 'ubuntu-latest'
         run: |
           echo "os_platform=linux" >> $GITHUB_ENV
           sudo apt-get update
           sudo apt-get install libsasl2-dev
 
-      - name: Install Mac Dependencies
+      - name: "Install Mac Dependencies"
         if: matrix.os == 'macos-latest'
         run: |
           echo "os_platform=mac" >> $GITHUB_ENV
 
-      - name: Install Python Dependencies
+      - name: "Install Python Dependencies"
         run: |    
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
 
-      - name: Generate Bundle
+      - name: "Generate Bundle"
         run: |
           python -m pip install -e . && \
           python -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=update
 
-      - name: Test install from Github Release
+      - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
         with:
           version_number: ${{ needs.create-bundle.outputs.created_tag }}
           python_version: ${{ matrix.python-version }}
           os_platform: ${{ env.os_platform }}
 
-      - name: Post Notification
+      - name: "Post Notification"
         run: |
           title="Test Install Successful"
           message="Installation and version command run successful for os_platform=${{ matrix.os }}, Python=${{ matrix.python-version }}, version=${{ steps.create-release.outputs.created_tag }}"
