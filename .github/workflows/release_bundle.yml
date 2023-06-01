@@ -58,13 +58,15 @@ jobs:
         run: |
           if [[ ${{ steps.semver.outputs.minor }} < 4 ]]
           then
-            echo "versions=['3.7', '3.9', '3.10']" >> "$GITHUB_OUTPUT"
+            versions="['3.7', '3.9', '3.10']"
           elif  [[ ${{ steps.semver.outputs.minor }} < 6 ]]
           then
-            echo "versions=['3.7', '3.9', '3.10', '3.11']" >> "$GITHUB_OUTPUT"
+            versions="['3.7', '3.9', '3.10', '3.11']"
           else
-            echo "versions=['3.9', '3.10', '3.11']" >> "$GITHUB_OUTPUT"
+            versions="['3.9', '3.10', '3.11']"
           fi
+          echo $versions
+          echo "versions=$versions" >> "$GITHUB_OUTPUT"
       
       - name: Print Support of Python Versions Other Than 3.8
         run: |
