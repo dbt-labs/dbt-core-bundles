@@ -60,6 +60,7 @@ jobs:
           then
             echo "versions=['3.7', '3.9', '3.10']" >> "$GITHUB_OUTPUT"
           elif  [[ ${{ steps.semver.outputs.minor }} < 6 ]]
+          then
             echo "versions=['3.7', '3.9', '3.10', '3.11']" >> "$GITHUB_OUTPUT"
           else
             echo "versions=['3.9', '3.10', '3.11']" >> "$GITHUB_OUTPUT"
