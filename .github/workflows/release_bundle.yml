@@ -66,7 +66,7 @@ jobs:
             versions="['3.9', '3.10', '3.11']"
           fi
           echo $versions
-          echo "versions=$versions" >> "$GITHUB_OUTPUT"
+          echo "versions=$versions" >> $GITHUB_OUTPUT
       
       - name: Print Support of Python Versions Other Than 3.8
         run: |
@@ -105,7 +105,7 @@ jobs:
            --operation=create
           source ./result.env
           echo "$CREATED_TAG" 
-          echo "created_tag=$CREATED_TAG" >> "$GITHUB_OUTPUT"
+          echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
 
       - name: Test install from Github Release
         uses: ./.github/actions/test_install
