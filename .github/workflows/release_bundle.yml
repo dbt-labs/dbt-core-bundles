@@ -123,7 +123,7 @@ jobs:
   build-for-os-and-python-versions:
     needs: [create-bundle, build-python-matrix]
     strategy:
-      # run even if some fail so we get a full picture.  At thois point linux/3.8 si already released anyways so there's no reason to stop
+      # run even if some fail so we get a full picture.  At this point linux/3.8 is already released anyways so there's no reason to stop
       fail-fast: false
       matrix:
         python-version: ${{ fromJSON(needs.build-python-matrix.outputs.python_versions) }}
