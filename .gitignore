@@ -106,5 +106,4 @@ snapshot*.txt
 .snapshot-env*
 bundle*.txt
 .bundle-env*
-dbt-core*.zip
 .DS_Store

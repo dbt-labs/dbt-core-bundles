@@ -19,3 +19,6 @@ pip install -r "${requirements_file}" \
   --ignore-installed \
   --find-links ./bundle_pkgs \
   --pre
+
+unset DBT_PSYCOPG2_NAME
+

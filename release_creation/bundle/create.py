@@ -4,17 +4,10 @@ import subprocess
 import shutil
 
 from release_creation.bundle.bundle_config import get_bundle_config, BundleConfig
-
+from release_creation.bundle.bundle_os import BundleOS, PIP_PLATFORM_OS_VALUES
 
 # leaving this as `snapshot` for now to not break consuming systems
 BUNDLE_REQ_NAME_PREFIX = "snapshot_requirements"
-
-
-def _get_extra_platforms_for_os(_os: str) -> List[str]:
-    if _os == "mac":
-        return ['macosx_10_9_x86_64', 'macosx_11_0_arm64', 'macosx_10_10_intel', 'macosx_12_0_arm64']
-    else:
-        return ['manylinux_2_17_x86_64', 'manylinux2014_x86_64', 'manylinux2014_i686']
 
 
 def _get_requirements_prefix(
@@ -48,7 +41,7 @@ def _freeze_dependencies(bundle_config: BundleConfig):
 
 
 def _download_binaries(bundle_config: BundleConfig):
-    extra_platforms = _get_extra_platforms_for_os(bundle_config.local_os)
+    extra_platforms = PIP_PLATFORM_OS_VALUES[bundle_config.local_os]
     for extra_platform in extra_platforms:
         subprocess.run(
             ['bash', f"{bundle_config.file_dir}/download_no_deps.sh",

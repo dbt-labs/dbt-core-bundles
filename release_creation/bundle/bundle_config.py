@@ -6,18 +6,20 @@ from typing import Optional
 from pydantic.dataclasses import dataclass
 from semantic_version import Version
 
+from release_creation.bundle.bundle_os import BundleOS
+
 _OUTPUT_ARCHIVE_FILE_BASE = "dbt-core-all-adapters-bundle"
 _FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
-def _get_local_os() -> str:
+def _get_local_os() -> BundleOS:
     local_sys = platform.system()
     if local_sys == "Linux":
-        return "linux"
+        return BundleOS.LINUX
     elif local_sys == "Windows":
-        return "windows"
+        return BundleOS.WINDOWS
     elif local_sys == "Darwin":
-        return "mac"
+        return BundleOS.MAC
     else:
         raise ValueError(f"Unsupported system {local_sys}")
 
@@ -37,7 +39,7 @@ class BundleConfig:
     requirements_file: Optional[str] = None
     py_version_tmp_path: Optional[str] = None
     py_version_archive_path: Optional[str] = None
-    local_os: str = field(default_factory=_get_local_os)
+    local_os: BundleOS = field(default_factory=_get_local_os)
     py_version: str = field(default_factory=platform.python_version)
 
     def __post_init__(self):
