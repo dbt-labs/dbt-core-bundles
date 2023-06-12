@@ -1,3 +1,7 @@
+# **what?**
+# This workflow tests installing a bundle for a given os and python version
+# Using a composite action for efficiency of runners.
+
 name: test-bundle-install
 description: "test installing a bundle for a given os/python/dbt version"
 
@@ -14,12 +18,16 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v3
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
     - name: Set up Python "${{ inputs.python_version }}"
       uses: actions/setup-python@v4
       with:
         python-version: "${{ inputs.python_version }}"
-    - shell: bash
+
+    - name: Install Release
+      shell: bash
       run: |
         python -m venv env test_release_install
         source test_release_install/bin/activate
@@ -28,3 +36,4 @@ runs:
           "${{ inputs.python_version }}" \
           "${{ inputs.os_platform }}"
         pip freeze
+        dbt --version
