@@ -12,18 +12,6 @@ _OUTPUT_ARCHIVE_FILE_BASE = "dbt-core-all-adapters-bundle"
 _FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
-def _get_local_os() -> BundleOS:
-    local_sys = platform.system()
-    if local_sys == "Linux":
-        return BundleOS.LINUX
-    elif local_sys == "Windows":
-        return BundleOS.WINDOWS
-    elif local_sys == "Darwin":
-        return BundleOS.MAC
-    else:
-        raise ValueError(f"Unsupported system {local_sys}")
-
-
 def _get_requirements_prefix(major_version: Optional[int], minor_version: Optional[int], is_pre: bool = False):
     suffix = "pre" if is_pre else "latest"
     return f"v{major_version}.{minor_version}.{suffix}"
@@ -39,7 +27,7 @@ class BundleConfig:
     requirements_file: Optional[str] = None
     py_version_tmp_path: Optional[str] = None
     py_version_archive_path: Optional[str] = None
-    local_os: BundleOS = field(default_factory=_get_local_os)
+    local_os: BundleOS = field(default_factory=BundleOS.get_local_os)
     py_version: str = field(default_factory=platform.python_version)
 
     def __post_init__(self):

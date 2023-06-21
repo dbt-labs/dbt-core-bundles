@@ -1,3 +1,5 @@
+import platform
+
 import strenum as strenum
 
 
@@ -5,6 +7,18 @@ class BundleOS(strenum):
     LINUX = "linux"
     MAC = "mac"
     WINDOWS = "windows"
+
+    @classmethod
+    def get_local_os(cls) -> str:
+        local_sys = platform.system()
+        if local_sys == "Linux":
+            return BundleOS.LINUX
+        elif local_sys == "Windows":
+            return BundleOS.WINDOWS
+        elif local_sys == "Darwin":
+            return BundleOS.MAC
+        else:
+            raise ValueError(f"Unsupported system {local_sys}")
 
 
 # these values have been derived by trial and error, as to date
