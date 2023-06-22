@@ -7,7 +7,6 @@ dbt-spark[PyHive,ODBC]~=1.3.0
 dbt-databricks~=1.3.0
 dbt-rpc~=0.1.1
 grpcio-status~=1.47.0
-pyarrow~=12.0.0,!=12.0.1
 pyasn1-modules~=0.2.1
 pyodbc==4.0.32 --no-binary pyodbc
 snowflake-connector-python~=3.0,!=3.0.4
