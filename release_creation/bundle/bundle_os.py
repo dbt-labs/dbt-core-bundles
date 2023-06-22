@@ -1,9 +1,9 @@
 import platform
 
-import strenum as strenum
+from strenum import StrEnum
 
 
-class BundleOS(strenum):
+class BundleOS(StrEnum):
     LINUX = "linux"
     MAC = "mac"
     WINDOWS = "windows"
