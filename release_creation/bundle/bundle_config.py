@@ -45,8 +45,9 @@ def get_bundle_config(target_version: Version) -> BundleConfig:
         is_pre=is_pre
     )
 
-    return BundleConfig(archive_path=f"{_OUTPUT_ARCHIVE_FILE_BASE}-{target_version}",
-                        requirements_prefix=req_prefix,
-                        is_pre=is_pre,
-                        file_dir=_FILE_DIR
-                        )
+    return BundleConfig(
+        archive_path=f"{_OUTPUT_ARCHIVE_FILE_BASE}-{target_version}",
+        requirements_prefix=req_prefix,
+        is_pre=is_pre,
+        file_dir=_FILE_DIR
+    )
