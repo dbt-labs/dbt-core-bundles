@@ -1,2 +1,1 @@
-recursive-include release_creation *.txt
-include release_creation/snapshot/requirements/*.txt
+recursive-include release_creation *
