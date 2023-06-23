@@ -1,4 +1,4 @@
-name: Adapter Integration Tests
+name: Bundle Integration Tests
 
 on:
   # pushes to release branches
