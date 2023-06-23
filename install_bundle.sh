@@ -13,9 +13,12 @@ export DBT_PSYCOPG2_NAME=psycopg2
 curl --fail --retry 5 --retry-all-errors -OL "${github_url}/${archive_file}"
 curl --fail --retry 5 --retry-all-errors -OL "${github_url}/${requirements_file}"
 unzip -o "${archive_file}" -d bundle_pkgs
-python -m pip install -r "${requirements_file}" \
+pip install -r "${requirements_file}" \
   --no-index \
   --no-cache-dir \
   --ignore-installed \
   --find-links ./bundle_pkgs \
   --pre
+
+unset DBT_PSYCOPG2_NAME
+

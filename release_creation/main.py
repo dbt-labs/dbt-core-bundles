@@ -6,10 +6,10 @@ import argparse
 
 from release_creation.github_client.releases import (
     create_new_release_for_version,
-    get_latest_snapshot_release,
+    get_latest_bundle_release,
     add_assets_to_release,
 )
-from release_creation.snapshot.create import generate_snapshot
+from release_creation.bundle.create import generate_bundle
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 logger = logging.getLogger(__name__)
@@ -40,18 +40,18 @@ def main():
     args = parser.parse_args()
     version = args.input_version
     operation = args.operation
-    latest_version, latest_release = get_latest_snapshot_release(version)
+    latest_version, latest_release = get_latest_bundle_release(version)
     if operation == ReleaseOperations.create:
         target_version = latest_version.next_patch()
         target_version.prerelease = latest_version.prerelease
         target_version.build = latest_version.build
-        snapshot_assets = generate_snapshot(target_version)
+        bundle_assets = generate_bundle(target_version)
         logger.info(f"Attempting to create new release for target version: {target_version}")
-        create_new_release_for_version(target_version, snapshot_assets, latest_release)
+        create_new_release_for_version(target_version, bundle_assets, latest_release)
         write_result(version=target_version)
     elif operation == ReleaseOperations.update:
-        snapshot_assets = generate_snapshot(latest_version)
-        add_assets_to_release(assets=snapshot_assets, latest_release=latest_release)
+        bundle_assets = generate_bundle(latest_version)
+        add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
 
 
 if __name__ == "__main__":
