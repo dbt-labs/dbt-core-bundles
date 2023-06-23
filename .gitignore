@@ -104,4 +104,6 @@ tmp/
 dbt-core*.zip
 snapshot*.txt
 .snapshot-env*
+bundle*.txt
+.bundle-env*
 .DS_Store
