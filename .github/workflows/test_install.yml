@@ -1,0 +1,103 @@
+# **what?**
+# This workflow tests installing and running a simple command for a bundle for a given 
+# os and python version
+
+# **why?**
+# To ensure that the bundle we have released is minimally functional
+
+# **when?**
+# This is triggered manually or via another workflow.
+
+name: Test Bundle Installation
+
+permissions:
+  packages: read
+  contents: read
+  pull-requests: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_number:
+        description: The bundle release version number (i.e. 1.5.3).
+        required: true
+      python_version:
+        description: The version of python to test against
+        required: true
+      os_platform:
+        type: choice
+        description: The os platform of the worker performing the test
+        required: true
+        options: 
+        - linux
+        - mac
+  workflow_call:
+    inputs:
+      version_number:
+        description: The bundle release version number (i.e. 1.5.3).
+        type: string
+        required: true
+      python_version:
+        description: The version of python to test against
+        type: string
+        required: true
+      os_platform:
+        description: The os platform of the worker performing the test
+        type: string
+        required: true
+
+jobs:
+  audit_inputs:
+    runs-on: ubuntu-latest
+    outputs:
+        runs-on: ${{ steps.platform-conversion.outputs.platform }}
+    steps:
+      - name: "[DEBUG] Inputs"
+        run: |
+          echo "version_number:   ${{ inputs.version_number }}"
+          echo "python_version:   ${{ inputs.python_version }}"
+          echo "os_platform:      ${{ inputs.os_platform }}"
+
+      - name: Convert platform to runnable platform
+        id: platform-conversion
+        run: |
+          if [[ ${{ inputs.os_platform }} == 'mac' ]]
+          then
+            echo "platform=macos-latest" >> $GITHUB_OUTPUT
+          elif [[ ${{ inputs.os_platform }} == 'linux' ]]
+          then
+            echo "platform=ubuntu-latest" >> $GITHUB_OUTPUT
+          else
+            echo "os_platform of ${{ inputs.os_platform }} is not valid.  Must be either mac or linux"
+            exit 1
+          fi
+
+  test_install:
+    needs: [audit_inputs]
+    runs-on: ${{ needs.audit_inputs.outputs.runs-on }}
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python "${{ inputs.python_version }}"
+      uses: actions/setup-python@v4
+      with:
+        python-version: "${{ inputs.python_version }}"
+
+    - name: Test the Install
+      run: |
+        python -m venv env test_release_install
+        source test_release_install/bin/activate
+        bash install_bundle.sh \
+          "${{ inputs.version_number }}" \
+          "${{ inputs.python_version }}" \
+          "${{ inputs.os_platform }}"
+
+    - name: Pip Freeze
+      run: |
+          pip freeze
+
+    - name: Test a simple dbt --version command
+      run: |
+        dbt --version
