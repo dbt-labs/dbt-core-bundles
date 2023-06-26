@@ -8,7 +8,7 @@ dbt-databricks~=1.1.5
 dbt-trino~=1.1.0
 dbt-rpc~=0.1.0b1
 grpcio-status~=1.47.0
-pyarrow~=12.0.0,!=12.0.1
+pyarrow!=12.0.1
 pyasn1-modules~=0.2.1
 pyodbc~=4.0.32
 snowflake-connector-python~=3.0,!=3.0.4
