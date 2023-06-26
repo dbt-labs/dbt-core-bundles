@@ -1,4 +1,4 @@
-name: Adapter Integration Tests
+name: Bundle Integration Tests
 
 on:
   # pushes to release branches
@@ -10,6 +10,10 @@ on:
   # is a public repo
   pull_request_target:
   workflow_dispatch:
+    inputs:
+      test_ref:
+        description: the ref (either sha or branch) to test against
+        default: 'main'
 
 # explicitly turn off permissions for `GITHUB_TOKEN`
 permissions: read-all
@@ -29,8 +33,18 @@ jobs:
     name: ${{ matrix.os }} Test
 
     steps:
-      - name: Checkout Repo
+      - name: Check out the repository (non-PR)
+        if: github.event_name != 'pull_request_target'
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Check out the repository (PR)
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -54,4 +68,4 @@ jobs:
       - name: Run Integration Tests (long running)
         # run integration tests even when unit tests fail
         if: ${{ always() }}
-        run: tox -e integration
+        run: tox -r -e integration
