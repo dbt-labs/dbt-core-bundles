@@ -6,8 +6,7 @@ import shutil
 from release_creation.bundle.bundle_config import get_bundle_config, BundleConfig
 from release_creation.bundle.bundle_os import BundleOS, PIP_PLATFORM_OS_VALUES
 
-# leaving this as `snapshot` for now to not break consuming systems
-BUNDLE_REQ_NAME_PREFIX = "snapshot_requirements"
+BUNDLE_REQ_NAME_PREFIX = "bundle_requirements"
 
 
 def _get_requirements_prefix(
@@ -51,7 +50,7 @@ def _download_binaries(bundle_config: BundleConfig):
 def _generate_assets(bundle_config: BundleConfig) -> dict:
     shutil.make_archive(bundle_config.py_version_archive_path, 'zip', bundle_config.py_version_tmp_path)
     created_archive = bundle_config.py_version_archive_path + ".zip"
-    created_asset_name = f"snapshot_core_all_adapters_{bundle_config.local_os}_{bundle_config.py_major_minor}.zip"
+    created_asset_name = f"bundle_core_all_adapters_{bundle_config.local_os}_{bundle_config.py_major_minor}.zip"
     req_file_name = f"{BUNDLE_REQ_NAME_PREFIX}_{bundle_config.local_os}_{bundle_config.py_major_minor}.txt"
     subprocess.run(
         ['bash', f"{bundle_config.file_dir}/test_archive_install.sh",
