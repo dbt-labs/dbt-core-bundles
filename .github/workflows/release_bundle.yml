@@ -198,6 +198,7 @@ jobs:
           os_platform: ${{ env.os_platform }}
 
       - name: "Post Notification"
+        if: ${{ inputs.draft_release }} == false
         run: |
           title="Test Install Successful"
           message="Installation and version command run successful for os_platform=${{ matrix.os }}, Python=${{ matrix.python-version }}, version=${{ needs.create-bundle.outputs.created_tag }}"
