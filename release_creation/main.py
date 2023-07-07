@@ -36,9 +36,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--operation", required=True, type=ReleaseOperations)
     parser.add_argument("--input-version", required=True, type=str)  # e.g. 1.3.4
+    parser.add_argument("--draft", required=False, type=bool)  # e.g. 1.3.4
     args = parser.parse_args()
     version = args.input_version
     operation = args.operation
+    draft = args.draft
     latest_version, latest_release = get_latest_bundle_release(version)
     logger.info(f"Retrieved latest version: {latest_version} "
                 f"and latest release: {latest_release.tag_name if latest_release else None}")
@@ -50,7 +52,7 @@ def main():
         target_version.patch += 1
         bundle_assets = generate_bundle(target_version)
         logger.info(f"Attempting to create new release for target version: {target_version}")
-        create_new_release_for_version(target_version, bundle_assets, latest_release)
+        create_new_release_for_version(target_version, draft, bundle_assets, latest_release)
         write_result(version=target_version)
     elif operation == ReleaseOperations.update:
         bundle_assets = generate_bundle(latest_version)
