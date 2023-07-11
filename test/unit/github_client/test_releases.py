@@ -16,6 +16,7 @@ def test_create_new_release_for_version_correctly_calls_github(monkeypatch):
     monkeypatch.setattr(releases, "_diff_bundle_requirements",
                         lambda bundle_req_path, latest_release: "No prior bundle")
     releases.create_new_release_for_version(release_version=test_version,
+                                            draft=False,
                                             assets={"bundle_requirements.txt": "path/to/req_files.txt"},
                                             latest_release=release_mock)
     calls = mock_github.mock_calls

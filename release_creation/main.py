@@ -36,11 +36,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--operation", required=True, type=ReleaseOperations)
     parser.add_argument("--input-version", required=True, type=str)  # e.g. 1.3.4
-    parser.add_argument("--draft", required=False, type=bool)  # e.g. 1.3.4
+    parser.add_argument("--draft", required=True, type=str)  # e.g. true/false
     args = parser.parse_args()
     version = args.input_version
     operation = args.operation
-    draft = args.draft
+    # GitHub booleans are lowercase and actually just strings
+    draft = False if args.draft == "false" else True
     latest_version, latest_release = get_latest_bundle_release(version)
     logger.info(f"Retrieved latest version: {latest_version} "
                 f"and latest release: {latest_release.tag_name if latest_release else None}")
