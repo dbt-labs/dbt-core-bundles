@@ -10,7 +10,7 @@ from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
 from release_creation.bundle.create import BUNDLE_REQ_NAME_PREFIX
 
-_GH_BUNDLE_REPO = "dbt-labs/dbt-core-snapshots"
+_GH_BUNDLE_REPO = "dbt-labs/dbt-core-bundles"
 _GH_ACCESS_TOKEN = os.environ.get("GH_ACCESS_TOKEN")
 
 logger = logging.getLogger(__name__)
