@@ -16,7 +16,7 @@ name: Schedule Bundle Releases
 
 on:
   schedule:
-    - cron: "0 13 * * 1"
+    - cron: "0 22 * * 4" # 10pm UTC on Thursday
   workflow_dispatch:
 
 jobs:
