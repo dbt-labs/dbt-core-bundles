@@ -16,11 +16,11 @@ def test_create_new_release_for_version_correctly_calls_github(monkeypatch):
     monkeypatch.setattr(releases, "_diff_bundle_requirements",
                         lambda bundle_req_path, latest_release: "No prior bundle")
     releases.create_new_release_for_version(release_version=test_version,
-                                            assets={"snapshot_requirements.txt": "path/to/req_files.txt"},
+                                            assets={"bundle_requirements.txt": "path/to/req_files.txt"},
                                             latest_release=release_mock)
     calls = mock_github.mock_calls
-    assert calls[0].args == ('dbt-labs/dbt-core-snapshots',)
+    assert calls[0].args == ('dbt-labs/dbt-core-bundles',)
     assert calls[1].kwargs == {'tag': '1.0.0', 'name': 'Bundle for dbt v1.0',
                                'message': 'No prior bundle'}
     assert calls[2].kwargs == {'path': 'path/to/req_files.txt',
-                               'name': 'snapshot_requirements.txt'}
+                               'name': 'bundle_requirements.txt'}
