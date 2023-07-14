@@ -14,9 +14,29 @@ _GH_BUNDLE_REPO = "dbt-labs/dbt-core-bundles"
 _GH_ACCESS_TOKEN = os.environ.get("GH_ACCESS_TOKEN")
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 
 def get_github_client() -> Github:
     return Github(_GH_ACCESS_TOKEN)
+
+
+def _normalize_version_tags(version:Version) -> Version:
+    if version.prerelease or version.build:
+        version.prerelease = ["pre"]
+    if version.build:
+        version.build = []
+    return version
+
+
+def _normalize_input_version(version: Version) -> Version:
+    """Normalize the version:
+    - set patch to 0
+    - if pre-release version use 'pre' instead of 'rc' or 'b1' for the tag
+    """
+    version = _normalize_version_tags(version)
+    version.patch = 0
+    return version
 
 
 def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[GitRelease]]:
@@ -33,7 +53,7 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
     gh = get_github_client()
     target_version = Version.coerce(input_version)
     latest_version = copy.copy(target_version)
-    latest_version.patch = 0
+    latest_version = _normalize_input_version(latest_version)
     repo = gh.get_repo(_GH_BUNDLE_REPO)
     releases = repo.get_releases()
     latest_release = None
@@ -42,13 +62,13 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
         if (
             release_version.major == latest_version.major
             and release_version.minor == latest_version.minor
-            and release_version.prerelease == latest_version.prerelease
-            and release_version.build == latest_version.build
+            and (not release_version.prerelease) == (not latest_version.prerelease)
+            and (not release_version.build) == (not latest_version.build)
             and release_version.patch >= latest_version.patch  # type: ignore
         ):
             latest_version = release_version
             latest_release = r
-    return latest_version, latest_release    
+    return _normalize_version_tags(latest_version), latest_release
 
 
 def _get_local_bundle_reqs(bundle_req_path: str) -> List[str]:
@@ -112,17 +132,21 @@ def create_new_release_for_version(
     """
     gh = get_github_client()
     release_tag = str(release_version)
+    is_pre = True if release_version.prerelease else False
     repo = gh.get_repo(_GH_BUNDLE_REPO)
     logger.info(f"Assets for release: {assets.keys()}")
     reqs_files = [x for x in assets if BUNDLE_REQ_NAME_PREFIX in x]
     release_name = f"Bundle for dbt v{release_version.major}.{release_version.minor}"
+    if is_pre:
+        release_name += f".{release_version.prerelease[0]}"
     release_body = _diff_bundle_requirements(
         assets[reqs_files[0]], latest_release=latest_release
     )
+
     if not release_body:
         raise RuntimeError("New bundle does not contain any new changes")
     created_release = repo.create_git_release(
-        tag=release_tag, name=release_name, message=release_body
+        tag=release_tag, name=release_name, message=release_body, prerelease=is_pre
     )
     try:
         for asset_name, asset_path in assets.items():
