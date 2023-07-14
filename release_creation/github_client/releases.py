@@ -26,7 +26,7 @@ def normalize_version(version: Version) -> Version:
     - set patch to 0
     - if pre-release version to use 'pre' instead of 'rc' or 'b1' for the tag
     """
-    if version.prerelease is not None:
+    if version.prerelease:
         version.prerelease = "pre"
     version.patch = 0
     return version
@@ -55,7 +55,7 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
         if (
             release_version.major == latest_version.major
             and release_version.minor == latest_version.minor
-            and (release_version.prerelease is None) == (latest_version.prerelease is None)
+            and (not release_version.prerelease) == (not latest_version.prerelease)
             and release_version.build == latest_version.build
             and release_version.patch >= latest_version.patch  # type: ignore
         ):
