@@ -130,10 +130,11 @@ def create_new_release_for_version(
     release_body = _diff_bundle_requirements(
         assets[reqs_files[0]], latest_release=latest_release
     )
+    is_pre = True if release_version.prerelease else False
     if not release_body:
         raise RuntimeError("New bundle does not contain any new changes")
     created_release = repo.create_git_release(
-        tag=release_tag, name=release_name, message=release_body
+        tag=release_tag, name=release_name, message=release_body, prerelease=is_pre
     )
     try:
         for asset_name, asset_path in assets.items():
