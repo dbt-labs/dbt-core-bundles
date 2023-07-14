@@ -19,6 +19,17 @@ def get_github_client() -> Github:
     return Github(_GH_ACCESS_TOKEN)
 
 
+def normalize_version(version: Version) -> Version:
+    """Normalize the version:
+    - set patch to 0
+    - if pre-release version to use 'pre' instead of 'rc' or 'b1' for the tag
+    """
+    if version.prerelease is not None:
+        version.prerelease = "pre"
+    version.patch = 0
+    return version
+
+
 def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[GitRelease]]:
     """Retrieve the latest release matching the major.minor and release stage
        semantic version if it exists. Ignores the patch version. 
@@ -33,7 +44,7 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
     gh = get_github_client()
     target_version = Version.coerce(input_version)
     latest_version = copy.copy(target_version)
-    latest_version.patch = 0
+    latest_version = normalize_version(latest_version)
     repo = gh.get_repo(_GH_BUNDLE_REPO)
     releases = repo.get_releases()
     latest_release = None
@@ -42,7 +53,7 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
         if (
             release_version.major == latest_version.major
             and release_version.minor == latest_version.minor
-            and release_version.prerelease == latest_version.prerelease
+            and (release_version.prerelease is None) == (latest_version.prerelease is None)
             and release_version.build == latest_version.build
             and release_version.patch >= latest_version.patch  # type: ignore
         ):
