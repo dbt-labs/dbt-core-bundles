@@ -14,6 +14,8 @@ _GH_BUNDLE_REPO = "dbt-labs/dbt-core-bundles"
 _GH_ACCESS_TOKEN = os.environ.get("GH_ACCESS_TOKEN")
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 
 def get_github_client() -> Github:
     return Github(_GH_ACCESS_TOKEN)

@@ -13,6 +13,7 @@ from release_creation.bundle.create import generate_bundle
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class ReleaseOperations(StrEnum):
