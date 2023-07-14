@@ -32,7 +32,7 @@ def _normalize_version_tags(version:Version) -> Version:
 def _normalize_input_version(version: Version) -> Version:
     """Normalize the version:
     - set patch to 0
-    - if pre-release version to use 'pre' instead of 'rc' or 'b1' for the tag
+    - if pre-release version use 'pre' instead of 'rc' or 'b1' for the tag
     """
     version = _normalize_version_tags(version)
     version.patch = 0
