@@ -47,8 +47,11 @@ def main():
     latest_version, latest_release = get_latest_bundle_release(version)
     if operation == ReleaseOperations.create:
         target_version = latest_version.next_patch()
-        target_version.prerelease = latest_version.prerelease
-        target_version.build = latest_version.build
+        if latest_version.prerelease or latest_version.build:
+            target_version.prerelease = latest_version.prerelease
+            target_version.build = latest_version.build
+            # pre-release semver versions are not incremented by next_patch
+            target_version.patch = latest_version.patch + 1
         bundle_assets = generate_bundle(target_version)
         logger.info(f"Attempting to create new release for target version: {target_version}")
         create_new_release_for_version(target_version, bundle_assets, latest_release)
