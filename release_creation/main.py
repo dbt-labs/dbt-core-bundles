@@ -40,6 +40,7 @@ def main():
     version = args.input_version
     operation = args.operation
     latest_version, latest_release = get_latest_bundle_release(version)
+    logger.info(f"Retrieved latest version: {latest_version} and latest release: {latest_release.tag_name}")
     if operation == ReleaseOperations.create:
         target_version = latest_version
         target_version.prerelease = latest_version.prerelease

@@ -1,5 +1,4 @@
 import copy
-import logging
 import os
 import requests
 from typing import Dict, List, Optional, Set, Tuple
@@ -125,7 +124,7 @@ def create_new_release_for_version(
     Args:
         release_version (Version): semantic version to be used when creating the release
         assets (Dict): assets to be added to the created release where a key is the asset name
-        latest_release GitRelease]: supply if there is a prior release to be diffed against
+        latest_release (GitRelease): supply if there is a prior release to be diffed against
 
     Raises:
         RuntimeError: _description_
