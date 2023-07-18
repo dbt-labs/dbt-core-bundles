@@ -9,12 +9,12 @@ from github.GithubException import GithubException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
 from release_creation.bundle.create import BUNDLE_REQ_NAME_PREFIX
+from release_creation.release_logger import get_logger
 
 _GH_BUNDLE_REPO = "dbt-labs/dbt-core-bundles"
 _GH_ACCESS_TOKEN = os.environ.get("GH_ACCESS_TOKEN")
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = get_logger()
 
 
 def get_github_client() -> Github:
@@ -99,6 +99,7 @@ def _diff_bundle_requirements(
     # 2. No prior patch version - Create major.minor.0 bundle
     # 3. New changes - generate diff
     if latest_release:
+        logger.info(f"Comparing bundle requirements with {latest_release.tag_name}")
         diff_result = ""
         release_reqs = [
             _asset for _asset in latest_release.get_assets() if BUNDLE_REQ_NAME_PREFIX in _asset.name
