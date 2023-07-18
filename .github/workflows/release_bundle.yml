@@ -151,7 +151,7 @@ jobs:
         run: |
           echo "os_platform=linux" >> $GITHUB_ENV
           sudo apt-get update
-          sudo apt-get install libsasl2-dev
+          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev
 
       - name: "Install Mac Dependencies"
         if: matrix.os == 'macos-latest'
