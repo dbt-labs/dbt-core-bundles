@@ -20,7 +20,11 @@ def get_github_client() -> Github:
     return Github(_GH_ACCESS_TOKEN)
 
 
-def _normalize_version_tags(version:Version) -> Version:
+def _normalize_version_tags(version: Version) -> Version:
+    """Normalize the version tags:
+    - if pre-release version use 'pre' instead of 'rc' or 'b1' for the tag
+    - remove build tag
+    """
     if version.prerelease or version.build:
         version.prerelease = ["pre"]
     if version.build:
@@ -31,7 +35,6 @@ def _normalize_version_tags(version:Version) -> Version:
 def _normalize_input_version(version: Version) -> Version:
     """Normalize the version:
     - set patch to 0
-    - if pre-release version use 'pre' instead of 'rc' or 'b1' for the tag
     """
     version = _normalize_version_tags(version)
     version.patch = 0
