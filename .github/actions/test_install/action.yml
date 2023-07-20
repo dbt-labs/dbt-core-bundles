@@ -6,8 +6,8 @@ name: test-bundle-install
 description: "test installing a bundle for a given os/python/dbt version"
 
 inputs:
-  tag:
-    description: The release tag (i.e. 1.5.11).
+  html_url:
+    description: The GitHub url of the release.
     required: true
   python_version:
     description: The version of python to test against
@@ -32,7 +32,7 @@ runs:
         python -m venv env test_release_install
         source test_release_install/bin/activate
         bash install_bundle.sh \
-          "${{ inputs.tag }}" \
+          "${{ inputs.html_url }}" \
           "${{ inputs.python_version }}" \
           "${{ inputs.os_platform }}"
         pip freeze

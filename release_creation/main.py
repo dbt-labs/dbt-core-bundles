@@ -51,11 +51,9 @@ def main():
         target_version.patch += 1
         bundle_assets = generate_bundle(target_version=target_version)
         logger.info(f"Attempting to create new release for target version: {target_version}")
-        create_new_release_for_version(release_version=target_version, assets=bundle_assets, latest_release=latest_release, draft=draft)
-        # write_result(version=target_version)
-        # TODO: fill in with unreleased tag
-        tag = {str(version)} if not draft else None
-        set_output(name="CREATED_TAG", value=tag)
+        created_release = create_new_release_for_version(release_version=target_version, assets=bundle_assets, latest_release=latest_release, draft=draft)
+        set_output(name="created_tag", value=created_release.tag_name)
+        set_output(name="html_url", value=created_release.html_url)
     elif operation == ReleaseOperations.update:
         bundle_assets = generate_bundle(latest_version)
         add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
