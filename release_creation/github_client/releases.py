@@ -1,5 +1,4 @@
 import copy
-import logging
 import os
 import requests
 from typing import Dict, List, Optional, Set, Tuple
@@ -9,19 +8,23 @@ from github.GithubException import GithubException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
 from release_creation.bundle.create import BUNDLE_REQ_NAME_PREFIX
+from release_creation.release_logger import get_logger
 
 _GH_BUNDLE_REPO = "dbt-labs/dbt-core-bundles"
 _GH_ACCESS_TOKEN = os.environ.get("GH_ACCESS_TOKEN")
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = get_logger()
 
 
 def get_github_client() -> Github:
     return Github(_GH_ACCESS_TOKEN)
 
 
-def _normalize_version_tags(version:Version) -> Version:
+def _normalize_version_tags(version: Version) -> Version:
+    """Normalize the version tags:
+    - if pre-release version use 'pre' instead of 'rc' or 'b1' for the tag
+    - remove build tag
+    """
     if version.prerelease or version.build:
         version.prerelease = ["pre"]
     if version.build:
@@ -32,7 +35,6 @@ def _normalize_version_tags(version:Version) -> Version:
 def _normalize_input_version(version: Version) -> Version:
     """Normalize the version:
     - set patch to 0
-    - if pre-release version use 'pre' instead of 'rc' or 'b1' for the tag
     """
     version = _normalize_version_tags(version)
     version.patch = 0
@@ -99,6 +101,7 @@ def _diff_bundle_requirements(
     # 2. No prior patch version - Create major.minor.0 bundle
     # 3. New changes - generate diff
     if latest_release:
+        logger.info(f"Comparing bundle requirements with {latest_release.tag_name}")
         diff_result = ""
         release_reqs = [
             _asset for _asset in latest_release.get_assets() if BUNDLE_REQ_NAME_PREFIX in _asset.name
@@ -124,7 +127,7 @@ def create_new_release_for_version(
     Args:
         release_version (Version): semantic version to be used when creating the release
         assets (Dict): assets to be added to the created release where a key is the asset name
-        latest_release GitRelease]: supply if there is a prior release to be diffed against
+        latest_release (GitRelease): supply if there is a prior release to be diffed against
 
     Raises:
         RuntimeError: _description_
