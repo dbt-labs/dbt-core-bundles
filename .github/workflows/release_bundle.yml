@@ -93,7 +93,7 @@ jobs:
         id: install-linux-deps
         run: |
           sudo apt-get update
-          sudo apt-get install libsasl2-dev
+          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
 
@@ -101,7 +101,7 @@ jobs:
         id: create-release
         run: |
           python -m pip install -e . && \
-          python -m release_creation.main \
+          python -u -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=create
           source ./result.env
@@ -151,7 +151,7 @@ jobs:
         run: |
           echo "os_platform=linux" >> $GITHUB_ENV
           sudo apt-get update
-          sudo apt-get install libsasl2-dev
+          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev
 
       - name: "Install Mac Dependencies"
         if: matrix.os == 'macos-latest'
@@ -166,7 +166,7 @@ jobs:
       - name: "Generate Bundle"
         run: |
           python -m pip install -e . && \
-          python -m release_creation.main \
+          python -u -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=update
 
