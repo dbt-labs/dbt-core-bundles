@@ -151,6 +151,7 @@ def create_new_release_for_version(
     if not release_body:
         raise RuntimeError("New bundle does not contain any new changes")
     created_release = repo.create_git_release(tag=release_tag, name=release_name, message=release_body, prerelease=is_pre, draft=is_draft)
+    logger.debug(f"Release created: {created_release}")
     try:
         for asset_name, asset_path in assets.items():
             created_release.upload_asset(path=asset_path, name=asset_name)

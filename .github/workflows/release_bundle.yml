@@ -113,14 +113,11 @@ jobs:
            --input-version=${{ inputs.version_number }} \
            --draft=${{ inputs.draft_release }} \
            --operation=create
-          source ./result.env
-          echo "$CREATED_TAG"
-          echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
 
       - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
         with:
-          version_number: ${{ steps.create-release.outputs.created_tag }}
+          tag: ${{ steps.create-release.outputs.created_tag }}
           python_version: "3.8"
           os_platform: "linux"
 

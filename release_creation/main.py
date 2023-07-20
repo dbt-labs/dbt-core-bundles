@@ -19,9 +19,8 @@ class ReleaseOperations(StrEnum):
     update = "update"
 
 
-def write_result(version: Version):
-    with open(f"{os.getcwd()}/result.env", "w+") as f:
-        f.write(f"CREATED_TAG=\"{str(version)}\"")
+def set_output(name, value):
+    os.system(f"""echo "{name}={value}" >> $GITHUB_OUTPUT""")
 
 
 def main():
@@ -53,7 +52,10 @@ def main():
         bundle_assets = generate_bundle(target_version=target_version)
         logger.info(f"Attempting to create new release for target version: {target_version}")
         create_new_release_for_version(release_version=target_version, assets=bundle_assets, latest_release=latest_release, draft=draft)
-        write_result(version=target_version)
+        # write_result(version=target_version)
+        # TODO: fill in with unreleased tag
+        tag = {str(version)} if not draft else None
+        set_output(name="CREATED_TAG", value=tag)
     elif operation == ReleaseOperations.update:
         bundle_assets = generate_bundle(latest_version)
         add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
