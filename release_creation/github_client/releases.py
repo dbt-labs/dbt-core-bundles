@@ -7,7 +7,7 @@ from github import Github
 from github.GithubException import GithubException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
-from release_creation.bundle.bundle_config import BundleConfig
+from release_creation.bundle.bundle_config import get_bundle_config
 from release_creation.bundle.create import BUNDLE_REQ_NAME_PREFIX
 from release_creation.release_logger import get_logger
 
@@ -94,7 +94,8 @@ def _compare_reqs(bundle_req: List[str], release_req: List[str]) -> Tuple[Set[st
     return added_req, removed_req
 
 
-def generate_download_urls(release: GitRelease, bundle_config: BundleConfig) -> List[str]:
+def generate_download_urls(release: GitRelease) -> Tuple[str, str]:
+    bundle_config = get_bundle_config(target_version=release.version)
     created_asset_name = f"bundle_core_all_adapters_{bundle_config.local_os}_{bundle_config.py_major_minor}.zip"
     req_file_name = f"{BUNDLE_REQ_NAME_PREFIX}_{bundle_config.local_os}_{bundle_config.py_major_minor}.txt"
 
