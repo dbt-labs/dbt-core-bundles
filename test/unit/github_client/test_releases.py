@@ -21,6 +21,7 @@ def test_create_new_release_for_version_correctly_calls_github(monkeypatch):
     calls = mock_github.mock_calls
     assert calls[0].args == ('dbt-labs/dbt-core-bundles',)
     assert calls[1].kwargs == {'tag': '1.0.0', 'name': 'Bundle for dbt v1.0',
+                               'prerelease': False,
                                'message': 'No prior bundle'}
     assert calls[2].kwargs == {'path': 'path/to/req_files.txt',
                                'name': 'bundle_requirements.txt'}
