@@ -94,8 +94,8 @@ def _compare_reqs(bundle_req: List[str], release_req: List[str]) -> Tuple[Set[st
     return added_req, removed_req
 
 
-def generate_download_urls(release: GitRelease) -> Tuple[str, str]:
-    bundle_config = get_bundle_config(target_version=release.tag_name)
+def generate_download_urls(release: GitRelease, version: Version) -> Tuple[str, str]:
+    bundle_config = get_bundle_config(target_version=version)
     created_asset_name = f"bundle_core_all_adapters_{bundle_config.local_os}_{bundle_config.py_major_minor}.zip"
     req_file_name = f"{BUNDLE_REQ_NAME_PREFIX}_{bundle_config.local_os}_{bundle_config.py_major_minor}.txt"
 
