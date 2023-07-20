@@ -56,7 +56,8 @@ def main():
         set_output(name="html_url", value=created_release.html_url)
     elif operation == ReleaseOperations.update:
         bundle_assets = generate_bundle(latest_version)
-        add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
+        logger.debug(f"latest_release: {latest_release}")
+        # add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
 
 
 if __name__ == "__main__":
