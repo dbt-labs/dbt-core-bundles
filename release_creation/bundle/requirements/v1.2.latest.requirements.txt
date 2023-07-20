@@ -1,9 +1,9 @@
-dbt-core~=1.2.0 --no-binary dbt-postgres
-dbt-snowflake~=1.2.0
-dbt-bigquery~=1.2.0
-dbt-redshift~=1.2.0
-dbt-postgres~=1.2.0
-dbt-spark[PyHive,ODBC]~=1.2.0
+git+https://github.com/dbt-labs/dbt-core.git@1.2.latest#egg=dbt-core&subdirectory=core --no-binary dbt-postgres
+git+https://github.com/dbt-labs/dbt-core.git@1.2.latest#egg=dbt-postgres&subdirectory=plugins/postgres
+git+https://github.com/dbt-labs/dbt-bigquery.git@1.2.latest#egg=dbt-bigquery
+git+https://github.com/dbt-labs/dbt-snowflake.git@1.2.latest#egg=dbt-snowflake
+git+https://github.com/dbt-labs/dbt-redshift.git@1.2.latest#egg=dbt-redshift
+git+https://github.com/dbt-labs/dbt-spark.git@1.2.latest#egg=dbt-spark[PyHive,ODBC]
 dbt-databricks==1.2.3
 dbt-rpc~=0.1.1
 grpcio-status~=1.47.0
