@@ -40,8 +40,7 @@ def main():
     args = parser.parse_args()
     version = args.input_version
     operation = args.operation
-    # GitHub booleans are lowercase and actually just strings
-    draft = False if args.draft == "false" else True
+    draft = args.draft
     latest_version, latest_release = get_latest_bundle_release(version)
     logger.info(f"Retrieved latest version: {latest_version} "
                 f"and latest release: {latest_release.tag_name if latest_release else None}")
@@ -51,9 +50,9 @@ def main():
         target_version.build = latest_version.build
         # pre-release semver versions are not incremented by next_patch
         target_version.patch += 1
-        bundle_assets = generate_bundle(target_version)
+        bundle_assets = generate_bundle(target_version=target_version)
         logger.info(f"Attempting to create new release for target version: {target_version}")
-        create_new_release_for_version(target_version, draft, bundle_assets, latest_release)
+        create_new_release_for_version(release_version=target_version, assets=bundle_assets, latest_release=latest_release, draft=draft)
         write_result(version=target_version)
     elif operation == ReleaseOperations.update:
         bundle_assets = generate_bundle(latest_version)
