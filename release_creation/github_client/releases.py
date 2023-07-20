@@ -7,6 +7,7 @@ from github import Github
 from github.GithubException import GithubException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
+from release_creation.bundle.bundle_config import BundleConfig
 from release_creation.bundle.create import BUNDLE_REQ_NAME_PREFIX
 from release_creation.release_logger import get_logger
 
