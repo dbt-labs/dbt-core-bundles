@@ -88,7 +88,8 @@ jobs:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       created_tag: ${{ steps.create-release.outputs.created_tag }}
-      html_url: ${{ steps.create-release.outputs.html_url }}
+      created_asset_url: ${{ steps.create-release.outputs.created_asset_url }}
+      req_file_url: ${{ steps.create-release.outputs.req_file_url }}
     steps:
       - name: "Checkout Repo"
         uses: actions/checkout@v3
@@ -118,7 +119,8 @@ jobs:
       - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
         with:
-          html_url: ${{ steps.create-release.outputs.html_url }}
+          created_asset_url: ${{ steps.create-release.outputs.created_asset_url }}
+          req_file_url: ${{ steps.create-release.outputs.req_file_url }}
           python_version: "3.8"
           os_platform: "linux"
 
@@ -180,7 +182,8 @@ jobs:
       - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
         with:
-          html_url: ${{ needs.create-bundle.outputs.html_url }}
+          created_asset_url: ${{ needs.create-bundle.outputs.created_asset_url }}
+          req_file_url: ${{ needs.create-bundle.outputs.req_file_url }}
           python_version: ${{ matrix.python-version }}
           os_platform: ${{ env.os_platform }}
 

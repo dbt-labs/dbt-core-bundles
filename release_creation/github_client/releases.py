@@ -93,6 +93,18 @@ def _compare_reqs(bundle_req: List[str], release_req: List[str]) -> Tuple[Set[st
     return added_req, removed_req
 
 
+def generate_download_urls(release: GitRelease, bundle_config: BundleConfig) -> List[str]:
+    created_asset_name = f"bundle_core_all_adapters_{bundle_config.local_os}_{bundle_config.py_major_minor}.zip"
+    req_file_name = f"{BUNDLE_REQ_NAME_PREFIX}_{bundle_config.local_os}_{bundle_config.py_major_minor}.txt"
+
+    for asset in release.get_assets():
+        if asset.name == created_asset_name:
+            created_asset_url = asset.browser_download_url
+        if asset.name == req_file_name:
+            req_file_url = asset.browser_download_url
+    return created_asset_url, req_file_url 
+
+
 def _diff_bundle_requirements(
     bundle_req_path: str, latest_release: Optional[GitRelease]
 ) -> str:
