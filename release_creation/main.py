@@ -57,7 +57,12 @@ def main():
         logger.debug(f"Release created id: {created_release.id}")
         logger.debug(f"Release created get_assets: {created_release.get_assets()}")
         for i in created_release.get_assets():
-            logger.debug(f"Release created get_assets: {i}")
+            logger.debug(f"Release created id: {i.id}")
+            logger.debug(f"Release created name: {i.name}")
+            logger.debug(f"Release created download_url: {i.browser_download_url}")
+            logger.debug(f"Release created url: {i.url}")
+            logger.debug(f"Release created url: {i.state}")
+
         logger.debug(f"Release created assets: {created_release.assets}")
         set_output(name="created_tag", value=created_release.tag_name)
         set_output(name="archive_file", value=created_release.html_url)
