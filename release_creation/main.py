@@ -56,9 +56,12 @@ def main():
         logger.debug(f"Release created url: {created_release.url}")
         logger.debug(f"Release created id: {created_release.id}")
         logger.debug(f"Release created get_assets: {created_release.get_assets()}")
+        for i in created_release.get_assets():
+            logger.debug(f"Release created get_assets: {i}")
         logger.debug(f"Release created assets: {created_release.assets}")
         set_output(name="created_tag", value=created_release.tag_name)
-        set_output(name="download_url", value=created_release.html_url)
+        set_output(name="archive_file", value=created_release.html_url)
+        set_output(name="requirements_file", value=created_release.html_url)
     elif operation == ReleaseOperations.update:
         bundle_assets = generate_bundle(latest_version)
         logger.debug(f"latest_release: {latest_release}")
