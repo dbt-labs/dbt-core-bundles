@@ -52,6 +52,9 @@ def main():
         bundle_assets = generate_bundle(target_version=target_version)
         logger.info(f"Attempting to create new release for target version: {target_version}")
         created_release = create_new_release_for_version(release_version=target_version, assets=bundle_assets, latest_release=latest_release, draft=draft)
+        logger.debug(f"Release created zipball url: {created_release.zipball_url}")
+        logger.debug(f"Release created url: {created_release.url}")
+        logger.debug(f"Release created id: {created_release.id}")
         set_output(name="created_tag", value=created_release.tag_name)
         set_output(name="html_url", value=created_release.html_url)
     elif operation == ReleaseOperations.update:
