@@ -18,6 +18,10 @@ major.minor version of dbt it's for so `1.3.45` release includes the latest patc
 Note that the patch version *will not* match the patch version for dbt-core or any other package as it will increment 
 with a change to any of the included python packages.  
 
+#### EOL Packages
+For dbt packages that have reached end-of-life we will be installing from the git repo instead of pypi. This will allow
+us to incorporate any security patches that are released after we have stopped updating the package on pypi.
+
 ## How to use
 To use a bundle you will need to download, unzip the archive and pass the resulting directory to pip.
 You can use the [install_bundle.sh](/install_bundle.sh) to do this for you by running the following: 
