@@ -59,9 +59,8 @@ def main():
             draft=draft
         )
         created_asset_url, req_file_url = generate_download_urls(release=created_release, version=target_version)
+        # TODO: this isn't filled correctly for drafts
         set_output(name="created_tag", value=created_release.tag_name)
-        set_output(name="created_asset_url", value=created_asset_url)
-        set_output(name="req_file_url", value=req_file_url)
     elif operation == ReleaseOperations.update:
         bundle_assets = generate_bundle(latest_version)
         created_asset_url, req_file_url = generate_download_urls(release=latest_release, version=latest_version)

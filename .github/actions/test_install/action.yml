@@ -6,18 +6,15 @@ name: test-bundle-install
 description: "test installing a bundle for a given os/python/dbt version"
 
 inputs:
-  created_asset_url:
-    description: The GitHub download url of the assets.
-    required: true
-  req_file_url:
-    description: The GitHub download url of the requirements file.
-    required: true
+  version:
+    description: The release version number (i.e. 1.5.12).
   python_version:
     description: The version of python to test against
     required: true
   os_platform:
     description: The os platform of the worker performing the test
     required: true
+
 runs:
   using: composite
   steps:
@@ -35,8 +32,7 @@ runs:
         python -m venv env test_release_install
         source test_release_install/bin/activate
         bash install_bundle.sh \
-          "${{ inputs.created_asset_url }}" \
-          "${{ inputs.req_file_url }}" \
+          "${{ inputs.version }}" \
           "${{ inputs.python_version }}" \
           "${{ inputs.os_platform }}"
         pip freeze
