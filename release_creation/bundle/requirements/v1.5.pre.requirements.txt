@@ -11,5 +11,6 @@ pyarrow~=12.0.0,!=12.0.1
 pyasn1-modules~=0.2.1
 pyodbc==4.0.39 --no-binary pyodbc
 #Temp change to test fix for snowflake connector
+Cython
 git+https://github.com/snowflakedb/snowflake-connector-python.git@7ac23578fa906cf9e969a6fff2ed4a202a7b69b0#egg=snowflake-connector-python
 # snowflake-connector-python~=3.0,!=3.0.4
