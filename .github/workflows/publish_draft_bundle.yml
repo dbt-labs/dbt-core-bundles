@@ -61,6 +61,9 @@ jobs:
       python_versions: ${{ steps.build-list.outputs.versions }}
 
     steps:
+      - name: "Checkout Repo"
+        uses: actions/checkout@v3
+
       - name: "Audit Version And Parse Into Parts"
         id: semver
         uses: dbt-labs/actions/parse-semver@v1.1.0
