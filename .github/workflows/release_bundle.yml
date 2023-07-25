@@ -30,7 +30,7 @@ on:
         description: The release version number (i.e. 1.0.0b1).
         type: string
         required: true
-      draft_release:
+      draft:
         description: Mark this a draft release
         type: boolean
         default: true
@@ -40,10 +40,12 @@ on:
         description: The release version number (i.e. 1.0.0b1).
         type: string
         required: true
-      draft_release:
+      draft:
         description: Mark this a draft release
         type: boolean
         default: true
+
+
 
 jobs:
   build-python-matrix:
@@ -111,6 +113,7 @@ jobs:
           tag: "${{ steps.create-release.outputs.created_tag }}"
           python_version: "3.8"
           os_platform: "linux"
+          draft: ${{ inputs.draft }}
 
       - name: "Post Notification"
         run: |
@@ -173,6 +176,7 @@ jobs:
           tag: "${{ needs.create-bundle.outputs.created_tag }}"
           python_version: "${{ matrix.python-version }}"
           os_platform: "${{ env.os_platform }}"
+          draft: ${{ inputs.draft }}
 
       - name: "Post Notification"
         run: |

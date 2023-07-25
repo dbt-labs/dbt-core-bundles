@@ -30,6 +30,7 @@ runs:
         python-version: "${{ inputs.python_version }}"
 
     - name: "Set up venv"
+      shell: bash
       run: |
         python -m venv env test_release_install
         source test_release_install/bin/activate
@@ -50,7 +51,7 @@ runs:
       if: ${{ inputs.draft }}
       shell: bash
       run: |
-        bash ${GITHUB_WORKSPACE}/scripts/install_draft_bundle.sh \
+        bash ./.github/scripts/install_draft_bundle.sh \
           "${{ inputs.tag }}" \
           "${{ inputs.python_version }}" \
           "${{ inputs.os_platform }}"
