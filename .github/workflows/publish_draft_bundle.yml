@@ -1,0 +1,113 @@
+# **what?**
+# Moves a bundle from draft to published.  Then tests all installtion methods.
+
+# **why?**
+# This allows testing a bundle before officially releasing it.
+
+# **when?**
+# This is currently triggered manually.
+
+# **how**
+# Call workflow dispatch. For input-version please use the semantic version
+# representing the release of the dependency you want to incorporate into a new
+# bundle.
+
+name: Publish a Draft Bundle
+run-name: Publishing a bundle for ${{ inputs.tag }}
+permissions:
+  packages: read
+  contents: write
+  pull-requests: read
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The release tag (i.e. 1.5.17).
+        type: string
+        required: true
+
+  workflow_call:
+    inputs:
+      tag:
+        description: The release tag (i.e. 1.5.17).
+        type: string
+        required: true
+
+jobs:
+  publish-bundle:
+    name: "Publish the bundle"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout Repo"
+        uses: actions/checkout@v3
+
+      - name: "Check Bundle Exists"
+        id: check-bundle
+        run: |
+          echo ${{ inputs.tag }}
+          gh release view ${{ inputs.tag }}
+
+      - name: "Publish draft bundle"
+        id: publish-draft
+        run: |
+          echo ${{ inputs.tag }}
+          gh release edit ${{ inputs.tag }} --draft=false
+
+  build-python-matrix:
+    name: Audit Version and Build Python Release Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      python_versions: ${{ steps.build-list.outputs.versions }}
+
+    steps:
+      - name: "Audit Version And Parse Into Parts"
+        id: semver
+        uses: dbt-labs/actions/parse-semver@v1.1.0
+        with:
+          version: ${{ inputs.tag }}
+
+      - name: "Set Python Versions"
+        id: build-list
+        run: ${GITHUB_WORKSPACE}/scripts/build_python_matrix.sh ${{ steps.semver.outputs.minor }}
+
+      - name: Print Support of Python Versions Other Than 3.8
+        run: |
+          echo "${{ steps.build-list.outputs.versions }}"
+
+  test-bundle:
+    needs: [publish-bundle, build-python-matrix]
+    strategy:
+      # run even if some fail so we get a full picture.  At this point linux/3.8 is already released anyways so there's no reason to stop
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJSON(needs.build-python-matrix.outputs.python_versions) }}
+        os: ["macos-latest", "ubuntu-latest"]
+
+    name: ${{ matrix.os }} - ${{ matrix.python-version }}}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: "Set Linux OS"
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          echo "os_platform=linux" >> $GITHUB_ENV
+
+      - name: "Set Mac OS"
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo "os_platform=mac" >> $GITHUB_ENV
+
+      - name: "Test install from Github Release"
+        uses: ./.github/actions/test_install
+        with:
+          tag: "${{ inputs.tag }}"
+          python_version: "${{ matrix.python-version }}"
+          os_platform: "${{ env.os_platform }}"
+          draft: false
+
+      - name: "Post Notification"
+        run: |
+          title="Test Install Successful"
+          message="Installation and version command run successful for os_platform=${{ matrix.os }}, Python=${{ matrix.python-version }}, version=${{ needs.create-bundle.outputs.created_tag }}"
+          echo "::notice $title::$message"
