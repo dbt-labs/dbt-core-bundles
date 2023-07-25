@@ -36,7 +36,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--operation", required=True, type=ReleaseOperations)
     parser.add_argument("--input-version", required=True, type=str)  # e.g. 1.3.4
-    parser.add_argument("--draft", required=True, type=str)  # e.g. true/false
+    parser.add_argument("--draft", required=True, type=bool)  # e.g. True/False
     args = parser.parse_args()
     version = args.input_version
     operation = args.operation
@@ -58,12 +58,9 @@ def main():
             latest_release=latest_release,
             draft=draft
         )
-        created_asset_url, req_file_url = generate_download_urls(release=created_release, version=target_version)
-        # TODO: this isn't filled correctly for drafts
         set_output(name="created_tag", value=created_release.tag_name)
     elif operation == ReleaseOperations.update:
         bundle_assets = generate_bundle(latest_version)
-        created_asset_url, req_file_url = generate_download_urls(release=latest_release, version=latest_version)
 
         logger.debug(f"latest_release: {latest_release}")
         # add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
