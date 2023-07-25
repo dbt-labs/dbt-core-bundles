@@ -69,7 +69,7 @@ jobs:
 
       - name: "Set Python Versions"
         id: build-list
-        run: ${GITHUB_WORKSPACE}/scripts/build_python_matrix.sh ${{ steps.semver.outputs.minor }}
+        run: ${GITHUB_WORKSPACE}/scripts/supported_python_versions.sh ${{ steps.semver.outputs.minor }}
 
       - name: Print Support of Python Versions Other Than 3.8
         run: |
