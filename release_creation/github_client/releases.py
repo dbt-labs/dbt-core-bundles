@@ -121,7 +121,7 @@ def _diff_bundle_requirements(
 
 def create_new_release_for_version(
     release_version: Version, assets: Dict, latest_release: GitRelease, draft: bool
-) -> GitRelease:
+) -> None:
     """Given an input version it creates a matching Github Release and attaches the assets
        as a ReleaseAsset
 
@@ -159,7 +159,6 @@ def create_new_release_for_version(
     except Exception as e:
         created_release.delete_release()
         raise e
-    return created_release
 
 
 def add_assets_to_release(assets: Dict, latest_release: Optional[GitRelease]) -> None:
