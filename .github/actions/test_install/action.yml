@@ -57,3 +57,5 @@ runs:
           "${{ inputs.os_platform }}"
         pip freeze
         dbt --version
+      env:
+          GH_TOKEN: ${{ github.token }}
