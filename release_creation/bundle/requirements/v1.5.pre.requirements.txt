@@ -1,5 +1,6 @@
 --pre
-dbt-core~=1.5.0b1 --no-binary dbt-postgres
+# core version with specific change for rotating file handler
+git+https://github.com/dbt-labs/dbt-core.git@1e4167c48095739a3be4b3812ff62bbfd15ca520#egg=dbt-core&subdirectory=core --no-binary dbt-postgres
 dbt-snowflake~=1.5.0b1
 dbt-bigquery~=1.5.0b1
 dbt-redshift~=1.5.0b1
