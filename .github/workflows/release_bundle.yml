@@ -18,7 +18,7 @@
 # as the input version (without a `v` prefix).
 
 name: Release a Draft Bundle
-run-name: Releasing a draft bundle for ${{ inputs.version_number }}
+run-name: Drafting a release bundle for ${{ inputs.version_number }}
 permissions:
   packages: read
   contents: write
@@ -61,7 +61,7 @@ jobs:
 
       - name: "Set Python Versions"
         id: build-list
-        run: ${GITHUB_WORKSPACE}/scripts/supported_python_versions.sh ${{ steps.semver.outputs.minor }}
+        run: ${GITHUB_WORKSPACE}/.github/scripts/supported_python_versions.sh ${{ steps.semver.outputs.minor }}
 
       - name: Print Support of Python Versions Other Than 3.8
         run: |
