@@ -7,7 +7,6 @@ from release_creation.github_client.releases import (
     create_new_release_for_version,
     get_latest_bundle_release,
     add_assets_to_release,
-    generate_download_urls
 )
 from release_creation.bundle.create import generate_bundle
 from release_creation.release_logger import get_logger
