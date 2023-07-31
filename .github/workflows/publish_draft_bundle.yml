@@ -18,6 +18,7 @@ permissions:
   packages: read
   contents: write
   pull-requests: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -47,12 +48,16 @@ jobs:
         run: |
           echo ${{ inputs.tag }}
           gh release view ${{ inputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Publish draft bundle"
         id: publish-draft
         run: |
           echo ${{ inputs.tag }}
           gh release edit ${{ inputs.tag }} --draft=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-python-matrix:
     name: Audit Version and Build Python Release Matrix
@@ -72,7 +77,7 @@ jobs:
 
       - name: "Set Python Versions"
         id: build-list
-        run: ${GITHUB_WORKSPACE}/.github/scripts/supported_python_versions.sh ${{ steps.semver.outputs.minor }}
+        run: ./.github/scripts/supported_python_versions.sh ${{ steps.semver.outputs.minor }}
 
       - name: Print Support of Python Versions Other Than 3.8
         run: |

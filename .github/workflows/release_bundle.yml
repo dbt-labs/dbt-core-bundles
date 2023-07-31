@@ -23,6 +23,7 @@ permissions:
   packages: read
   contents: write
   pull-requests: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -37,9 +38,6 @@ on:
         description: The release version number (i.e. 1.0.0b1).
         type: string
         required: true
-
-
-
 
 jobs:
   build-python-matrix:
