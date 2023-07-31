@@ -56,11 +56,11 @@ def main():
         )
         set_output(name="created_tag", value=target_version)
     elif operation == ReleaseOperations.update:
-        bundle_assets = generate_bundle(latest_version)
+        logger.info(f"Attempting to update existing release for latest version: {latest_version}")
+        bundle_assets = generate_bundle(target_version=latest_version)
 
         logger.debug(f"latest_release: {latest_release}")
-        # TODO: temp disable for debugging
-        # add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
+        add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
 
 
 if __name__ == "__main__":

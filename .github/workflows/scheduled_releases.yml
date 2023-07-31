@@ -10,7 +10,7 @@
 # Every Monday morning
 
 # **how**
-# Iterate over the list of bundles and invoke the release_bundle.yml workflow
+# Iterate over the list of bundles and invoke the full_release.yml workflow
 
 name: Schedule Bundle Releases
 
