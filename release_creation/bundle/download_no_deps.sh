@@ -9,7 +9,8 @@ pip download -r "$requirements_file" \
  --dest $staging \
  --progress-bar off \
  --platform "$platform" \
- --no-deps
+ --no-deps \
+ --exists-action "i"
 
 # some mac builds needs wheel and cython installed
 # include the psycopg2-binary in mac builds for ease of install
