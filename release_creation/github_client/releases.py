@@ -119,15 +119,14 @@ def _diff_bundle_requirements(
         return "No prior bundle"
 
 
-def create_new_release_for_version(
-    release_version: Version, assets: Dict, latest_release: GitRelease, draft: bool
+def create_new_draft_release_for_version(
+    release_version: Version, assets: Dict, latest_release: GitRelease
 ) -> None:
     """Given an input version it creates a matching Github Release and attaches the assets
        as a ReleaseAsset
 
     Args:
         release_version (Version): semantic version to be used when creating the release
-        draft (bool): if this is a draft release or not
         assets (Dict): assets to be added to the created release where a key is the asset name
         latest_release (GitRelease): supply if there is a prior release to be diffed against
 
@@ -138,7 +137,6 @@ def create_new_release_for_version(
     gh = get_github_client()
     release_tag = str(release_version)
     is_pre = True if release_version.prerelease else False
-    is_draft = draft
     repo = gh.get_repo(_GH_BUNDLE_REPO)
     logger.info(f"Assets for release: {assets.keys()}")
     reqs_files = [x for x in assets if BUNDLE_REQ_NAME_PREFIX in x]
@@ -151,7 +149,7 @@ def create_new_release_for_version(
 
     if not release_body:
         raise RuntimeError("New bundle does not contain any new changes")
-    created_release = repo.create_git_release(tag=release_tag, name=release_name, message=release_body, prerelease=is_pre, draft=is_draft)
+    created_release = repo.create_git_release(tag=release_tag, name=release_name, message=release_body, prerelease=is_pre, draft=True)
 
     try:
         for asset_name, asset_path in assets.items():

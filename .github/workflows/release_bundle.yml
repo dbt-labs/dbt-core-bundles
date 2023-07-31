@@ -98,7 +98,6 @@ jobs:
           python -m pip install -e . && \
           python -u -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
-           --draft=True \
            --operation=create
       
       - name: "Test install from Github Release"

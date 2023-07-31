@@ -32,4 +32,4 @@ jobs:
     uses: ./.github/workflows/release_bundle.yml
     with:
       version_number: ${{ matrix.version }}
-      draft_release: false
+      draft_release: false  # TODO: will need to run this as a draft, test it, then update the release out of draft?
