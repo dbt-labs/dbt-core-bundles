@@ -42,7 +42,7 @@ def _normalize_input_version(version: Version) -> Version:
     return version
 
 
-def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[GitRelease]]:
+def get_latest_bundle_release(input_version: str) -> Tuple[Version, Optional[GitRelease]]:
     """Retrieve the latest release matching the major.minor and release stage
        semantic version if it exists. Ignores the patch version. 
 
@@ -57,8 +57,9 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
     target_version = Version.coerce(input_version)
     latest_version = copy.copy(target_version)
     latest_version = _normalize_input_version(latest_version)
+    breakpoint()
     repo = gh.get_repo(_GH_BUNDLE_REPO)
-    releases = repo.get_releases()
+    releases = repo.get_releases()  # does not include drafts
     latest_release = None
     for r in releases:
         release_version = Version.coerce(r.tag_name)

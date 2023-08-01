@@ -12,7 +12,8 @@
 # **how**
 # Publish the draft release, test it and if everything is successful, publish the draft as a final release
 
-name: Schedule Bundle Releases
+name: Release a Bundle
+run-name: Releasing bundle for ${{ inputs.version_number }}
 
 on:
     workflow_dispatch:
@@ -28,6 +29,11 @@ on:
           description: The release version number (i.e. 1.0.0b1).
           type: string
           required: true
+
+permissions:
+    packages: read
+    contents: write
+    pull-requests: read
 
 jobs:
   release-draft-bundles:        
