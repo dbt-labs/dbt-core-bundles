@@ -57,12 +57,15 @@ def get_latest_bundle_release(input_version: str) -> Tuple[Version, Optional[Git
     target_version = Version.coerce(input_version)
     latest_version = copy.copy(target_version)
     latest_version = _normalize_input_version(latest_version)
-    breakpoint()
     repo = gh.get_repo(_GH_BUNDLE_REPO)
-    releases = repo.get_releases()  # does not include drafts
+    releases = repo.get_releases()  # must have push access to get draft releases
     latest_release = None
     for r in releases:
         release_version = Version.coerce(r.tag_name)
+        logger.info(f"Release version: {release_version}")
+        logger.info(f"Release details: {r}")
+        # if r.draft:
+        #     raise RuntimeError(f"A draft release already exists for version {release_version}")
         if (
             release_version.major == latest_version.major
             and release_version.minor == latest_version.minor
