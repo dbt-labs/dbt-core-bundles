@@ -47,4 +47,4 @@ jobs:
     name: Call Release Workflow for ${{ inputs.version_number }}
     uses: ./.github/workflows/publish_draft_bundle.yml
     with:
-      tag: ${{ inputs.version_number }}
+      tag: ${{ needs.release-draft-bundles.outputs.tag }}

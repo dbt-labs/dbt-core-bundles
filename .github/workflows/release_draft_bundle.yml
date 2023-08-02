@@ -38,6 +38,10 @@ on:
         description: The release version number (i.e. 1.0.0b1).
         type: string
         required: true
+    outputs:
+      tag: 
+        description: "The tag of the release that was created."
+        value: ${{ jobs.create-bundle.outputs.created_tag }}
 
 jobs:
   build-python-matrix:
