@@ -40,11 +40,9 @@ on:
         required: true
 
 jobs:
-
   build-python-matrix:
     name: Audit Version and Build Python Release Matrix
     runs-on: ubuntu-latest
-    needs: [audit-draft-exsists]
     outputs:
       python_versions: ${{ steps.build-list.outputs.versions }}
 
