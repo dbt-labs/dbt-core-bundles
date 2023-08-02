@@ -7,10 +7,10 @@
 # To centralize the full release bundle process
 
 # **when?**
-# Manuall triggered
+# Manual triggered
 
 # **how**
-# Publish the draft release, test it and if everything is successful, publish the draft as a final release
+# Publish the draft release, test it and if everything is successful, publish the draft as a final release, tests again
 
 name: Release a Bundle
 run-name: Releasing bundle for ${{ inputs.version_number }}
