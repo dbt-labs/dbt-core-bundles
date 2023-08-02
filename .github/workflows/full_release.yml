@@ -38,7 +38,7 @@ permissions:
 jobs:
   release-draft-bundles:        
     name: Call Release Workflow for ${{ inputs.version_number }}
-    uses: ./.github/workflows/release_bundle.yml
+    uses: ./.github/workflows/release_draft_bundle.yml
     with:
       version_number: ${{ inputs.version_number }}
 
