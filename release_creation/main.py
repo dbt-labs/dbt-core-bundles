@@ -43,14 +43,14 @@ def main():
                 f"and latest release: {latest_release.tag_name if latest_release else None}")
     if operation == ReleaseOperations.create:
         if is_draft:
-            raise RuntimeError(f"A draft release already exists for version {latest_version}")
+            raise RuntimeError(f"A draft release already exists for version {latest_version}.  It needs to be published or deleted first")
         target_version = latest_version
         target_version.prerelease = latest_version.prerelease
         target_version.build = latest_version.build
         # pre-release semver versions are not incremented by next_patch
         target_version.patch += 1
         bundle_assets = generate_bundle(target_version=target_version)
-        logger.info(f"Attempting to create new release for target version: {target_version}")
+        logger.info(f"Attempting to create new draft release for target version: {target_version}")
         create_new_draft_release_for_version(
             release_version=target_version,
             assets=bundle_assets,
@@ -59,8 +59,8 @@ def main():
         set_output(name="created_tag", value=target_version)
     elif operation == ReleaseOperations.update:
         if not is_draft:
-            raise RuntimeError(f"No draft release exists for version {latest_version}.  Cannot update.")
-        logger.info(f"Attempting to update existing release for latest version: {latest_version}")
+            raise RuntimeError(f"No draft release exists for version {latest_version}.  Nothing to update.")
+        logger.info(f"Attempting to update existing draft release for latest version: {latest_version}")
         bundle_assets = generate_bundle(target_version=latest_version)
 
         logger.debug(f"latest_release: {latest_release}")
