@@ -38,10 +38,12 @@ def main():
     args = parser.parse_args()
     version = args.input_version
     operation = args.operation
-    latest_version, latest_release = get_latest_bundle_release(version)
+    latest_version, is_draft, latest_release = get_latest_bundle_release(version)
     logger.info(f"Retrieved latest version: {latest_version} "
                 f"and latest release: {latest_release.tag_name if latest_release else None}")
     if operation == ReleaseOperations.create:
+        if is_draft:
+            raise RuntimeError(f"A draft release already exists for version {latest_version}")
         target_version = latest_version
         target_version.prerelease = latest_version.prerelease
         target_version.build = latest_version.build
@@ -56,6 +58,8 @@ def main():
         )
         set_output(name="created_tag", value=target_version)
     elif operation == ReleaseOperations.update:
+        if not is_draft:
+            raise RuntimeError(f"No draft release exists for version {latest_version}.  Cannot update.")
         logger.info(f"Attempting to update existing release for latest version: {latest_version}")
         bundle_assets = generate_bundle(target_version=latest_version)
 

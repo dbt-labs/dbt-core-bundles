@@ -42,7 +42,7 @@ def _normalize_input_version(version: Version) -> Version:
     return version
 
 
-def get_latest_bundle_release(input_version: str) -> Tuple[Version, Optional[GitRelease]]:
+def get_latest_bundle_release(input_version: str) -> Tuple[Version, bool, Optional[GitRelease]]:
     """Retrieve the latest release matching the major.minor and release stage
        semantic version if it exists. Ignores the patch version. 
 
@@ -50,7 +50,7 @@ def get_latest_bundle_release(input_version: str) -> Tuple[Version, Optional[Git
         input_version (str): semantic version (1.0.0.0rc, 2.3.5) to match against 
 
     Returns:
-        Tuple[ Version, Optional[GitRelease]]: A tuple of the latest release tag 
+        Tuple[ Version, is_draft, Optional[GitRelease]]: A tuple of the latest release tag, if it's in a draft state 
         and the latest release itself.
     """
     gh = get_github_client()
@@ -60,12 +60,9 @@ def get_latest_bundle_release(input_version: str) -> Tuple[Version, Optional[Git
     repo = gh.get_repo(_GH_BUNDLE_REPO)
     releases = repo.get_releases()  # must have push access to get draft releases
     latest_release = None
+    is_draft = False
     for r in releases:
         release_version = Version.coerce(r.tag_name)
-        logger.info(f"Release version: {release_version}")
-        logger.info(f"Release details: {r}")
-        # if r.draft:
-        #     raise RuntimeError(f"A draft release already exists for version {release_version}")
         if (
             release_version.major == latest_version.major
             and release_version.minor == latest_version.minor
@@ -74,8 +71,9 @@ def get_latest_bundle_release(input_version: str) -> Tuple[Version, Optional[Git
             and release_version.patch >= latest_version.patch  # type: ignore
         ):
             latest_version = release_version
+            is_draft = r.draft
             latest_release = r
-    return _normalize_version_tags(latest_version), latest_release
+    return _normalize_version_tags(latest_version), is_draft, latest_release
 
 
 def _get_local_bundle_reqs(bundle_req_path: str) -> List[str]:
