@@ -47,7 +47,7 @@ jobs:
       - name: "Check bundle exists in draft state"
         shell: bash
         run: |
-          bash audit_draft_bundle.sh "${{ inputs.tag }}"
+          bash ./.github/scripts/audit_draft_bundle.sh "${{ inputs.tag }}"
         env:
             GH_TOKEN: ${{ github.token }}
 
