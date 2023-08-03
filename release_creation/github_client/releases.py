@@ -58,8 +58,7 @@ def get_latest_bundle_release(input_version: str) -> Tuple[Version, bool, Option
     latest_version = copy.copy(target_version)
     latest_version = _normalize_input_version(latest_version)
     repo = gh.get_repo(_GH_BUNDLE_REPO)
-    # TODO: throw an actual error is the user doesnt have push access so this doesnt fail silently.
-    releases = repo.get_releases()  # must have push access to get draft releases
+    releases = repo.get_releases()  # must have push access to the repo to get draft releases
     latest_release = None
     is_draft = False
     for r in releases:

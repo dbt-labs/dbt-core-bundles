@@ -30,6 +30,6 @@ jobs:
       fail-fast: false
         
     name: Call Release Workflow for ${{ matrix.version }}
-    uses: ./.github/workflows/full_release.yml
+    uses: ./.github/workflows/release_new_bundle.yml
     with:
       version_number: ${{ matrix.version }}

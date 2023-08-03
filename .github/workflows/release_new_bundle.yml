@@ -12,7 +12,7 @@
 # **how**
 # Publish the draft release, test it and if everything is successful, publish the draft as a final release, tests again
 
-name: Release a Bundle
+name: Publish a New Bundle
 run-name: Releasing bundle for ${{ inputs.version_number }}
 
 on:
