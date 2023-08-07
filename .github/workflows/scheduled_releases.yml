@@ -22,6 +22,7 @@ on:
 jobs:
   release-bundles:
     strategy:
+      fail-fast: false
       matrix:
        # we support the trailing four versions plus the latest pre-release
        # and the upcoming version's pre-release.
