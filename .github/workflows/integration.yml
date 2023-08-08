@@ -56,7 +56,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install libsasl2-dev
+          sudo apt-get install libsasl2-dev build-essential
 
       - name: Python setup
         run: |
