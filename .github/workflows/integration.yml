@@ -56,8 +56,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install libsasl2-dev build-essential python-dev
-
+          sudo apt-get install libsasl2-dev git gcc g++ unixodbc-dev libxml2-dev libxslt-dev
       - name: Python setup
         run: |
           python -m pip install --upgrade pip
