@@ -107,3 +107,6 @@ snapshot*.txt
 bundle*.txt
 .bundle-env*
 .DS_Store
+/bundle_pkg_test
+/test_archive_install
+/download-no-deps-staging
