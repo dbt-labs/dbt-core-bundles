@@ -18,8 +18,8 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      version_number:
-        description: The bundle release version number (i.e. 1.5.3).
+      tag:
+        description: The bundle release tag (i.e. 1.5.3).
         required: true
       python_version:
         description: The version of python to test against
@@ -33,8 +33,8 @@ on:
         - mac
   workflow_call:
     inputs:
-      version_number:
-        description: The bundle release version number (i.e. 1.5.3).
+      tag:
+        description: The bundle release (i.e. 1.5.3).
         type: string
         required: true
       python_version:
@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: "[DEBUG] Inputs"
         run: |
-          echo "version_number:   ${{ inputs.version_number }}"
+          echo "tag:              ${{ inputs.tag }}"
           echo "python_version:   ${{ inputs.python_version }}"
           echo "os_platform:      ${{ inputs.os_platform }}"
 
@@ -90,7 +90,7 @@ jobs:
         python -m venv env test_release_install
         source test_release_install/bin/activate
         bash install_bundle.sh \
-          "${{ inputs.version_number }}" \
+          "${{ inputs.tag }}" \
           "${{ inputs.python_version }}" \
           "${{ inputs.os_platform }}"
 

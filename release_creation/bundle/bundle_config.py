@@ -31,8 +31,8 @@ class BundleConfig:
     py_version: str = field(default_factory=platform.python_version)
 
     def __post_init__(self):
-        self.requirements_file = f"{self.file_dir}/bundle.requirements.{self.py_major_minor}.txt"
         self.py_major_minor = ".".join(self.py_version.split(".")[:-1])
+        self.requirements_file = f"{self.file_dir}/bundle.requirements.{self.py_major_minor}.txt"
         self.py_version_tmp_path = f"tmp/{self.local_os}/{self.py_major_minor}"
         self.py_version_archive_path = f"{self.archive_path}-{self.local_os}-{self.py_major_minor}"
 
