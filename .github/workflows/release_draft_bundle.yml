@@ -168,9 +168,10 @@ jobs:
       - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
         with:
-          version_number: ${{ needs.create-bundle.outputs.created_tag }}
-          python_version: ${{ matrix.python-version }}
-          os_platform: ${{ env.os_platform }}
+          tag: "${{ needs.create-bundle.outputs.created_tag }}"
+          python_version: "${{ matrix.python-version }}"
+          os_platform: "${{ env.os_platform }}"
+          draft: true
 
       - name: "Post Notification"
         run: |
