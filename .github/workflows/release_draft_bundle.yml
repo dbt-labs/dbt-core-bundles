@@ -1,6 +1,7 @@
 # **what?**
 # This workflow generates a zip archive with all the python dependencies
 # needed to run core + all adapters for linux, mac OS platforms (future ToDo: add Windows)
+#  It will release to GitHub as a draft release.
 
 # **why?**
 # Installing from pip can result in unpredictable installs/runtime environments.
@@ -16,12 +17,13 @@
 # bundle. So if there has just been a release of dbt-core of 1.3.3 then pass that
 # as the input version (without a `v` prefix).
 
-name: Release a Bundle
-run-name: Releasing a bundle for ${{ inputs.version_number }}
+name: Release a Draft Bundle
+run-name: Drafting a release bundle for ${{ inputs.version_number }}
 permissions:
   packages: read
   contents: write
   pull-requests: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -29,12 +31,17 @@ on:
         description: The release version number (i.e. 1.0.0b1).
         type: string
         required: true
+
   workflow_call:
     inputs:
       version_number:
         description: The release version number (i.e. 1.0.0b1).
         type: string
         required: true
+    outputs:
+      tag:
+        description: "The tag of the release that was created."
+        value: ${{ jobs.create-bundle.outputs.created_tag }}
 
 jobs:
   build-python-matrix:
@@ -44,6 +51,9 @@ jobs:
       python_versions: ${{ steps.build-list.outputs.versions }}
 
     steps:
+      - name: "Checkout Repo"
+        uses: actions/checkout@v3
+
       - name: "Audit Version And Parse Into Parts"
         id: semver
         uses: dbt-labs/actions/parse-semver@v1.1.0
@@ -51,20 +61,8 @@ jobs:
           version: ${{ inputs.version_number }}
 
       - name: "Set Python Versions"
-        # 1.0 to 1.3 support python 3.8 to 3.10
-        # 1.4 added support for python 3.11
-        # Support for Python 3.7 was dropped at EOL (July 2023)
-        # Note that Python 3.8 is manually added to the matrix so not included here
         id: build-list
-        run: |
-          if [[ ${{ steps.semver.outputs.minor }} < 4 ]]
-          then
-            py_versions='["3.9", "3.10"]'
-          else
-            py_versions='["3.9", "3.10", "3.11"]'
-          fi
-          echo $py_versions
-          echo "versions=$py_versions" >> "$GITHUB_OUTPUT"
+        run: ./.github/scripts/supported_python_versions.sh ${{ steps.semver.outputs.minor }}
 
       - name: Print Support of Python Versions Other Than 3.8
         run: |
@@ -77,6 +75,8 @@ jobs:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       created_tag: ${{ steps.create-release.outputs.created_tag }}
+      created_asset_url: ${{ steps.create-release.outputs.created_asset_url }}
+      req_file_url: ${{ steps.create-release.outputs.req_file_url }}
     steps:
       - name: "Checkout Repo"
         uses: actions/checkout@v3
@@ -101,16 +101,14 @@ jobs:
           python -u -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=create
-          source ./result.env
-          echo "$CREATED_TAG"
-          echo "created_tag=$CREATED_TAG" >> $GITHUB_OUTPUT
 
       - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
         with:
-          version_number: ${{ steps.create-release.outputs.created_tag }}
+          tag: "${{ steps.create-release.outputs.created_tag }}"
           python_version: "3.8"
           os_platform: "linux"
+          draft: true
 
       - name: "Post Notification"
         run: |
@@ -126,9 +124,9 @@ jobs:
       matrix:
         python-version: ${{ fromJSON(needs.build-python-matrix.outputs.python_versions) }}
         os: ["macos-latest", "ubuntu-latest"]
-        include:
+        exclude:
           - python-version: 3.8
-            os: macos-latest
+            os: ubuntu-latest
     name: ${{ matrix.os }} - ${{ matrix.python-version }}
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

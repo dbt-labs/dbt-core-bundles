@@ -7,6 +7,7 @@ from github import Github
 from github.GithubException import GithubException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
+from release_creation.bundle.bundle_config import get_bundle_config
 from release_creation.bundle.create import BUNDLE_REQ_NAME_PREFIX
 from release_creation.release_logger import get_logger
 
@@ -41,7 +42,7 @@ def _normalize_input_version(version: Version) -> Version:
     return version
 
 
-def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[GitRelease]]:
+def get_latest_bundle_release(input_version: str) -> Tuple[Version, bool, Optional[GitRelease]]:
     """Retrieve the latest release matching the major.minor and release stage
        semantic version if it exists. Ignores the patch version. 
 
@@ -49,7 +50,7 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
         input_version (str): semantic version (1.0.0.0rc, 2.3.5) to match against 
 
     Returns:
-        Tuple[ Version, Optional[GitRelease]]: A tuple of the latest release tag 
+        Tuple[ Version, is_draft, Optional[GitRelease]]: A tuple of the latest release tag, if it's in a draft state 
         and the latest release itself.
     """
     gh = get_github_client()
@@ -57,8 +58,9 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
     latest_version = copy.copy(target_version)
     latest_version = _normalize_input_version(latest_version)
     repo = gh.get_repo(_GH_BUNDLE_REPO)
-    releases = repo.get_releases()
+    releases = repo.get_releases()  # must have push access to the repo to get draft releases
     latest_release = None
+    is_draft = False
     for r in releases:
         release_version = Version.coerce(r.tag_name)
         if (
@@ -69,8 +71,9 @@ def get_latest_bundle_release(input_version: str) -> Tuple[ Version, Optional[Gi
             and release_version.patch >= latest_version.patch  # type: ignore
         ):
             latest_version = release_version
+            is_draft = r.draft
             latest_release = r
-    return _normalize_version_tags(latest_version), latest_release
+    return _normalize_version_tags(latest_version), is_draft, latest_release
 
 
 def _get_local_bundle_reqs(bundle_req_path: str) -> List[str]:
@@ -118,7 +121,7 @@ def _diff_bundle_requirements(
         return "No prior bundle"
 
 
-def create_new_release_for_version(
+def create_new_draft_release_for_version(
     release_version: Version, assets: Dict, latest_release: GitRelease
 ) -> None:
     """Given an input version it creates a matching Github Release and attaches the assets
@@ -148,9 +151,8 @@ def create_new_release_for_version(
 
     if not release_body:
         raise RuntimeError("New bundle does not contain any new changes")
-    created_release = repo.create_git_release(
-        tag=release_tag, name=release_name, message=release_body, prerelease=is_pre
-    )
+    created_release = repo.create_git_release(tag=release_tag, name=release_name, message=release_body, prerelease=is_pre, draft=True)
+
     try:
         for asset_name, asset_path in assets.items():
             created_release.upload_asset(path=asset_path, name=asset_name)
