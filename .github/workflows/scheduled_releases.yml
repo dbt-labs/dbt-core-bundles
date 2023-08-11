@@ -13,7 +13,7 @@
 # Iterate over the list of bundles and invoke the full_release.yml workflow
 
 name: Schedule Bundle Releases
-
+run-name: Scheduled Bundle Release
 on:
   schedule:
     - cron: "0 22 * * 4" # 10pm UTC on Thursday
