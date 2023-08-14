@@ -56,7 +56,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install libsasl2-dev git gcc g++ unixodbc-dev libxml2-dev libxslt-dev
+          sudo apt-get install git gcc g++ unixodbc-dev  libsasl2-dev libxml2-dev libxslt-dev
 
       - name: Python setup
         run: |
@@ -69,4 +69,4 @@ jobs:
       - name: Run Integration Tests (long running)
         # run integration tests even when unit tests fail
         if: ${{ always() }}
-        run: tox -r -e integration
+        run: tox -e integration
