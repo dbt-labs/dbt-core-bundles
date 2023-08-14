@@ -13,7 +13,7 @@
 # Iterate over the list of bundles and invoke the full_release.yml workflow
 
 name: Schedule Bundle Releases
-
+run-name: Scheduled Bundle Release
 on:
   schedule:
     - cron: "0 22 * * 4" # 10pm UTC on Thursday
@@ -27,7 +27,6 @@ jobs:
        # we support the trailing four versions plus the latest pre-release
        # and the upcoming version's pre-release.
         version: ["1.1.0", "1.2.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0b2", "1.6.0"]
-      fail-fast: false
         
     name: Call Release Workflow for ${{ matrix.version }}
     uses: ./.github/workflows/release_new_bundle.yml
