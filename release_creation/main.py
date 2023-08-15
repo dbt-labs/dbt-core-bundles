@@ -3,12 +3,9 @@ from strenum import StrEnum
 import os
 import argparse
 
-from release_creation.github_client.create_release import (
-    create_new_draft_release_for_version,
-    get_latest_bundle_release,
-    add_assets_to_release, create_dev_release,
-)
-from release_creation.bundle.create import generate_bundle
+from release_creation.github_client import create_release
+from release_creation.bundle import create
+from release_creation.github_client import get_release
 from release_creation.release_logger import get_logger
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -41,11 +38,11 @@ def main():
     version = args.input_version
     operation = args.operation
     if version.startswith("0.0"):
-        latest_version = Version(DEV_VERSION)
+        latest_version = Version.coerce(DEV_VERSION)
         is_draft = False
         latest_release = None
     else:
-        latest_version, is_draft, latest_release = get_latest_bundle_release(version)
+        latest_version, is_draft, latest_release = get_release.get_latest_bundle_release(version)
         logger.info(f"Retrieved latest version: {latest_version} "
                     f"and latest release: {latest_release.tag_name if latest_release else None}")
     if operation == ReleaseOperations.create:
@@ -60,13 +57,13 @@ def main():
         if latest_release:
             # pre-release semver versions are not incremented by next_patch
             target_version.patch += 1
-        bundle_assets = generate_bundle(target_version=target_version)
+        bundle_assets = create.generate_bundle(target_version=target_version)
         logger.info(f"Attempting to create new draft release for target version: {target_version}")
 
-        if target_version.startswith("0.0"):
-            create_dev_release(release_version=target_version, assets=bundle_assets)
+        if str(target_version).startswith("0.0"):
+            create_release.create_dev_release(release_version=target_version, assets=bundle_assets)
         else:
-            create_new_draft_release_for_version(
+            create_release.create_new_draft_release_for_version(
                 release_version=target_version,
                 assets=bundle_assets,
                 latest_release=latest_release,
@@ -76,10 +73,10 @@ def main():
         if not is_draft:
             raise RuntimeError(f"No draft release exists for version {latest_version}.  Nothing to update.")
         logger.info(f"Attempting to update existing draft release for latest version: {latest_version}")
-        bundle_assets = generate_bundle(target_version=latest_version)
+        bundle_assets = create.generate_bundle(target_version=latest_version)
 
         logger.debug(f"latest_release: {latest_release}")
-        add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
+        create_release.add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,4 @@
 import os
-import unittest
 from unittest.mock import Mock
 
 from semantic_version import Version
