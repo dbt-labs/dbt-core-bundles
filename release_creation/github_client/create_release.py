@@ -1,79 +1,16 @@
-import copy
-import os
 import requests
 from typing import Dict, List, Optional, Set, Tuple
 from semantic_version import Version
-from github import Github
-from github.GithubException import GithubException
+from github.GithubException import GithubException, UnknownObjectException
 from github.GitRelease import GitRelease
 from github.GitReleaseAsset import GitReleaseAsset
-from release_creation.bundle.bundle_config import get_bundle_config
 from release_creation.bundle.create import BUNDLE_REQ_NAME_PREFIX
+from release_creation.github_client import client
 from release_creation.release_logger import get_logger
 
 _GH_BUNDLE_REPO = "dbt-labs/dbt-core-bundles"
-_GH_ACCESS_TOKEN = os.environ.get("GH_ACCESS_TOKEN")
 
 logger = get_logger()
-
-
-def get_github_client() -> Github:
-    return Github(_GH_ACCESS_TOKEN)
-
-
-def _normalize_version_tags(version: Version) -> Version:
-    """Normalize the version tags:
-    - if pre-release version use 'pre' instead of 'rc' or 'b1' for the tag
-    - remove build tag
-    """
-    if version.prerelease or version.build:
-        version.prerelease = ["pre"]
-    if version.build:
-        version.build = []
-    return version
-
-
-def _normalize_input_version(version: Version) -> Version:
-    """Normalize the version:
-    - set patch to 0
-    """
-    version = _normalize_version_tags(version)
-    version.patch = 0
-    return version
-
-
-def get_latest_bundle_release(input_version: str) -> Tuple[Version, bool, Optional[GitRelease]]:
-    """Retrieve the latest release matching the major.minor and release stage
-       semantic version if it exists. Ignores the patch version. 
-
-    Args:
-        input_version (str): semantic version (1.0.0.0rc, 2.3.5) to match against 
-
-    Returns:
-        Tuple[ Version, is_draft, Optional[GitRelease]]: A tuple of the latest release tag, if it's in a draft state 
-        and the latest release itself.
-    """
-    gh = get_github_client()
-    target_version = Version.coerce(input_version)
-    latest_version = copy.copy(target_version)
-    latest_version = _normalize_input_version(latest_version)
-    repo = gh.get_repo(_GH_BUNDLE_REPO)
-    releases = repo.get_releases()  # must have push access to the repo to get draft releases
-    latest_release = None
-    is_draft = False
-    for r in releases:
-        release_version = Version.coerce(r.tag_name)
-        if (
-            release_version.major == latest_version.major
-            and release_version.minor == latest_version.minor
-            and (not release_version.prerelease) == (not latest_version.prerelease)
-            and (not release_version.build) == (not latest_version.build)
-            and release_version.patch >= latest_version.patch  # type: ignore
-        ):
-            latest_version = release_version
-            is_draft = r.draft
-            latest_release = r
-    return _normalize_version_tags(latest_version), is_draft, latest_release
 
 
 def _get_local_bundle_reqs(bundle_req_path: str) -> List[str]:
@@ -136,10 +73,9 @@ def create_new_draft_release_for_version(
         RuntimeError: _description_
         e: _description_
     """
-    gh = get_github_client()
     release_tag = str(release_version)
     is_pre = True if release_version.prerelease else False
-    repo = gh.get_repo(_GH_BUNDLE_REPO)
+    repo = client.get_bundle_repo()
     logger.info(f"Assets for release: {assets.keys()}")
     reqs_files = [x for x in assets if BUNDLE_REQ_NAME_PREFIX in x]
     release_name = f"Bundle for dbt v{release_version.major}.{release_version.minor}"
@@ -154,8 +90,7 @@ def create_new_draft_release_for_version(
     created_release = repo.create_git_release(tag=release_tag, name=release_name, message=release_body, prerelease=is_pre, draft=True)
 
     try:
-        for asset_name, asset_path in assets.items():
-            created_release.upload_asset(path=asset_path, name=asset_name)
+        add_assets_to_release(assets=assets, latest_release=created_release)
     except Exception as e:
         created_release.delete_release()
         raise e
@@ -172,3 +107,21 @@ def add_assets_to_release(assets: Dict, latest_release: Optional[GitRelease]) ->
                 logger.warning("Asset already exists!")
             else:
                 raise e
+
+
+def create_dev_release(release_version: Version, assets: Dict,) -> None:
+    repo = client.get_bundle_repo()
+    release_tag = str(release_version)
+    try:
+        latest_release = repo.get_release(release_tag)
+        latest_release.delete_release()
+    except UnknownObjectException:
+        pass
+    latest_release = repo.create_git_release(
+        tag=release_tag,
+        name=f"dev Bundle for dbt",
+        message="This is a dev bundle release. It is meant for testing the latest changes in dbt-* packages.",
+        prerelease=True,
+        draft=False,
+    )
+    add_assets_to_release(assets=assets, latest_release=latest_release)

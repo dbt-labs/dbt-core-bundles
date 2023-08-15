@@ -1,18 +1,20 @@
+from semantic_version import Version
 from strenum import StrEnum
 import os
-from semantic_version.base import Version
 import argparse
 
-from release_creation.github_client.releases import (
+from release_creation.github_client.create_release import (
     create_new_draft_release_for_version,
     get_latest_bundle_release,
-    add_assets_to_release,
+    add_assets_to_release, create_dev_release,
 )
 from release_creation.bundle.create import generate_bundle
 from release_creation.release_logger import get_logger
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+DEV_VERSION = "0.0.0.0dev"
 logger = get_logger()
+
 
 class ReleaseOperations(StrEnum):
     create = "create"
@@ -38,24 +40,37 @@ def main():
     args = parser.parse_args()
     version = args.input_version
     operation = args.operation
-    latest_version, is_draft, latest_release = get_latest_bundle_release(version)
-    logger.info(f"Retrieved latest version: {latest_version} "
-                f"and latest release: {latest_release.tag_name if latest_release else None}")
+    if version.startswith("0.0"):
+        latest_version = Version(DEV_VERSION)
+        is_draft = False
+        latest_release = None
+    else:
+        latest_version, is_draft, latest_release = get_latest_bundle_release(version)
+        logger.info(f"Retrieved latest version: {latest_version} "
+                    f"and latest release: {latest_release.tag_name if latest_release else None}")
     if operation == ReleaseOperations.create:
         if is_draft:
-            raise RuntimeError(f"A draft release already exists for version {latest_version}.  It needs to be published or deleted first")
+            raise RuntimeError(
+                f"A draft release already exists for version {latest_version}. "
+                f"It needs to be published or deleted first")
         target_version = latest_version
         target_version.prerelease = latest_version.prerelease
         target_version.build = latest_version.build
-        # pre-release semver versions are not incremented by next_patch
-        target_version.patch += 1
+        # if a latest release exists then there is a prior patch version
+        if latest_release:
+            # pre-release semver versions are not incremented by next_patch
+            target_version.patch += 1
         bundle_assets = generate_bundle(target_version=target_version)
         logger.info(f"Attempting to create new draft release for target version: {target_version}")
-        create_new_draft_release_for_version(
-            release_version=target_version,
-            assets=bundle_assets,
-            latest_release=latest_release,
-        )
+
+        if target_version.startswith("0.0"):
+            create_dev_release(release_version=target_version, assets=bundle_assets)
+        else:
+            create_new_draft_release_for_version(
+                release_version=target_version,
+                assets=bundle_assets,
+                latest_release=latest_release,
+            )
         set_output(name="created_tag", value=target_version)
     elif operation == ReleaseOperations.update:
         if not is_draft:
