@@ -39,7 +39,7 @@ on:
         type: string
         required: true
     outputs:
-      tag: 
+      tag:
         description: "The tag of the release that was created."
         value: ${{ jobs.create-bundle.outputs.created_tag }}
 
@@ -90,7 +90,7 @@ jobs:
         id: install-linux-deps
         run: |
           sudo apt-get update
-          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev
+          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev git gcc g++ unixodbc-dev
           python -m pip install --user --upgrade pip
           pip install -r requirements.txt
 
@@ -101,7 +101,7 @@ jobs:
           python -u -m release_creation.main \
            --input-version=${{ inputs.version_number }} \
            --operation=create
-      
+
       - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
         with:
