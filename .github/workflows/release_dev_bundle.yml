@@ -19,6 +19,8 @@ permissions:
 on:
   workflow_dispatch:
 
+  workflow_call:
+
 jobs:
   build-python-matrix:
     name: Build Python Release Matrix

@@ -5,7 +5,10 @@
 # Note that Python 3.8 is manually added to the matrix so not included here
 
 minor_version="$1"
-if [[ ${minor_version} < 4 ]]
+if [[ ${minor_version} < 1 ]]
+then
+py_versions='["3.8", "3.9", "3.10", "3.11"]'
+elif [[ ${minor_version} < 4 ]]
 then
 py_versions='["3.8", "3.9", "3.10"]'
 else
