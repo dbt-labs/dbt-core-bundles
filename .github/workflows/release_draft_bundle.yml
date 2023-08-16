@@ -146,11 +146,12 @@ jobs:
         run: |
           echo "os_platform=linux" >> $GITHUB_ENV
           sudo apt-get update
-          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev
+          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev gcc g++ unixodbc-dev
 
       - name: "Install Mac Dependencies"
         if: matrix.os == 'macos-latest'
         run: |
+          brew install openblas lapack
           echo "os_platform=mac" >> $GITHUB_ENV
 
       - name: "Install Python Dependencies"
