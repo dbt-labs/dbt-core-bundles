@@ -62,12 +62,12 @@ jobs:
       - name: Set up Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
-          ./scripts/worker_install_linux_deps.sh
+          ./github/scripts/worker_install_linux_deps.sh
 
       - name: Install Mac Dependencies
         if: matrix.os == 'macos-latest'
         run: |
-          ./scripts/worker_install_mac_deps.sh
+          ./github/scripts/worker_install_mac_deps.sh
 
       - name: Python setup
         run: |
