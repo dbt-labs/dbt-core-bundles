@@ -1,9 +1,10 @@
 --pre
-dbt-core~=1.6.0b2 --no-binary dbt-postgres
-dbt-snowflake~=1.6.0b2
-dbt-bigquery~=1.6.0b2
-dbt-redshift~=1.6.0b2
-dbt-postgres~=1.6.0b2
+git+https://github.com/dbt-labs/dbt-core.git@1.6.latest#egg=dbt-core&subdirectory=core --no-binary dbt-postgres
+git+https://github.com/dbt-labs/dbt-core.git@1.6.latest#egg=dbt-postgres&subdirectory=plugins/postgres
+git+https://github.com/dbt-labs/dbt-bigquery.git@1.6.latest#egg=dbt-bigquery
+git+https://github.com/dbt-labs/dbt-snowflake.git@1.6.latest#egg=dbt-snowflake
+git+https://github.com/dbt-labs/dbt-redshift.git@1.6.latest#egg=dbt-redshift
+git+https://github.com/dbt-labs/dbt-spark.git@1.6.latest#egg=dbt-spark[PyHive,ODBC]
 dbt-spark[PyHive,ODBC]~=1.6.0b2
 dbt-databricks~=1.6.0rc2
 dbt-rpc~=0.4.1

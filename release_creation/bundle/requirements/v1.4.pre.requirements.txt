@@ -1,11 +1,11 @@
 --pre
 setuptools
-dbt-core~=1.4.0b1 --no-binary dbt-postgres
-dbt-snowflake~=1.4.0b1
-dbt-bigquery~=1.4.0b1
-dbt-redshift~=1.4.0b1
-dbt-postgres~=1.4.0b1
-dbt-spark[PyHive,ODBC]~=1.4.0b1
+git+https://github.com/dbt-labs/dbt-core.git@1.4.latest#egg=dbt-core&subdirectory=core --no-binary dbt-postgres
+git+https://github.com/dbt-labs/dbt-core.git@1.4.latest#egg=dbt-postgres&subdirectory=plugins/postgres
+git+https://github.com/dbt-labs/dbt-bigquery.git@1.4.latest#egg=dbt-bigquery
+git+https://github.com/dbt-labs/dbt-snowflake.git@1.4.latest#egg=dbt-snowflake
+git+https://github.com/dbt-labs/dbt-redshift.git@1.4.latest#egg=dbt-redshift
+git+https://github.com/dbt-labs/dbt-spark.git@1.4.latest#egg=dbt-spark[PyHive,ODBC]
 dbt-databricks~=1.4.0b1
 dbt-trino~=1.4.0
 dbt-rpc~=0.1.3b1
