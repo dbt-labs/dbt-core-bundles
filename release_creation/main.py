@@ -39,7 +39,7 @@ def main():
     operation = args.operation
     if version.startswith("0.0"):
         latest_version = Version.coerce(DEV_VERSION)
-        is_draft = False
+        is_draft = True
         latest_release = None
     else:
         latest_version, is_draft, latest_release = get_release.get_latest_bundle_release(version)
@@ -60,7 +60,7 @@ def main():
         bundle_assets = create.generate_bundle(target_version=target_version)
         logger.info(f"Attempting to create new draft release for target version: {target_version}")
 
-        if str(target_version).startswith("0.0"):
+        if str(target_version) == DEV_VERSION:
             create_release.create_dev_release(release_version=target_version, assets=bundle_assets)
         else:
             create_release.create_new_draft_release_for_version(
@@ -74,7 +74,6 @@ def main():
             raise RuntimeError(f"No draft release exists for version {latest_version}.  Nothing to update.")
         logger.info(f"Attempting to update existing draft release for latest version: {latest_version}")
         bundle_assets = create.generate_bundle(target_version=latest_version)
-
         logger.debug(f"latest_release: {latest_release}")
         create_release.add_assets_to_release(assets=bundle_assets, latest_release=latest_release)
 

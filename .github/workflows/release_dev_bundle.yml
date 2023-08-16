@@ -22,119 +22,18 @@ on:
   workflow_call:
 
 jobs:
-  build-python-matrix:
-    name: Build Python Release Matrix
+  release-new-dev-bundle:
+    name: Call Release New Bundle Workflow for ${{ inputs.version_number }}
+    uses: ./.github/workflows/release_new_bundle.yml
+    with:
+      version_number: ${{ inputs.version_number }}
+  swap-dev-bundle:
+    name: Swap Dev Bundle
     runs-on: ubuntu-latest
-    outputs:
-      python_versions: ${{ steps.build-list.outputs.versions }}
+    needs: [release-new-dev-bundle]
     steps:
       - name: "Checkout Repo"
         uses: actions/checkout@v3
-      - name: "Set Python Versions"
-        id: build-list
-        run: ./.github/scripts/supported_python_versions.sh "0.0.0"
-
-      - name: Print Support of Python Versions Other Than 3.8
+      - name: "Swap Dev Bundle"
         run: |
-          echo "${{ steps.build-list.outputs.versions }}"
-
-  create-bundle:
-    needs: [ build-python-matrix ]
-    runs-on: ubuntu-latest
-    env:
-      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    outputs:
-      created_tag: ${{ steps.create-release.outputs.created_tag }}
-      created_asset_url: ${{ steps.create-release.outputs.created_asset_url }}
-      req_file_url: ${{ steps.create-release.outputs.req_file_url }}
-    steps:
-      - name: "Checkout Repo"
-        uses: actions/checkout@v3
-
-      - name: "Set up Python 3.8"
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.8"
-
-      - name: "Install Linux Dependencies"
-        id: install-linux-deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev
-          python -m pip install --user --upgrade pip
-          pip install -r requirements.txt
-
-      - name: "Create Release"
-        id: create-release
-        run: |
-          python -m pip install -e . && \
-          python -u -m release_creation.main \
-           --input-version=0.0.0 \
-           --operation=create
-
-      - name: "Test install from Github Release"
-        uses: ./.github/actions/test_install
-        with:
-          tag: "${{ steps.create-release.outputs.created_tag }}"
-          python_version: "3.8"
-          os_platform: "linux"
-          draft: true
-
-      - name: "Post Notification"
-        run: |
-          title="Test Install Successful"
-          message="Installation and version command run successful for os_platform=linux, Python="3.8", version=${{ steps.create-release.outputs.created_tag }}"
-          echo "::notice $title::$message"
-  build-for-os-and-python-versions:
-    needs: [create-bundle, build-python-matrix]
-    strategy:
-      # run even if some fail so we get a full picture.  At this point linux/3.8 is already released anyways so there's no reason to stop
-      fail-fast: false
-      matrix:
-        python-version: ${{ fromJSON(needs.build-python-matrix.outputs.python_versions) }}
-        exclude:
-          - python-version: 3.8
-    name: ${{ matrix.python-version }}
-    env:
-      GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: "Checkout Repo"
-        uses: actions/checkout@v3
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: "${{ matrix.python-version }}"
-
-      - name: "Install Linux Dependencies"
-        run: |
-          sudo apt-get update
-          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev
-
-      - name: "Install Python Dependencies"
-        run: |
-          python -m pip install --user --upgrade pip
-          pip install -r requirements.txt
-
-      - name: "Generate Bundle"
-        run: |
-          python -m pip install -e . && \
-          python -u -m release_creation.main \
-           --input-version=0.0.0 \
-           --operation=update
-
-      - name: "Test install from Github Release"
-        uses: ./.github/actions/test_install
-        with:
-          tag: "${{ needs.create-bundle.outputs.created_tag }}"
-          python_version: "${{ matrix.python-version }}"
-          os_platform: "linux"
-          draft: true
-
-      - name: "Post Notification"
-        run: |
-          title="Test Install Successful"
-          message="Dev Installation and version command run successful for Python=${{ matrix.python-version }}, version=${{ needs.create-bundle.outputs.created_tag }}"
-          echo "::notice $title::$message"
+          ./.github/scripts/swap_dev_bundle.sh ${{ needs.release-new-dev-bundle.outputs.tag }}
