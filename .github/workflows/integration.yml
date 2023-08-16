@@ -64,7 +64,7 @@ jobs:
         run: |
           ./.github/scripts/worker_install_linux_deps.sh
 
-      - name: Install Mac Dependencies
+      - name: Set up Mac
         if: matrix.os == 'macos-latest'
         run: |
           ./.github/scripts/worker_install_mac_deps.sh
