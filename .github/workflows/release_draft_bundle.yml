@@ -147,6 +147,7 @@ jobs:
           echo "os_platform=linux" >> $GITHUB_ENV
           sudo apt-get update
           sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev gcc g++ unixodbc-dev
+          sudo apt-get install gfortran libatlas-base-dev
 
       - name: "Install Mac Dependencies"
         if: matrix.os == 'macos-latest'
