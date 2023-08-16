@@ -55,9 +55,11 @@ jobs:
       - name: Set up Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
-          sudo apt-get update
-          sudo apt-get install git gcc g++ unixodbc-dev  libsasl2-dev libxml2-dev libxslt-dev
-
+          ./scripts/worker_install_linux_deps.sh
+      - name: Install Mac Dependencies
+        if: matrix.os == 'macos-latest'
+        run: |
+          ./scripts/worker_install_mac_deps.sh
       - name: Python setup
         run: |
           python -m pip install --upgrade pip
