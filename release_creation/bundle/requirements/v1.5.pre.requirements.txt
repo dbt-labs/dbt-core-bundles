@@ -1,4 +1,3 @@
---pre
 git+https://github.com/dbt-labs/dbt-core.git@1.5.latest#egg=dbt-core&subdirectory=core --no-binary dbt-postgres
 git+https://github.com/dbt-labs/dbt-core.git@1.5.latest#egg=dbt-postgres&subdirectory=plugins/postgres
 git+https://github.com/dbt-labs/dbt-bigquery.git@1.5.latest#egg=dbt-bigquery
