@@ -9,7 +9,7 @@ from release_creation.github_client import get_release
 from release_creation.release_logger import get_logger
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-DEV_VERSION = "0.0.0.0dev"
+DEV_VERSION = "0.0.0+dev"
 logger = get_logger()
 
 
