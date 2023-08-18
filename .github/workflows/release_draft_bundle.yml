@@ -73,6 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ github.token }}
     outputs:
       created_tag: ${{ steps.create-release.outputs.created_tag }}
       created_asset_url: ${{ steps.create-release.outputs.created_asset_url }}
