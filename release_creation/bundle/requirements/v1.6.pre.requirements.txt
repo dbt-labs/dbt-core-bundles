@@ -1,4 +1,3 @@
---pre
 git+https://github.com/dbt-labs/dbt-core.git@1.6.latest#egg=dbt-core&subdirectory=core --no-binary dbt-postgres
 git+https://github.com/dbt-labs/dbt-core.git@1.6.latest#egg=dbt-postgres&subdirectory=plugins/postgres
 git+https://github.com/dbt-labs/dbt-bigquery.git@1.6.latest#egg=dbt-bigquery
@@ -7,6 +6,7 @@ git+https://github.com/dbt-labs/dbt-redshift.git@1.6.latest#egg=dbt-redshift
 git+https://github.com/dbt-labs/dbt-spark.git@1.6.latest#egg=dbt-spark[PyHive,ODBC]
 dbt-spark[PyHive,ODBC]~=1.6.0b2
 dbt-databricks~=1.6.0rc2
+dbt-trino~=1.6.0rc2
 dbt-rpc~=0.4.1
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1

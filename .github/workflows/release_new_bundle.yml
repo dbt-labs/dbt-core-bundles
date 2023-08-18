@@ -43,6 +43,7 @@ jobs:
       version_number: ${{ inputs.version_number }}
 
   publish-bundles:  
+    if: ${{ always() }}
     needs: [release-draft-bundles]      
     name: Call Release Workflow for ${{ inputs.version_number }}
     uses: ./.github/workflows/publish_draft_bundle.yml

@@ -13,7 +13,7 @@ elif [[ ${minor_version} < 4 ]]
 then
 py_versions='["3.8", "3.9", "3.10"]'
 else
-py_versions='["3.8", "3.9", "3.10", "3.11"]'
+py_versions='["3.8", "3.9", "3.10"]'
 fi
 echo $py_versions
 echo "versions=$py_versions" >> "$GITHUB_OUTPUT"
