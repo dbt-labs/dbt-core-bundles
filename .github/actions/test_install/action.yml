@@ -32,6 +32,7 @@ runs:
     - name: "Set up venv"
       shell: bash
       run: |
+        set -e
         exit 1
         python -m venv env test_release_install
         source test_release_install/bin/activate

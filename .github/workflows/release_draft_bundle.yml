@@ -103,6 +103,7 @@ jobs:
            --operation=create
 
       - name: "Test install from Github Release"
+        id: test-install
         uses: ./.github/actions/test_install
         continue-on-error: true
         with:
@@ -112,7 +113,7 @@ jobs:
           draft: true
 
       - name: "Delete Draft if Test Install fails"
-        if: failure()
+        if: steps.test-install.outcome == 'failure'
         run: |
           gh release delete "${{ steps.create-release.outputs.created_tag }}" -y
           exit 1
