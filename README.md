@@ -1,7 +1,7 @@
 # dbt Bundles (beta)
 *NOTE*: this is still under active development please use with caution.
 ## Overview
-Generates bundles (zip archives) of all python dependencies needed to install and run the verified adapters + core as GitHub releases. 
+Generate bundles (zip archives) of all python dependencies needed to install and run the verified adapters + core as GitHub releases. 
 
 ### Why? 
 Python makes it difficult to create a shippable dependency enclosure that insures predictability at both install and run time. 
@@ -15,7 +15,7 @@ Every week we will release a new bundle that will include all of the changes fro
 dependencies for each supported major.minor version of dbt as a GitHub release. The release tag corresponds to the 
 major.minor version of dbt it's for so `1.3.45` release includes the latest patches for all dbt packages that are `~=1.3.0`.
 
-Each day we will update a dev bundle that will install dbt-* packages off of main instead of pypi. This will allow
+Every week day we will update a dev bundle that will install dbt-* packages off of main instead of pypi. This will allow
 us to test and develop against the latest changes in Core. The release tag for this bundle will _always_ be `0.0.1`.
 
 Note that the patch version *will not* match the patch version for dbt-core or any other package as it will increment 

@@ -17,18 +17,22 @@ permissions:
   pull-requests: read
 
 on:
+  schedule:
+    - cron: "0 22 * * 1-5" # 10pm UTC on Monday through Friday
+
   workflow_dispatch:
 
   workflow_call:
 
 jobs:
   release-new-dev-bundle:
-    name: Call Release New Bundle Workflow for ${{ inputs.version_number }}
+    name: "Release dev bundle"
     uses: ./.github/workflows/release_new_bundle.yml
     with:
       version_number: ${{ inputs.version_number }}
+
   swap-dev-bundle:
-    name: Swap Dev Bundle
+    name: "Swap Dev Bundle"
     runs-on: ubuntu-latest
     needs: [release-new-dev-bundle]
     steps:
