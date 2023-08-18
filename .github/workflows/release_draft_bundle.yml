@@ -16,6 +16,7 @@
 # representing the release of the dependency you want to incorporate into a new
 # bundle. So if there has just been a release of dbt-core of 1.3.3 then pass that
 # as the input version (without a `v` prefix).
+# If the test install fails we delete the draft release and exit with a non-zero exit code.
 
 name: Release a Draft Bundle
 run-name: Drafting a release bundle for ${{ inputs.version_number }}
@@ -73,6 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ github.token }}
     outputs:
       created_tag: ${{ steps.create-release.outputs.created_tag }}
       created_asset_url: ${{ steps.create-release.outputs.created_asset_url }}
@@ -103,12 +105,20 @@ jobs:
            --operation=create
 
       - name: "Test install from Github Release"
+        id: test-install
         uses: ./.github/actions/test_install
+        continue-on-error: true
         with:
           tag: "${{ steps.create-release.outputs.created_tag }}"
           python_version: "3.8"
           os_platform: "linux"
           draft: true
+
+      - name: "Delete Draft if Test Install fails"
+        if: steps.test-install.outcome == 'failure'
+        run: |
+          gh release delete "${{ steps.create-release.outputs.created_tag }}" -y
+          exit 1
 
       - name: "Post Notification"
         run: |
