@@ -104,11 +104,18 @@ jobs:
 
       - name: "Test install from Github Release"
         uses: ./.github/actions/test_install
+        continue-on-error: true
         with:
           tag: "${{ steps.create-release.outputs.created_tag }}"
           python_version: "3.8"
           os_platform: "linux"
           draft: true
+
+      - name: "Delete Draft if Test Install fails"
+        if: failure()
+        run: |
+          gh release delete "${{ steps.create-release.outputs.created_tag }}" -y
+          exit 1
 
       - name: "Post Notification"
         run: |
