@@ -85,6 +85,18 @@ jobs:
       with:
         python-version: "${{ inputs.python_version }}"
 
+    - name: Install Linux Dependencies
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        echo "os_platform=linux" >> $GITHUB_ENV
+        ./.github/scripts/worker_install_linux_deps.sh
+
+    - name: Install Mac Dependencies
+      if: matrix.os == 'macos-latest'
+      run: |
+        echo "os_platform=mac" >> $GITHUB_ENV
+        ./.github/scripts/worker_install_mac_deps.sh
+
     - name: Test the Install
       run: |
         python -m venv env test_release_install
