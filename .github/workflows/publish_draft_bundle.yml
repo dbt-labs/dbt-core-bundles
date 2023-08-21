@@ -81,6 +81,7 @@ jobs:
         run: ./.github/scripts/supported_python_versions.sh \
           ${{ steps.semver.outputs.major}} \
           ${{ steps.semver.outputs.minor }}
+
       - name: Print Supported Python Versions
         run: |
           echo "${{ steps.build-list.outputs.versions }}"

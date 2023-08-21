@@ -20,3 +20,18 @@ def test_main_calls_correct_functions(monkeypatch):
     assert get_latest_bundle_release_mock.call_count == 1
     assert create_release_mock.call_count == 1
     assert generate_bundle_mock.call_count == 1
+
+
+def test_main_calls_correct_functions_with_dev_input(monkeypatch):
+    argparse_mock = Mock(parse_args=lambda: Mock(input_version="0.0.0", operation=ReleaseOperations.create))
+    monkeypatch.setattr("argparse.ArgumentParser", lambda: argparse_mock)
+    get_latest_bundle_release_mock = Mock()
+    monkeypatch.setattr(get_release, "get_latest_bundle_release", get_latest_bundle_release_mock)
+    create_release_mock = Mock()
+    monkeypatch.setattr(create_release, "create_dev_release", create_release_mock)
+    generate_bundle_mock = Mock(return_value={})
+    monkeypatch.setattr(create, "generate_bundle", generate_bundle_mock)
+    main()
+    assert get_latest_bundle_release_mock.call_count == 0
+    assert create_release_mock.call_count == 1
+    assert generate_bundle_mock.call_count == 1

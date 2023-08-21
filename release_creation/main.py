@@ -39,7 +39,7 @@ def main():
     operation = args.operation
     if version.startswith("0.0"):
         latest_version = Version.coerce(DEV_VERSION)
-        is_draft = True
+        is_draft = False
         latest_release = None
     else:
         latest_version, is_draft, latest_release = get_release.get_latest_bundle_release(version)
@@ -57,12 +57,13 @@ def main():
         if latest_release:
             # pre-release semver versions are not incremented by next_patch
             target_version.patch += 1
+
         bundle_assets = create.generate_bundle(target_version=target_version)
-        logger.info(f"Attempting to create new draft release for target version: {target_version}")
 
         if str(target_version) == DEV_VERSION:
             create_release.create_dev_release(release_version=target_version, assets=bundle_assets)
         else:
+            logger.info(f"Attempting to create new draft release for target version: {target_version}")
             create_release.create_new_draft_release_for_version(
                 release_version=target_version,
                 assets=bundle_assets,
