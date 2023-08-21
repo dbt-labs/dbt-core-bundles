@@ -1,7 +1,7 @@
 import pytest
 from semantic_version import Version
 
-from release_creation.github_client.releases import get_latest_bundle_release
+from release_creation.github_client.get_release import get_latest_bundle_release
 
 
 @pytest.mark.parametrize("version", ["1.2.0b1", "1.4.0pre", "1.2.0", "1.3.0a1"])

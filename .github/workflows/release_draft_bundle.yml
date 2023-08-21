@@ -63,9 +63,11 @@ jobs:
 
       - name: "Set Python Versions"
         id: build-list
-        run: ./.github/scripts/supported_python_versions.sh ${{ steps.semver.outputs.minor }}
+        run: ./.github/scripts/supported_python_versions.sh \
+          ${{ steps.semver.outputs.major}} \
+          ${{ steps.semver.outputs.minor }}
 
-      - name: Print Support of Python Versions Other Than 3.8
+      - name: Print Supported Python Versions
         run: |
           echo "${{ steps.build-list.outputs.versions }}"
 
