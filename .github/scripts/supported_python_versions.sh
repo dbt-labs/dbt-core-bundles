@@ -9,7 +9,7 @@ minor_version="$2"
 if [[ ${minor_version} == 0 && ${major_version} == 0 ]]
 then
 py_versions='["3.8", "3.9", "3.10", "3.11"]'
-elif [[ ${minor_version} < 4 ]]
+elif [[ ${minor_version} < 4 && ${major_version} == 1  ]]
 then
 py_versions='["3.8", "3.9", "3.10"]'
 else
