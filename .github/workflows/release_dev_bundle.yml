@@ -29,7 +29,7 @@ jobs:
     name: "Release dev bundle"
     uses: ./.github/workflows/release_new_bundle.yml
     with:
-      version_number: ${{ inputs.version_number }}
+      version_number: "0.0.0"
 
   swap-dev-bundle:
     name: "Swap Dev Bundle"
