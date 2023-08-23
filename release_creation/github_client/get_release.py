@@ -1,6 +1,7 @@
 import copy
 from typing import Tuple, Optional
 
+from github import UnknownObjectException
 from github.GitRelease import GitRelease
 from semantic_version import Version
 
@@ -26,6 +27,23 @@ def _normalize_input_version(version: Version) -> Version:
     version = _normalize_version_tags(version)
     version.patch = 0
     return version
+
+
+def get_bundle_release(input_version: str) -> Optional[GitRelease]:
+    """Retrieve the release matching the input version if it exists.
+
+    Args:
+        input_version (str): semantic version (1.0.0.0rc, 2.3.5) to match against
+
+    Returns:
+        Optional[GitRelease]: The release if it exists.
+    """
+    repo = get_bundle_repo()
+    repo.get_release(input_version)
+    try:
+        return repo.get_release(input_version)
+    except UnknownObjectException:
+        return None
 
 
 def get_latest_bundle_release(input_version: str) -> Tuple[Version, bool, Optional[GitRelease]]:
