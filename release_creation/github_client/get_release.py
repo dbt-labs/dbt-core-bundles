@@ -39,18 +39,10 @@ def get_bundle_release(input_version: str) -> Optional[GitRelease]:
     Returns:
         Optional[GitRelease]: The release if it exists.
     """
-    target_version = Version.coerce(input_version)
     repo = get_bundle_repo()
     releases = repo.get_releases()
     for r in releases:
-        release_version = Version.coerce(r.tag_name)
-        if (
-                release_version.major == target_version.major
-                and release_version.minor == target_version.minor
-                and (not release_version.prerelease) == (not target_version.prerelease)
-                and (not release_version.build) == (not target_version.build)
-                and release_version.patch == target_version.patch  # type: ignore
-        ):
+        if r.tag_name == input_version:
             return r
 
 
