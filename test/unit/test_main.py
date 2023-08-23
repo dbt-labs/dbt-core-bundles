@@ -7,7 +7,7 @@ from release_creation.github_client import get_release, create_release
 from release_creation.main import main, ReleaseOperations
 
 
-def test_main_calls_correct_functions(monkeypatch):
+def test_main_create_calls_correct_functions(monkeypatch):
     argparse_mock = Mock(parse_args=lambda: Mock(input_version="1.0.0", operation=ReleaseOperations.create))
     monkeypatch.setattr("argparse.ArgumentParser", lambda: argparse_mock)
     get_latest_bundle_release_mock = Mock(return_value=(Version("1.0.0"), False, None))
@@ -22,7 +22,7 @@ def test_main_calls_correct_functions(monkeypatch):
     assert generate_bundle_mock.call_count == 1
 
 
-def test_main_calls_correct_functions_with_dev_input(monkeypatch):
+def test_main_create_calls_correct_functions_with_dev_input(monkeypatch):
     argparse_mock = Mock(parse_args=lambda: Mock(input_version="0.0.0", operation=ReleaseOperations.create))
     monkeypatch.setattr("argparse.ArgumentParser", lambda: argparse_mock)
     get_latest_bundle_release_mock = Mock()
@@ -34,4 +34,19 @@ def test_main_calls_correct_functions_with_dev_input(monkeypatch):
     main()
     assert get_latest_bundle_release_mock.call_count == 0
     assert create_release_mock.call_count == 1
+    assert generate_bundle_mock.call_count == 1
+
+
+def test_main_update_calls_correct_functions(monkeypatch):
+    argparse_mock = Mock(parse_args=lambda: Mock(input_version="1.0.0", operation=ReleaseOperations.update))
+    monkeypatch.setattr("argparse.ArgumentParser", lambda: argparse_mock)
+    get_bundle_release_mock = Mock(return_value=Mock())
+    monkeypatch.setattr(get_release, "get_bundle_release", get_bundle_release_mock)
+    generate_bundle_mock = Mock(return_value={})
+    add_assets_release_mock = Mock()
+    monkeypatch.setattr(create_release, "add_assets_to_release", add_assets_release_mock)
+    monkeypatch.setattr(create, "generate_bundle", generate_bundle_mock)
+    main()
+    assert get_bundle_release_mock.call_count == 1
+    assert add_assets_release_mock.call_count == 1
     assert generate_bundle_mock.call_count == 1

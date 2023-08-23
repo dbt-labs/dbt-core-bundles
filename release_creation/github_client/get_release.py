@@ -39,7 +39,6 @@ def get_bundle_release(input_version: str) -> Optional[GitRelease]:
         Optional[GitRelease]: The release if it exists.
     """
     repo = get_bundle_repo()
-    repo.get_release(input_version)
     try:
         return repo.get_release(input_version)
     except UnknownObjectException:

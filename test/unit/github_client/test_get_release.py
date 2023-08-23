@@ -2,8 +2,9 @@ from unittest.mock import Mock
 
 import pytest
 from semantic_version import Version
+from github import UnknownObjectException
 
-from release_creation.github_client.get_release import get_latest_bundle_release
+from release_creation.github_client.get_release import get_latest_bundle_release, get_bundle_release
 
 
 @pytest.mark.parametrize(["input_versions", "output_versions"],
@@ -21,3 +22,21 @@ def test_get_latest_bundle_release_gets_latest_release(monkeypatch, input_versio
     input_version = Version.coerce(input_versions)
     latest_version, is_draft, latest_release = get_latest_bundle_release(str(input_version))
     assert str(latest_version) == output_versions
+
+
+def test_get_bundle_release_returns_none_if_no_release_found(monkeypatch):
+    def raise_exception():
+        raise UnknownObjectException(404, "Not Found", headers={})
+
+    repo_mock = Mock(get_release=lambda x: raise_exception())
+    monkeypatch.setattr("release_creation.github_client.get_release.get_bundle_repo", lambda: repo_mock)
+    output = get_bundle_release("1.0.0")
+    assert output is None
+
+
+def test_get_bundle_release_returns_release_if_found(monkeypatch):
+    mock_version_1_0_0 = Mock(tag_name="1.0.0", is_draft=False)
+    repo_mock = Mock(get_release=lambda x: mock_version_1_0_0)
+    monkeypatch.setattr("release_creation.github_client.get_release.get_bundle_repo", lambda: repo_mock)
+    output = get_bundle_release("1.0.0")
+    assert output == mock_version_1_0_0
