@@ -31,6 +31,7 @@ def _normalize_input_version(version: Version) -> Version:
 
 def get_bundle_release(input_version: str) -> Optional[GitRelease]:
     """Retrieve the release matching the input version if it exists.
+    Note: we can't use get_release since it won't return draft releases.
 
     Args:
         input_version (str): semantic version (1.0.0.0rc, 2.3.5) to match against
@@ -38,11 +39,19 @@ def get_bundle_release(input_version: str) -> Optional[GitRelease]:
     Returns:
         Optional[GitRelease]: The release if it exists.
     """
+    target_version = Version.coerce(input_version)
     repo = get_bundle_repo()
-    try:
-        return repo.get_release(input_version)
-    except UnknownObjectException:
-        return None
+    releases = repo.get_releases()
+    for r in releases:
+        release_version = Version.coerce(r.tag_name)
+        if (
+                release_version.major == target_version.major
+                and release_version.minor == target_version.minor
+                and (not release_version.prerelease) == (not target_version.prerelease)
+                and (not release_version.build) == (not target_version.build)
+                and release_version.patch == target_version.patch  # type: ignore
+        ):
+            return r
 
 
 def get_latest_bundle_release(input_version: str) -> Tuple[Version, bool, Optional[GitRelease]]:
