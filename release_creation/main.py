@@ -60,7 +60,7 @@ def execute_update_bundle_release(version: str):
     release_to_update = get_release.get_bundle_release(version)
     if not release_to_update:
         raise RuntimeError(f"Release {version} does not exist")
-    logger.info(f"Attempting to update existing release for version: {version}")
+    logger.info(f"Attempting to update existing release for version: {release_to_update.tag_name}")
     target_version = Version.coerce(version)
     bundle_assets = create.generate_bundle(target_version=target_version)
     logger.debug(f"latest_release: {release_to_update}")
