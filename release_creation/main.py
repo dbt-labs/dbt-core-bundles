@@ -22,7 +22,7 @@ def set_output(name, value):
     os.system(f"""echo "{name}={value}" >> $GITHUB_OUTPUT""")
 
 
-def create(version: str):
+def execute_create_bundle_release(version: str):
     if version.startswith("0.0"):
         latest_version = Version.coerce(DEV_VERSION)
         is_draft = False
@@ -57,7 +57,7 @@ def create(version: str):
     set_output(name="created_tag", value=target_version)
 
 
-def update(version: str):
+def execute_update_bundle_release(version: str):
     release_to_update = get_release.get_bundle_release(version)
     if not release_to_update:
         raise RuntimeError(f"Release {version} does not exist")
@@ -84,9 +84,9 @@ def main():
     version = args.input_version
     operation = args.operation
     if operation == ReleaseOperations.create:
-        create(version)
+        execute_create_bundle_release(version)
     elif operation == ReleaseOperations.update:
-        update(version)
+        execute_update_bundle_release(version)
 
 
 if __name__ == "__main__":

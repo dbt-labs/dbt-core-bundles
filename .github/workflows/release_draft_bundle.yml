@@ -174,7 +174,7 @@ jobs:
         run: |
           python -m pip install -e . && \
           python -u -m release_creation.main \
-           --input-version=${{ inputs.version_number }} \
+           --input-version=${{ needs.create-bundle.outputs.created_tag }} \
            --operation=update
 
       - name: "Test install from Github Release"
