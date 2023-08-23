@@ -25,16 +25,15 @@ def set_output(name, value):
 def execute_create_bundle_release(version: str):
     if version.startswith("0.0"):
         latest_version = Version.coerce(DEV_VERSION)
-        is_draft = False
         latest_release = None
     else:
         latest_version, is_draft, latest_release = get_release.get_latest_bundle_release(version)
         logger.info(f"Retrieved latest version: {latest_version} "
                     f"and latest release: {latest_release.tag_name if latest_release else None}")
-    if is_draft:
-        raise RuntimeError(
-            f"A draft release already exists for version {latest_version}. "
-            f"It needs to be published or deleted first")
+        if is_draft:
+            raise RuntimeError(
+                f"A draft release already exists for version {latest_version}. "
+                f"It needs to be published or deleted first")
     target_version = latest_version
     target_version.prerelease = latest_version.prerelease
     target_version.build = latest_version.build
