@@ -40,4 +40,4 @@ jobs:
         uses: actions/checkout@v3
       - name: "Swap Dev Bundle"
         run: |
-          ./.github/scripts/swap_dev_bundle.sh ${{ needs.release-new-dev-bundle.outputs.tag }}
+          ./.github/scripts/swap_release_tags.sh ${{ needs.release-new-dev-bundle.outputs.tag }} "0.0.1+dev"
