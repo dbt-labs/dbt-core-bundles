@@ -39,7 +39,7 @@ def test_create_new_release_for_dev_bundle(monkeypatch):
     assert str(calls[1]) == 'call.get_release().delete_release()'
     assert calls[2].kwargs == {'tag': '0.0.0', 'name': 'dev Bundle for dbt',
                                'prerelease': True,
-                               'draft': False,
+                               'draft': True,
                                'message': 'This is a dev bundle release. '
                                           'It is meant for testing the latest changes in dbt-* packages.'}
     assert calls[3].kwargs == {'path': 'path/to/req_files.txt',

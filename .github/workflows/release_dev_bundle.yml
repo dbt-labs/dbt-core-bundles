@@ -35,9 +35,11 @@ jobs:
     name: "Swap Dev Bundle"
     runs-on: ubuntu-latest
     needs: [release-new-dev-bundle]
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: "Checkout Repo"
         uses: actions/checkout@v3
       - name: "Swap Dev Bundle"
         run: |
-          ./.github/scripts/swap_dev_bundle.sh ${{ needs.release-new-dev-bundle.outputs.tag }}
+          ./.github/scripts/swap_release_tags.sh "0.0.0+dev" "0.0.1+dev"

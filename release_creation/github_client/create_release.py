@@ -122,6 +122,6 @@ def create_dev_release(release_version: Version, assets: Dict,) -> None:
         name=f"dev Bundle for dbt",
         message="This is a dev bundle release. It is meant for testing the latest changes in dbt-* packages.",
         prerelease=True,
-        draft=False,
+        draft=True,
     )
     add_assets_to_release(assets=assets, latest_release=latest_release)
