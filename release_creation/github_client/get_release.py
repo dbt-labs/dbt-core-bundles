@@ -34,7 +34,7 @@ def get_bundle_release(input_version: str) -> Optional[GitRelease]:
     Note: we can't use get_release since it won't return draft releases.
 
     Args:
-        input_version (str): semantic version (1.0.0.0rc, 2.3.5) to match against
+        input_version (str): semantic version (1.0.0rc1, 2.3.5) to match against
 
     Returns:
         Optional[GitRelease]: The release if it exists.
