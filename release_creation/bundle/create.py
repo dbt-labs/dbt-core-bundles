@@ -1,13 +1,14 @@
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 from semantic_version import Version
 import subprocess
 import shutil
 
 from release_creation.bundle.bundle_config import get_bundle_config, BundleConfig
-from release_creation.bundle.bundle_os import BundleOS, PIP_PLATFORM_OS_VALUES
+from release_creation.bundle.bundle_os import PIP_PLATFORM_OS_VALUES
+from release_creation.release_logger import get_logger
 
 BUNDLE_REQ_NAME_PREFIX = "bundle_requirements"
-
+logger = get_logger()
 
 def _get_requirements_prefix(
         major_version: Optional[int], minor_version: Optional[int], is_pre: bool = False
@@ -73,14 +74,24 @@ def generate_bundle(target_version: Version) -> Dict[str, str]:
     """
     bundle_configuration = get_bundle_config(target_version=target_version)
     # Download pip dependencies
+    logger.info("===========================\n")
+    logger.info(f"Downloading dependencies")
     _download_packages(bundle_configuration)
     # Check install
+    logger.info("===========================\n")
+    logger.info(f"Installing dependencies")
     _install_packages(bundle_configuration)
     # Freeze complete requirements (i.e. including transitive dependencies)
+    logger.info("===========================\n")
+    logger.info(f"Freezing dependencies for")
     _freeze_dependencies(bundle_configuration)
     # Use the complete requirements to do a no-deps download (doesn't check system compatibility)
     # This allows us to download requirements for platform architectures other than the local
+    logger.info("===========================\n")
+    logger.info(f"Downloading binaries for")
     _download_binaries(bundle_configuration)
 
     # return a dict with a Zip archive of required packages and the req file
+    logger.info("===========================\n")
+    logger.info(f"Generating assets")
     return _generate_assets(bundle_configuration)
