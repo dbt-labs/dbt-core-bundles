@@ -5,7 +5,6 @@ download_reqs_file="$2"
 rm -rf $base_dir
 mkdir  -p $base_dir
 python -m pip install --upgrade pip
-python -m pip install 'setuptools_scm<8.0.0'
 
 python -m pip download \
  --progress-bar off \
