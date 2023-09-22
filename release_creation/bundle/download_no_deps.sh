@@ -12,6 +12,13 @@ pip download -r "$requirements_file" \
  --no-deps \
  --exists-action "i"
 
+pip download setuptools_scm<8.0.0 \
+ --dest $staging \
+ --progress-bar off \
+ --platform "$platform" \
+ --no-deps \
+ --exists-action "i"
+
 # some mac builds needs wheel and cython installed
 # include the psycopg2-binary in mac builds for ease of install
 if [[ "$OSTYPE" == darwin* ]]; then 
