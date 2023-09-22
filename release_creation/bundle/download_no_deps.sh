@@ -5,13 +5,6 @@ platform=$2
 requirements_file=$3
 staging="download-no-deps-staging"
 
-pip download setuptools_scm<8.0.0 \
- --dest $staging \
- --progress-bar off \
- --platform "$platform" \
- --no-deps \
- --exists-action "i"
-
 pip download -r "$requirements_file" \
  --dest $staging \
  --progress-bar off \
