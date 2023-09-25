@@ -5,6 +5,7 @@ download_reqs_file="$2"
 rm -rf $base_dir
 mkdir  -p $base_dir
 python -m pip install --upgrade pip
+
 python -m pip download \
  --progress-bar off \
  --prefer-binary \
