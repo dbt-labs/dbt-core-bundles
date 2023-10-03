@@ -1,8 +1,8 @@
-dbt-core~=1.6.0 --no-binary dbt-postgres
+git+https://github.com/dbt-labs/dbt-core.git@1.6.latest#egg=dbt-core&subdirectory=core --no-binary dbt-postgres
+git+https://github.com/dbt-labs/dbt-core.git@1.6.latest#egg=dbt-postgres&subdirectory=plugins/postgres
 dbt-snowflake~=1.6.0
 dbt-bigquery~=1.6.0
 dbt-redshift~=1.6.0
-dbt-postgres~=1.6.0
 dbt-spark[PyHive,ODBC]~=1.6.0
 dbt-databricks~=1.6.0
 dbt-trino~=1.6.0
