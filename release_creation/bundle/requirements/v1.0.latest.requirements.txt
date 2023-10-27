@@ -10,3 +10,4 @@ grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyodbc~=4.0.32
 snowflake-connector-python
+chardet
