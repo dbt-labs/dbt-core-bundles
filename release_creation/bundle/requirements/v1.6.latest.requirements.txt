@@ -1,7 +1,8 @@
 dbt-core~=1.6.0 --no-binary dbt-postgres
 dbt-snowflake~=1.6.0
 dbt-bigquery~=1.6.0
-dbt-redshift~=1.6.0
+# we changed a dependency in dbt-redshift
+dbt-redshift~=1.6.2
 dbt-postgres~=1.6.0
 dbt-spark[PyHive,ODBC]~=1.6.0
 dbt-databricks~=1.6.0
