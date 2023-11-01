@@ -10,7 +10,7 @@ import zipfile
 
 @pytest.mark.parametrize(argnames="test_version",
                          argvalues=["1.3.0", "1.4.0", "1.5.0", "1.5.0rc1",
-                                    "1.6.0b2", "1.6.0", "1.7.0b1", "0.0.0"])
+                                    "1.6.0b2", "1.6.2", "1.7.0b1", "0.0.0"])
 def test_generate_bundle_creates_a_bundle_with_valid_version(test_version):
     created_assets = generate_bundle(Version.coerce(test_version))
     for asset_name, asset_location in created_assets.items():
