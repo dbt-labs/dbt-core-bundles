@@ -2,7 +2,7 @@ dbt-core~=1.6.0 --no-binary dbt-postgres
 dbt-snowflake~=1.6.0
 dbt-bigquery~=1.6.0
 # we changed a dependency in dbt-redshift
-dbt-redshift~=1.6.2
+dbt-redshift~=1.6.0
 dbt-postgres~=1.6.0
 dbt-spark[PyHive,ODBC]~=1.6.0
 dbt-databricks~=1.6.0
@@ -14,3 +14,4 @@ pyasn1-modules~=0.3.0
 pyarrow~=12.0.0,!=12.0.1
 pyodbc==4.0.39 --no-binary pyodbc
 snowflake-connector-python ~=3.0,!=3.0.4
+redshift-connector>=2.0.915
