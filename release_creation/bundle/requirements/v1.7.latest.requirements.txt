@@ -6,6 +6,7 @@ dbt-postgres~=1.7.0
 dbt-spark[PyHive,ODBC]~=1.7.0
 # dbt-databricks~=1.7.0
 # dbt-trino~=1.7.0
+dbt-rpc~=0.4.1
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyarrow~=12.0.0,!=12.0.1
