@@ -105,6 +105,8 @@ jobs:
       - name: "Set Linux OS"
         if: matrix.os == 'ubuntu-latest'
         run: |
+          sudo apt-get update
+          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev git gcc g++ unixodbc-dev
           echo "os_platform=linux" >> $GITHUB_ENV
 
       - name: "Set Mac OS"
