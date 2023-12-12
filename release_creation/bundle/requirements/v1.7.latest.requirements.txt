@@ -3,7 +3,7 @@ dbt-snowflake~=1.7.0
 dbt-bigquery~=1.7.0
 dbt-redshift~=1.7.0
 dbt-postgres~=1.7.0
-dbt-spark[PyHive,ODBC]~=1.7.0
+dbt-spark[PyHive,ODBC]~=1.7.1
 dbt-databricks~=1.7.0
 dbt-trino~=1.7.0
 dbt-fabric==1.7.0
