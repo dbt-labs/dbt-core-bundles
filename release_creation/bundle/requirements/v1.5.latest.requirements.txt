@@ -8,7 +8,6 @@ dbt-databricks~=1.5.0
 dbt-trino~=1.5.0
 dbt-rpc~=0.4.0
 json-rpc==1.15.0
-grpcio-status~=1.47.0
 pyarrow~=14.0.1
 pyasn1-modules~=0.2.1
 pyodbc==4.0.39 --no-binary pyodbc
