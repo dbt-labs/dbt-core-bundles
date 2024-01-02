@@ -1,10 +1,11 @@
 import os
 from typing import List
 
+import github
 from semantic_version import Version
 import yaml
 
-from release_creation.github_client.client import get_bundle_repo
+from release_creation.github_client.client import get_bundle_repo, update_file
 
 _BUNDLE_MAP_FILE_NAME = "latest_bundle.yml"
 _BUNDLE_MAP_FILE_BRANCH = os.getenv("BUNDLE_MAP_FILE_BRANCH", "main")
@@ -27,6 +28,7 @@ def get_latest_bundle_from_map(bundle_version: Version):
 
 def update_latest_bundles_in_map(bundle_versions: List[Version]):
     repo = get_bundle_repo()
+    github.enable_console_debug_logging()
     bundle_map_file = repo.get_contents(_BUNDLE_MAP_FILE_NAME,
                                         ref=_BUNDLE_MAP_FILE_BRANCH)
     bundles = yaml.safe_load(bundle_map_file.decoded_content)
@@ -35,8 +37,9 @@ def update_latest_bundles_in_map(bundle_versions: List[Version]):
         release_version = _get_release_version(bundle_version)
         bundles['release_version'][release_version] = str(bundle_version)
         updated.append(f"{release_version}={bundle_version}")
-    repo.update_file(
-        path=_BUNDLE_MAP_FILE_NAME,
+    update_file(
+        repo=repo,
+        path=bundle_map_file.path,
         message="Updated: " + ", ".join(updated),
         branch=_BUNDLE_MAP_FILE_BRANCH,
         content=yaml.safe_dump(bundles),
