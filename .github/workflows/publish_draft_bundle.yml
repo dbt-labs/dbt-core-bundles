@@ -127,3 +127,30 @@ jobs:
           title="Test Install Successful"
           message="Installation and version command run successful for os_platform=${{ matrix.os }}, Python=${{ matrix.python-version }}, version=${{ inputs.tag }}"
           echo "::notice $title::$message"
+
+  update-latest-bundle-map:
+    needs: [test-bundle]
+    name: "Update bundle map with ${{ inputs.tag }}"
+
+    steps:
+      - name: "Checkout Repo"
+        uses: actions/checkout@v3
+
+      - name: "Set up Python 3.8"
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: "Install release_creation and deps"
+        run: |
+          python -m pip install --user --upgrade pip
+          pip install -r requirements.txt
+          python -m pip install -e . 
+
+      - name: "Run update latest map"
+        run: |
+          python -u -m release_creation.main \
+           --input-version=${{ inputs.tag }} \
+           --operation=update_latest_bundle
+          
+      
