@@ -1,5 +1,7 @@
-git+https://github.com/dbt-labs/dbt-core.git@main#egg=dbt-core&subdirectory=core --no-binary dbt-postgres
-git+https://github.com/dbt-labs/dbt-postgres.git@main#egg=dbt-postgres
+git+https://github.com/dbt-labs/dbt-adapters.git@main
+git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-tests-adapter
+git+https://github.com/dbt-labs/dbt-common.git@main
+git+https://github.com/dbt-labs/dbt-postgres.git@main
 git+https://github.com/dbt-labs/dbt-bigquery.git@main#egg=dbt-bigquery
 git+https://github.com/dbt-labs/dbt-snowflake.git@main#egg=dbt-snowflake
 git+https://github.com/dbt-labs/dbt-redshift.git@main#egg=dbt-redshift
