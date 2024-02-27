@@ -12,5 +12,5 @@ git+https://github.com/dbt-labs/dbt-spark.git@main#egg=dbt-spark[PyHive,ODBC]
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyarrow!=12.0.1
-pyodbc==4.0.39 --no-binary pyodbc
+pyodbc==5.1.0 --no-binary pyodbc
 snowflake-connector-python~=3.0,!=3.0.4
