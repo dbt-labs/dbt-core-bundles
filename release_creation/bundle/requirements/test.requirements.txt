@@ -1,4 +1,4 @@
-dbt-core --no-binary dbt-postgres
+dbt-core --no-binary
 dbt-snowflake
 dbt-bigquery
 dbt-redshift
