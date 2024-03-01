@@ -1,3 +1,4 @@
+hatchling<2.0
 dbt-core @ git+https://github.com/dbt-labs/dbt-core.git@main#subdirectory=core
 dbt-postgres @ git+https://github.com/dbt-labs/dbt-postgres.git@main
 dbt-bigquery @ git+https://github.com/dbt-labs/dbt-bigquery.git@main
