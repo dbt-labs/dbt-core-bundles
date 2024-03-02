@@ -1,16 +1,14 @@
-dbt-core~=1.7.0,>=1.7.3 --no-binary dbt-postgres
-dbt-snowflake~=1.7.0
-dbt-bigquery~=1.7.0
-dbt-redshift~=1.7.0
-dbt-postgres~=1.7.0
-dbt-spark[PyHive,ODBC]~=1.7.1
-dbt-databricks~=1.7.2
-dbt-trino~=1.7.0
-dbt-fabric~=1.7.0
-dbt-synapse~=1.7.0
+dbt-core~=1.8.0b1 --no-binary dbt-postgres
+dbt-snowflake~=1.8.0b1
+dbt-bigquery~=1.8.0b1
+dbt-redshift~=1.8.0b1
+dbt-postgres~=1.8.0b1
+dbt-spark[PyHive,ODBC]~=1.8.0b1
+dbt-databricks~=1.8.0b1
+# dbt-trino~=1.8.0
+dbt-fabric~=1.8.0rc1
+dbt-synapse~=1.8.0rc1
 dbt-rpc~=0.4.1
-google-api-core<2.16.0 # see https://github.com/dbt-labs/dbt-bigquery/issues/1081
-pandas<2.2.0,>=2.0.0
 pyasn1-modules~=0.2.1
 pyarrow~=14.0.1
 pydantic~=1.10
