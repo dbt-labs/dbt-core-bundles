@@ -1,3 +1,4 @@
+hatch
 StrEnum
 requests
 semantic-version~=2.10.0
