@@ -1,8 +1,0 @@
-dbt-core --no-binary
-dbt-snowflake
-dbt-bigquery
-dbt-redshift
-dbt-postgres
-dbt-spark[PyHive,ODBC]
-dbt-databricks
-dbt-rpc
