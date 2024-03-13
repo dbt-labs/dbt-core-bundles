@@ -1,18 +1,15 @@
-hatchling<2.0
-setuptools
-Cython<3.0
 dbt-common~=1.0.0b1
 dbt-adapters~=1.0.0b1
 dbt-core~=1.8.0b1
-# dbt-snowflake~=1.8.0b1
-# dbt-bigquery~=1.8.0b1
-# dbt-redshift~=1.8.0b1
+dbt-snowflake~=1.8.0b1
+dbt-bigquery~=1.8.0b1
+dbt-redshift~=1.8.0b1
 dbt-postgres~=1.8.0b1
-# dbt-spark[PyHive,ODBC]~=1.8.0b1
-# dbt-databricks~=1.8.0b1  # this is on PyPI, but it's pinned to `dbt-spark~=1.7.0`
-# dbt-trino~=1.8.0
-# dbt-fabric~=1.8.0rc1
-# dbt-synapse~=1.8.0rc1
+dbt-spark[PyHive,ODBC]~=1.8.0b1
+dbt-databricks~=1.8.0b2  # `dbt-databricks==1.8.0b1` is pinned to `dbt-spark~=1.7.0`
+dbt-trino~=1.8.0b1
+# dbt-fabric~=1.8.0rc1  # `dbt-fabric==1.8.0rc1` is pinned to `dbt-common~=0.1.6`
+# dbt-synapse~=1.8.0rc1  # uses the same deps as `dbt-fabric`
 pyasn1-modules~=0.2.1
 pyarrow~=14.0.1
 pydantic~=1.10
