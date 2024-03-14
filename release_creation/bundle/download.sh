@@ -16,4 +16,4 @@ python -m pip download \
 python -m pip download \
  --progress-bar off \
  --dest $base_dir \
- wheel
+ wheel hatchling

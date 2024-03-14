@@ -2,7 +2,11 @@ set -e
 archive_file="$1"
 requirements_file="$2"
 export DBT_PSYCOPG2_NAME=psycopg2
+
+rm -rf bundle_pkg_test
 unzip -o "${archive_file}" -d bundle_pkg_test
+
+rm -rf test_archive_install
 python -m venv test_archive_install
 source test_archive_install/bin/activate
 python -m pip install -r "${requirements_file}" \
