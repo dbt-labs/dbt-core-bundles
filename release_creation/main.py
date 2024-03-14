@@ -3,6 +3,7 @@ from strenum import StrEnum
 import os
 import argparse
 
+from release_creation.bundle_map import get_latest_bundle_from_map, update_latest_bundles_in_map
 from release_creation.github_client import create_release
 from release_creation.bundle import create
 from release_creation.github_client import get_release
@@ -16,6 +17,8 @@ logger = get_logger()
 class ReleaseOperations(StrEnum):
     create = "create"
     update = "update"
+    get_latest = "get_latest_bundle"
+    update_latest = "update_latest_bundle"
 
 
 def set_output(name, value):
@@ -86,7 +89,11 @@ def main():
         execute_create_bundle_release(version)
     elif operation == ReleaseOperations.update:
         execute_update_bundle_release(version)
-
+    elif operation == ReleaseOperations.get_latest:
+        get_latest_bundle_from_map(Version(version))
+    elif operation == ReleaseOperations.update_latest:
+        versions = [Version(v) for v in version.split(",")]
+        update_latest_bundles_in_map(versions)
 
 if __name__ == "__main__":
     main()
