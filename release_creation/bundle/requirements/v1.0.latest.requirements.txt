@@ -6,7 +6,10 @@ git+https://github.com/dbt-labs/dbt-redshift.git@1.0.latest#egg=dbt-redshift
 git+https://github.com/dbt-labs/dbt-spark.git@1.0.latest#egg=dbt-spark[PyHive,ODBC]
 dbt-databricks~=1.0.0
 dbt-rpc~=0.1.1
+json-rpc==1.13.0
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyodbc~=4.0.32
-snowflake-connector-python~=3.0,!=3.0.4
+# the following need to be pinned to prevent a circular dependency issue
+chardet
+charset-normalizer==3.1.0

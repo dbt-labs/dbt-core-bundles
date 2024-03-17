@@ -9,11 +9,11 @@ minor_version="$2"
 if [[ ${minor_version} == 0 && ${major_version} == 0 ]]
 then
 py_versions='["3.8", "3.9", "3.10", "3.11"]'
-elif [[ ${minor_version} < 4 && ${major_version} == 1  ]]
+elif [[ ${minor_version} < 5 && ${major_version} == 1  ]]
 then
 py_versions='["3.8", "3.9", "3.10"]'
 else
-py_versions='["3.8", "3.9", "3.10"]'
+py_versions='["3.8", "3.9", "3.10", "3.11"]'
 fi
 echo $py_versions
 echo "versions=$py_versions" >> "$GITHUB_OUTPUT"

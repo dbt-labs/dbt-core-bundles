@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: "Checkout Repo"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # non-zero exit code when the release does not exist and is not currently in draft status
       - name: "Check bundle exists in draft state"
@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - name: "Checkout Repo"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Audit Version And Parse Into Parts"
         id: semver
@@ -100,11 +100,13 @@ jobs:
 
     steps:
       - name: "Checkout Repo"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Set Linux OS"
         if: matrix.os == 'ubuntu-latest'
         run: |
+          sudo apt-get update
+          sudo apt-get install libsasl2-dev libxml2-dev libxslt-dev git gcc g++ unixodbc-dev
           echo "os_platform=linux" >> $GITHUB_ENV
 
       - name: "Set Mac OS"

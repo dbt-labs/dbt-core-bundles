@@ -5,6 +5,9 @@ platform=$2
 requirements_file=$3
 staging="download-no-deps-staging"
 
+rm -rf $staging
+mkdir $staging
+
 pip download -r "$requirements_file" \
  --dest $staging \
  --progress-bar off \
