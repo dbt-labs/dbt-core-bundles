@@ -7,11 +7,11 @@ dbt-bigquery @ git+https://github.com/dbt-labs/dbt-bigquery.git@main
 dbt-snowflake @ git+https://github.com/dbt-labs/dbt-snowflake.git@main
 dbt-redshift @ git+https://github.com/dbt-labs/dbt-redshift.git@main
 dbt-spark[PyHive,ODBC] @ git+https://github.com/dbt-labs/dbt-spark.git@main
-# need to get trino + databricks to increment version numbers in main
-# dbt-databricks @ git+https://github.com/databricks/dbt-databricks.git@main
-# dbt-trino @ git+https://github.com/starburstdata/dbt-trino.git@main
-# dbt-fabric @ git+https://github.com/microsoft/dbt-fabric.git@main
-# dbt-synapse @ git+https://github.com/microsoft/dbt-synapse.git@main
+# need to get databricks to increment version numbers in main
+dbt-databricks @ git+https://github.com/databricks/dbt-databricks.git@1.8.latest
+dbt-trino @ git+https://github.com/starburstdata/dbt-trino.git@master
+dbt-fabric @ git+https://github.com/microsoft/dbt-fabric.git@main
+dbt-synapse @ git+https://github.com/microsoft/dbt-synapse.git@master
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyarrow!=12.0.1
