@@ -8,8 +8,8 @@ dbt-postgres~=1.8.0b1
 dbt-spark[PyHive,ODBC]~=1.8.0b1
 dbt-databricks~=1.8.0b2  # `dbt-databricks==1.8.0b1` is pinned to `dbt-spark~=1.7`
 dbt-trino~=1.8.0b1
-# dbt-fabric~=1.8.0rc1  # these are both pinned to `dbt-common~=0.1`, causing conflicts
-# dbt-synapse~=1.8.0rc1
+dbt-fabric~=1.8.0rc3  # `dbt-fabric<1.8.0rc3` has dependency conflicts on `dbt-common`
+# dbt-synapse~=1.8.0rc2  # `dbt-synapse==1.8.0rc1` has dependency conflicts on `dbt-common`
 pyasn1-modules~=0.2.1
 pyarrow~=14.0.1
 pydantic~=1.10
