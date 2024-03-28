@@ -1,5 +1,5 @@
 StrEnum
 requests
 semantic-version~=2.10.0
-PyGithub~=2.2
+PyGithub~=2.3
 pydantic
