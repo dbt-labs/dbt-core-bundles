@@ -1,5 +1,4 @@
 set -e
-export DBT_PSYCOPG2_NAME=psycopg2
 base_dir="$1"
 requirements_file_prefix="$2"
 link_dir="$3"
