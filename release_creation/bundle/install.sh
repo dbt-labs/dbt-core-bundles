@@ -6,7 +6,7 @@ target_dir="$4"
 rm -rf target
 mkdir target
 
-pip install -r "$base_dir"/requirements/"$requirements_file_prefix".requirements.txt \
+DBT_PSYCOPG2_NAME=psycopg2 pip install -r "$base_dir"/requirements/"$requirements_file_prefix".requirements.txt \
 --no-index  \
 --force-reinstall \
 --find-links ./"$link_dir" \
