@@ -8,7 +8,7 @@ unzip -o "${archive_file}" -d bundle_pkg_test
 rm -rf test_archive_install
 python -m venv test_archive_install
 source test_archive_install/bin/activate
-DBT_PSYCOPG2_NAME=psycopg2 python -m pip install -r "${requirements_file}" \
+python -m pip install -r "${requirements_file}" \
   --no-index \
   --find-links ./bundle_pkg_test \
   --pre
