@@ -1,5 +1,6 @@
 #!/bin/bash -e
 set -e
+export DBT_PSYCOPG2_NAME=psycopg2
 final_dest=$1
 platform=$2
 requirements_file=$3
