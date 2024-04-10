@@ -1,15 +1,27 @@
 version: 2
 updates:
-  # python dependencies
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "daily"
     rebase-strategy: "disabled"
-
-  # github dependencies
+  - package-ecosystem: "pip"
+    directory: "/release_creation/bundle/requirements"
+    schedule:
+      interval: "daily"
+    rebase-strategy: "disabled"
+  - package-ecosystem: "pip"
+    directory: "/test"
+    schedule:
+      interval: "daily"
+    rebase-strategy: "disabled"
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "weekly"
+    rebase-strategy: "disabled"
+  - package-ecosystem: "github-actions"
+    directory: "/.github/actions/test_install"
     schedule:
       interval: "weekly"
     rebase-strategy: "disabled"
