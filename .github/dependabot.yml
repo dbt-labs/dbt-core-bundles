@@ -16,12 +16,7 @@ updates:
       interval: "daily"
     rebase-strategy: "disabled"
   - package-ecosystem: "github-actions"
-    directory: "/.github/workflows"
-    schedule:
-      interval: "weekly"
-    rebase-strategy: "disabled"
-  - package-ecosystem: "github-actions"
-    directory: "/.github/actions/test_install"
+    directory: "/"
     schedule:
       interval: "weekly"
     rebase-strategy: "disabled"
