@@ -1,4 +1,4 @@
-hatchling<2.0
+--no-binary dbt-postgres
 dbt-common @ git+https://github.com/dbt-labs/dbt-common.git@main
 dbt-adapters @ git+https://github.com/dbt-labs/dbt-adapters.git@main
 dbt-core @ git+https://github.com/dbt-labs/dbt-core.git@main#subdirectory=core
