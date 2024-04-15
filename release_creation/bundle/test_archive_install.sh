@@ -19,8 +19,8 @@ echo -n "Checking psycopg2 install for linux..."
 if "$OSTYPE" == linux*; then
 echo -n "Checking psycopg2 install..."
 if ! pip freeze | grep psycopg2; then
-  echo "psycopg2 is not installed!"
-  exit 1
+    echo "psycopg2 is not installed!"
+    exit 1
 fi
 echo ok
 
