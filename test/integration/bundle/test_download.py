@@ -1,4 +1,5 @@
 from pathlib import Path
+import platform
 from semantic_version import Version
 import sys
 
@@ -21,9 +22,17 @@ def test_correct_version_of_psycopg2(test_version):
     tmp_dir = Path(bundle_configuration.py_version_tmp_path)
     assert tmp_dir.is_dir()
     psycopg2_is_found = False
+    psycopg2_binary_is_found = False
     for file in tmp_dir.iterdir():
         if "psycopg2" in file.name:
             psycopg2_is_found = True
-            assert "psycopg2-binary" not in file.name
-            assert "psycopg2_binary" not in file.name
-    assert psycopg2_is_found
+            if "psycopg2_binary" not in file.name:
+                psycopg2_is_found = True
+            else:
+                psycopg2_binary_is_found = True
+    if platform.system() == "Linux":
+        assert psycopg2_is_found and not psycopg2_binary_is_found
+    elif platform.system() == "Darwin":
+        assert psycopg2_binary_is_found and not psycopg2_is_found
+    else:
+        assert False, f"Unexpected platform: {platform.system()}"
