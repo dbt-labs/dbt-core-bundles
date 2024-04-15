@@ -1,5 +1,5 @@
 set -e
-DBT_PSYCOPG2_NAME=psycopg2
+EXPORT DBT_PSYCOPG2_NAME=psycopg2
 base_dir="$1"
 download_reqs_file="$2"
 rm -rf $base_dir
