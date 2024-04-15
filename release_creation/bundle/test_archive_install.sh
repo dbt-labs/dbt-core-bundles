@@ -14,8 +14,7 @@ python -m pip install -r "${requirements_file}" \
   --find-links ./bundle_pkg_test \
   --pre
 dbt --version
-# make sure psycopg2 is installed for linux, but not psycopg2-binary
-echo -n "Checking psycopg2 install for linux..."
+# make sure psycopg2 is installed, but not psycopg2-binary (linux only)
 if "$OSTYPE" == linux*; then
 echo -n "Checking psycopg2 install..."
 if ! pip freeze | grep psycopg2; then
