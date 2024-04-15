@@ -25,7 +25,6 @@ def test_correct_version_of_psycopg2(test_version):
     psycopg2_binary_is_found = False
     for file in tmp_dir.iterdir():
         if "psycopg2" in file.name:
-            psycopg2_is_found = True
             if "psycopg2_binary" not in file.name:
                 psycopg2_is_found = True
             else:
