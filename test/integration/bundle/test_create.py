@@ -9,19 +9,10 @@ import os.path
 import zipfile
 
 
-TEST_VERSIONS = [
-    "0.0.0",
-    "1.3.0",
-    "1.4.0",
-    "1.5.0",
-    "1.6.0",
-    "1.7.0b1",
-    "1.7.0",
-    "1.8.0b1",
-]
-
-
-@pytest.mark.parametrize("test_version", TEST_VERSIONS)
+@pytest.mark.parametrize(
+    argnames="test_version",
+    argvalues=["0.0.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0", "1.7.0b1", "1.7.0", "1.8.0b1"],
+)
 def test_generate_bundle_creates_a_bundle_with_valid_version(
     test_version
 ):
