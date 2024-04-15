@@ -9,7 +9,7 @@ from release_creation.bundle.bundle_config import get_bundle_config
 from release_creation.bundle.create import _download_packages
 
 
-@pytest.mark.parametrize("test_version", ["1.8.0b1"])
+@pytest.mark.parametrize("test_version", ["0.0.0"])
 def test_correct_version_of_psycopg2(test_version):
     if sys.version_info == (3, 10) and Version.coerce(test_version) >= Version.coerce(
         "1.5.0"
