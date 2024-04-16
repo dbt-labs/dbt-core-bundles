@@ -3,7 +3,7 @@ dbt-common~=1.0.0b1
 dbt-core~=1.8.0b1
 dbt-snowflake~=1.8.0b1
 dbt-bigquery~=1.8.0b1
-dbt-redshift~=1.8.0b1
+dbt-redshift~=1.8.0b2
 dbt-postgres~=1.8.0b1
 dbt-spark[PyHive,ODBC]~=1.8.0b1
 dbt-databricks~=1.8.0b2  # `dbt-databricks==1.8.0b1` is pinned to `dbt-spark~=1.7`
