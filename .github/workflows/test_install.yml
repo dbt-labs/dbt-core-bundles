@@ -63,7 +63,7 @@ jobs:
         run: |
           if [[ ${{ inputs.os_platform }} == 'mac' ]]
           then
-            echo "platform=macos-latest" >> $GITHUB_OUTPUT
+            echo "platform=macos-12" >> $GITHUB_OUTPUT
           elif [[ ${{ inputs.os_platform }} == 'linux' ]]
           then
             echo "platform=ubuntu-latest" >> $GITHUB_OUTPUT

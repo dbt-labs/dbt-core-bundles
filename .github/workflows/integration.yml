@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-       os: ["macos-latest", "ubuntu-latest"]
+       os: ["macos-12", "ubuntu-latest"]
        python-version: ["3.8", "3.10", "3.11"]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} ${{ matrix.python-version }} Test
@@ -65,7 +65,7 @@ jobs:
           ./.github/scripts/worker_install_linux_deps.sh
 
       - name: Set up Mac
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-12'
         run: |
           ./.github/scripts/worker_install_mac_deps.sh
 
