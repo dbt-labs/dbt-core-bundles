@@ -6,7 +6,7 @@ dbt-bigquery~=1.8.0
 dbt-redshift~=1.8.0
 dbt-postgres~=1.8.0
 dbt-spark[PyHive,ODBC]~=1.8.0
-dbt-databricks~=1.8.0
+dbt-databricks~=1.8.0b2
 dbt-trino~=1.8.0
 # `dbt-fabric==1.8.3` breaks `dbt-synapse`
 dbt-fabric>=1.8.0,<1.8.3
