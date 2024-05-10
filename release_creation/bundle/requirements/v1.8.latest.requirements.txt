@@ -1,0 +1,18 @@
+dbt-adapters>=1.1.0
+dbt-common~=1.0.0
+dbt-core~=1.8.0
+dbt-snowflake~=1.8.0
+dbt-bigquery~=1.8.0
+dbt-redshift~=1.8.0
+dbt-postgres~=1.8.0
+dbt-spark[PyHive,ODBC]~=1.8.0
+# dbt-databricks~=1.8.0 # no final release (pre-release is currently 1.8.0b2
+# dbt-trino~=1.8.0 # no final release (pre-release is 1.8.0b3)
+# `dbt-fabric==1.8.3` breaks `dbt-synapse`
+dbt-fabric>=1.8.0,<1.8.3
+# dbt-synapse~=1.8.0 # no 1.8 final on 1.8.0rc3
+pyasn1-modules~=0.2.1
+pyarrow~=14.0.1
+pydantic~=1.10
+pyodbc==4.0.39 --no-binary pyodbc
+snowflake-connector-python~=3.0,!=3.0.4
