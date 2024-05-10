@@ -2,7 +2,7 @@ setuptools
 dbt-core~=1.4.0 --no-binary dbt-postgres
 dbt-snowflake~=1.4.0
 dbt-bigquery~=1.4.0
-dbt-redshift~=1.4.0
+dbt-redshift~=1.8.0
 dbt-postgres~=1.4.0
 dbt-spark[PyHive,ODBC]~=1.4.0
 dbt-databricks~=1.4.0
