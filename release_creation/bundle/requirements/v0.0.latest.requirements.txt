@@ -11,7 +11,8 @@ dbt-spark[PyHive,ODBC] @ git+https://github.com/dbt-labs/dbt-spark.git@main
 # dbt-databricks @ git+https://github.com/databricks/dbt-databricks.git@1.8.latest
 dbt-trino @ git+https://github.com/starburstdata/dbt-trino.git@master
 dbt-fabric @ git+https://github.com/microsoft/dbt-fabric.git@main
-dbt-synapse @ git+https://github.com/microsoft/dbt-synapse.git@master
+# synapsse currently in a version mistmatch state while being in pre-release
+# dbt-synapse @ git+https://github.com/microsoft/dbt-synapse.git@master
 
 pyasn1-modules~=0.2.1
 pyarrow~=14.0.1
