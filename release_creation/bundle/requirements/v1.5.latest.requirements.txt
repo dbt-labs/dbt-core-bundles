@@ -5,7 +5,7 @@ dbt-redshift~=1.5.0
 dbt-postgres~=1.5.0
 dbt-spark[PyHive,ODBC]~=1.5.0
 dbt-databricks~=1.5.0
-dbt-trino~=1.5.0
+dbt-trino~=1.8.0
 dbt-rpc~=0.4.0
 google-api-core<2.16.0 # see https://github.com/dbt-labs/dbt-bigquery/issues/1081
 json-rpc==1.15.0
