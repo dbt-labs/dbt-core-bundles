@@ -1,6 +1,6 @@
 dbt-adapters>=1.0.0b1
 dbt-common~=1.0.0b1
-dbt-core~=1.8.0b1
+dbt-core~=1.8.2
 dbt-snowflake~=1.8.0b1
 dbt-bigquery~=1.8.0b1
 dbt-redshift~=1.8.0b1
