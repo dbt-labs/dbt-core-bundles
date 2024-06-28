@@ -14,4 +14,4 @@ pyodbc==4.0.32 --no-binary pyodbc
 snowflake-connector-python~=3.0,!=3.0.4
 google-cloud-bigquery~=2.0
 google-cloud-storage~=2.4
-google-cloud-dataproc~=4.0
+google-cloud-dataproc~=5.10
