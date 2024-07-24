@@ -10,6 +10,7 @@ json-rpc==1.13.0
 grpcio-status~=1.47.0
 pyasn1-modules~=0.2.1
 pyodbc~=4.0.32
+setuptools<71.0
 # the following need to be pinned to prevent a circular dependency issue
 chardet
 charset-normalizer==3.1.0
