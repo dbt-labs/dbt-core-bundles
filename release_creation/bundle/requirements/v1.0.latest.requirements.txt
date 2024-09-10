@@ -8,6 +8,7 @@ dbt-databricks~=1.0.0
 dbt-rpc~=0.1.1
 json-rpc==1.13.0
 grpcio-status~=1.47.0
+numpy<2.0.0
 pyasn1-modules~=0.2.1
 pyodbc~=4.0.32
 setuptools<71.0
