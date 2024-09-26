@@ -13,7 +13,7 @@ dbt-rpc~=0.4.1
 google-api-core<2.16.0 # see https://github.com/dbt-labs/dbt-bigquery/issues/1081
 pandas<2.2.0,>=2.0.0
 pyasn1-modules~=0.2.1
-pyarrow~=14.0.1
+pyarrow~=17.0.0
 pydantic~=1.10
 pyodbc==4.0.39 --no-binary pyodbc
 snowflake-connector-python~=3.0,!=3.0.4
