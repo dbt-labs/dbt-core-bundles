@@ -11,6 +11,6 @@ grpcio-status~=1.47.0
 pyarrow!=12.0.1
 pyasn1-modules~=0.2.1
 pyodbc==4.0.32 --no-binary pyodbc
-setuptools<71.0
+setuptools<76.0
 snowflake-connector-python~=3.0,!=3.0.4
 numpy<2.0
