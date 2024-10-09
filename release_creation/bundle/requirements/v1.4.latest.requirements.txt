@@ -9,7 +9,7 @@ dbt-databricks~=1.4.0
 dbt-trino~=1.4.0
 dbt-rpc~=0.3.1
 json-rpc==1.15.0
-google-api-core<2.16.0 # see https://github.com/dbt-labs/dbt-bigquery/issues/1081
+google-api-core<2.22.0 # see https://github.com/dbt-labs/dbt-bigquery/issues/1081
 grpcio-status~=1.47.0
 pyarrow~=14.0.1
 pyasn1-modules~=0.2.1
