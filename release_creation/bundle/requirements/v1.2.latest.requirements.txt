@@ -7,7 +7,7 @@ git+https://github.com/dbt-labs/dbt-spark.git@1.2.latest#egg=dbt-spark[PyHive,OD
 dbt-databricks~=1.2.3, !=1.2.4
 dbt-rpc~=0.1.1
 json-rpc==1.13.0
-grpcio-status~=1.47.0
+grpcio-status~=1.67.0
 pyarrow!=12.0.1
 pyasn1-modules~=0.2.1
 pyodbc==4.0.32 --no-binary pyodbc
