@@ -6,7 +6,7 @@ dbt-postgres~=1.7.0
 dbt-spark[PyHive,ODBC]~=1.7.1
 dbt-databricks~=1.7.2
 dbt-trino~=1.7.0
-dbt-fabric~=1.7.0
+dbt-fabric~=1.9.0
 dbt-synapse~=1.7.0, !=1.7.4
 dbt-athena-community~=1.7.0
 dbt-rpc~=0.4.1
