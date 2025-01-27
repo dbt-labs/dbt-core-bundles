@@ -9,7 +9,7 @@ dbt-trino~=1.7.0rc1
 dbt-fabric~=1.7.0
 dbt-synapse~=1.7.0rc1
 dbt-rpc~=0.4.1
-pyasn1-modules~=0.2.1
+pyasn1-modules~=0.4.1
 pyarrow~=14.0.1
 pydantic~=1.10
 pyodbc==4.0.39 --no-binary pyodbc
