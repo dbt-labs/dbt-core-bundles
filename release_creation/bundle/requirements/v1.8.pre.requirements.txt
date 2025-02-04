@@ -13,7 +13,7 @@ dbt-trino~=1.8.0b1
 dbt-fabric>=1.8.0rc3,<1.8.3
 dbt-synapse~=1.8.0rc1
 dbt-athena-community~=1.8.0b1
-pyasn1-modules~=0.2.1
+pyasn1-modules~=0.4.1
 pyarrow~=14.0.1
 pydantic~=1.10
 pyodbc==4.0.39 --no-binary pyodbc
