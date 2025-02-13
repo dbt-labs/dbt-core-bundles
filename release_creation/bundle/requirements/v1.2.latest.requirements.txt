@@ -13,4 +13,4 @@ pyasn1-modules~=0.2.1
 pyodbc==4.0.32 --no-binary pyodbc
 setuptools<71.0
 snowflake-connector-python~=3.0,!=3.0.4
-numpy<2.0
+numpy<3.0
