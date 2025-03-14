@@ -14,4 +14,4 @@ pyodbc~=4.0.32
 setuptools<71.0
 # the following need to be pinned to prevent a circular dependency issue
 chardet
-charset-normalizer==3.1.0
+charset-normalizer==3.4.1
