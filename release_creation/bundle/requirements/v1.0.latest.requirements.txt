@@ -4,7 +4,7 @@ git+https://github.com/dbt-labs/dbt-bigquery.git@1.0.latest#egg=dbt-bigquery
 git+https://github.com/dbt-labs/dbt-snowflake.git@1.0.latest#egg=dbt-snowflake
 git+https://github.com/dbt-labs/dbt-redshift.git@1.0.latest#egg=dbt-redshift
 git+https://github.com/dbt-labs/dbt-spark.git@1.0.latest#egg=dbt-spark[PyHive,ODBC]
-dbt-databricks~=1.0.0
+dbt-databricks~=1.10.0a1
 dbt-rpc~=0.1.1
 json-rpc==1.13.0
 grpcio-status~=1.47.0

@@ -4,7 +4,7 @@ dbt-bigquery~=1.7.0
 dbt-redshift~=1.7.0
 dbt-postgres~=1.7.0
 dbt-spark[PyHive,ODBC]~=1.7.1
-dbt-databricks~=1.7.2
+dbt-databricks~=1.10.0a1
 dbt-trino~=1.7.0
 dbt-fabric~=1.7.0
 dbt-synapse~=1.7.0, !=1.7.4
