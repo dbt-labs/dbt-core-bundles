@@ -8,7 +8,7 @@ dbt-databricks~=1.6.0
 dbt-trino~=1.6.0
 dbt-fabric~=1.6.0
 dbt-rpc~=0.4.1
-pyasn1-modules~=0.3.0
+pyasn1-modules~=0.4.2
 pyarrow~=14.0.1
 pyodbc==4.0.39 --no-binary pyodbc
 snowflake-connector-python ~=3.0,!=3.0.4

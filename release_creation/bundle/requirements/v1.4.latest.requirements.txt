@@ -12,6 +12,6 @@ json-rpc==1.15.0
 google-api-core<2.16.0 # see https://github.com/dbt-labs/dbt-bigquery/issues/1081
 grpcio-status~=1.47.0
 pyarrow~=14.0.1
-pyasn1-modules~=0.2.1
+pyasn1-modules~=0.4.2
 pyodbc==4.0.32 --no-binary pyodbc
 snowflake-connector-python~=3.0,!=3.0.4

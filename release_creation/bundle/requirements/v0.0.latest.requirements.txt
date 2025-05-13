@@ -14,7 +14,7 @@ dbt-fabric @ git+https://github.com/microsoft/dbt-fabric.git@main
 # synapsse currently in a version mistmatch state while being in pre-release
 # dbt-synapse @ git+https://github.com/microsoft/dbt-synapse.git@master
 
-pyasn1-modules~=0.2.1
+pyasn1-modules~=0.4.2
 pyarrow~=14.0.1
 pydantic~=1.10
 pyodbc==4.0.39 --no-binary pyodbc

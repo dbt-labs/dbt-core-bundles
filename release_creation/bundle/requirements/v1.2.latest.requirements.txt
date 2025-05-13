@@ -9,7 +9,7 @@ dbt-rpc~=0.1.1
 json-rpc==1.13.0
 grpcio-status~=1.47.0
 pyarrow!=12.0.1
-pyasn1-modules~=0.2.1
+pyasn1-modules~=0.4.2
 pyodbc==4.0.32 --no-binary pyodbc
 setuptools<71.0
 snowflake-connector-python~=3.0,!=3.0.4
