@@ -1,7 +1,7 @@
 dbt-core~=1.7.0,>=1.7.3 --no-binary dbt-postgres
 dbt-snowflake~=1.7.0
 dbt-bigquery~=1.7.0
-dbt-redshift~=1.7.0
+dbt-redshift~=1.9.5
 dbt-postgres~=1.7.0
 dbt-spark[PyHive,ODBC]~=1.7.1
 dbt-databricks~=1.7.2
