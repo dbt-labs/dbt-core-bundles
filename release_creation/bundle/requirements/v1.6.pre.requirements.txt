@@ -1,4 +1,4 @@
-dbt-core~=1.6.0 --no-binary dbt-postgres
+dbt-core~=1.10.0rc2 --no-binary dbt-postgres
 dbt-snowflake~=1.6.0
 dbt-bigquery~=1.6.0
 dbt-redshift~=1.6.0
