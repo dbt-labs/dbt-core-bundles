@@ -1,17 +1,17 @@
 dbt-common @ git+https://github.com/dbt-labs/dbt-common.git@main
-dbt-adapters @ git+https://github.com/dbt-labs/dbt-adapters.git@main
+dbt-adapters @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-adapters
 dbt-core @ git+https://github.com/dbt-labs/dbt-core.git@main#subdirectory=core
-dbt-postgres @ git+https://github.com/dbt-labs/dbt-postgres.git@main
-dbt-bigquery @ git+https://github.com/dbt-labs/dbt-bigquery.git@main
-dbt-snowflake @ git+https://github.com/dbt-labs/dbt-snowflake.git@main
-dbt-redshift @ git+https://github.com/dbt-labs/dbt-redshift.git@main
-dbt-spark[PyHive,ODBC] @ git+https://github.com/dbt-labs/dbt-spark.git@main
+dbt-postgres @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-postgres
+dbt-bigquery @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-bigquery
+dbt-snowflake @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-snowflake
+dbt-redshift @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-redshift
+dbt-spark[PyHive,ODBC] @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-spark
 # need to get databricks to increment version numbers in main
 # databricks currently in a version mistmatch state while being in pre-release.
 # dbt-databricks @ git+https://github.com/databricks/dbt-databricks.git@1.8.latest
 dbt-trino @ git+https://github.com/starburstdata/dbt-trino.git@master
 dbt-fabric @ git+https://github.com/microsoft/dbt-fabric.git@main
-# synapsse currently in a version mistmatch state while being in pre-release
+# synapse currently in a version mistmatch state while being in pre-release
 # dbt-synapse @ git+https://github.com/microsoft/dbt-synapse.git@master
 
 pyasn1-modules~=0.2.1
