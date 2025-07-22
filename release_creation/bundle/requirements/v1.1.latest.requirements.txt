@@ -13,5 +13,5 @@ pyarrow!=12.0.1
 pyasn1-modules~=0.2.1
 pyodbc~=4.0.32
 setuptools<81.0
-snowflake-connector-python~=3.0,!=3.0.4
+snowflake-connector-python~=3.16
 wheel
