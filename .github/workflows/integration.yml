@@ -5,10 +5,8 @@ on:
   push:
     branches:
       - "main"
-  # all PRs, important to note that `pull_request_target` workflows
-  # will run in the context of the target branch of a PR since this
-  # is a public repo
-  pull_request_target:
+  # all PRs, run in the context of the PR branch (not target branch)
+  pull_request:
   workflow_dispatch:
     inputs:
       test_ref:
