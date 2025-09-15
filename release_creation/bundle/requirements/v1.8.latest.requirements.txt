@@ -14,6 +14,6 @@ dbt-athena-community~=1.8.1
 # dbt-synapse~=1.8.0 # no 1.8 final on 1.8.0rc3
 pyasn1-modules~=0.2.1
 pyarrow~=14.0.1
-pydantic~=1.10
+pydantic~=2.11
 pyodbc==4.0.39 --no-binary pyodbc
 snowflake-connector-python~=3.0,!=3.0.4
