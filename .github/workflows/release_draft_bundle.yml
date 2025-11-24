@@ -53,7 +53,7 @@ jobs:
 
     steps:
       - name: "Checkout Repo"
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955  # actions/checkout@v4
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # actions/checkout@v4
 
       - name: "Audit Version And Parse Into Parts"
         id: semver
@@ -83,7 +83,7 @@ jobs:
       req_file_url: ${{ steps.create-release.outputs.req_file_url }}
     steps:
       - name: "Checkout Repo"
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955  # actions/checkout@v4
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # actions/checkout@v4
 
       - name: "Set up Python 3.8"
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # actions/setup-python@v5
@@ -146,7 +146,7 @@ jobs:
 
     steps:
       - name: "Checkout Repo"
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955  # actions/checkout@v4
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # actions/setup-python@v5
