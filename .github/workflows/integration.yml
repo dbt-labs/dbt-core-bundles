@@ -34,21 +34,21 @@ jobs:
     steps:
       - name: Check out the repository (PR)
         if: github.event_name == 'pull_request'
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # actions/checkout@v4
         with:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Check out the repository (workflow_dispatch)
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # actions/checkout@v4
         with:
           persist-credentials: false
           ref: ${{ inputs.test_ref }}
 
       - name: Check out the repository (non-PR)
         if: github.event_name == 'push'
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # actions/checkout@v4
         with:
           persist-credentials: false
 
