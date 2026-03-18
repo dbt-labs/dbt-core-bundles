@@ -1,5 +1,5 @@
 dbt-core~=1.7.0rc1 --no-binary dbt-postgres
-dbt-snowflake~=1.7.0rc1
+dbt-snowflake~=1.11.3
 dbt-bigquery~=1.7.0rc1
 dbt-redshift~=1.7.0rc1
 dbt-postgres~=1.7.0rc1
