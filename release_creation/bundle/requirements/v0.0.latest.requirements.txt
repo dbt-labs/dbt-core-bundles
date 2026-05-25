@@ -1,6 +1,6 @@
 dbt-common @ git+https://github.com/dbt-labs/dbt-common.git@main
 dbt-adapters @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-adapters
-dbt-core @ git+https://github.com/dbt-labs/dbt-core.git@main#subdirectory=core
+dbt-core @ git+https://github.com/dbt-labs/dbt-core.git@1.latest#subdirectory=core
 dbt-postgres @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-postgres
 dbt-bigquery @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-bigquery
 dbt-snowflake @ git+https://github.com/dbt-labs/dbt-adapters.git@main#subdirectory=dbt-snowflake
